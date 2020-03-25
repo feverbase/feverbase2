@@ -1,0 +1,10 @@
+coronavirus
+covid
+2019-ncov
+sars-cov-2
+remdesivir
+chloroquine
+hydroxychloroquine
+ritonavir
+lopinavir
+interferon
