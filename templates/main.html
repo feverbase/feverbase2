@@ -3,7 +3,7 @@
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Arxiv Sanity Preserver</title>
+<title>Feverbase</title>
 
 <!-- MathJax -->
 <script type="text/x-mathjax-config">
@@ -22,6 +22,7 @@
 <!-- JS -->
 <script src="{{ url_for('static', filename='jquery-1.8.3.min.js') }}"></script>
 <script src="{{ url_for('static', filename='d3.min.js') }}"></script>
+<script src="{{ url_for('static', filename='moment.min.js') }}"></script>
 <script src="{{ url_for('static', filename='as-common.js') }}"></script>
 
 <!-- Google Analytics JS -->
@@ -39,14 +40,11 @@
 <script>
 
 // passed in from flask as json
-var tweets = {{ tweets | tojson }};
 var papers = {{ papers | tojson }};
-var pid_to_users = {{ pid_to_users | tojson }};
 var msg = "{{ msg }}";
 var render_format = "{{ render_format }}";
 var username = "{{ g.user.username }}";
 var numresults = "{{ numresults }}";
-var show_prompt = "{{ show_prompt }}";
 
 var urlq = ''; // global will be read in to QueryString when load is done
 
@@ -110,7 +108,7 @@ $(document).ready(function(){
     } else {
       var aelt = elt.append('a').attr('href', '/'+link_endpoint+'?'+'timefilter='+time_range+'&vfilter='+vflink);
     }
-    var delt = aelt.append('div').classed('vchoice', true).html('Only show v1');
+    // var delt = aelt.append('div').classed('vchoice', true).html('Only show v1');
     if(vf === '1') { delt.classed('vchoice-selected', true); }
   }
 
@@ -128,17 +126,17 @@ $(document).ready(function(){
   }
 
   // time choices for top tweets
-  if(render_format === 'toptwtr') {
-    var tf = QueryString.timefilter; if(typeof tf === 'undefined') { tf = 'day'; } // default here is day
-    var time_ranges = ['day', 'week', 'month'];
-    var elt = d3.select('#recommend-time-choice');
-    for(var i=0;i<time_ranges.length;i++) {
-      var time_range = time_ranges[i];
-      var aelt = elt.append('a').attr('href', '/'+link_endpoint+'?'+'timefilter='+time_range);
-      var delt = aelt.append('div').classed('timechoice', true).html(time_txt[time_range]);
-      if(tf == time_range) { delt.classed('timechoice-selected', true); } // also render as chosen
-    }
-  }
+  // if(render_format === 'toptwtr') {
+  //   var tf = QueryString.timefilter; if(typeof tf === 'undefined') { tf = 'day'; } // default here is day
+  //   var time_ranges = ['day', 'week', 'month'];
+  //   var elt = d3.select('#recommend-time-choice');
+  //   for(var i=0;i<time_ranges.length;i++) {
+  //     var time_range = time_ranges[i];
+  //     var aelt = elt.append('a').attr('href', '/'+link_endpoint+'?'+'timefilter='+time_range);
+  //     var delt = aelt.append('div').classed('timechoice', true).html(time_txt[time_range]);
+  //     if(tf == time_range) { delt.classed('timechoice-selected', true); } // also render as chosen
+  //   }
+  // }
 
   var xb = $("#xbanner");
   if(xb.length !== 0) {
@@ -169,7 +167,7 @@ $(document).ready(function(){
 <div id ="titdiv">
 
   <!-- User account information on top right -->
-  <div id="userinfo">
+  <!-- <div id="userinfo">
     {% if not g.user %}
     <form action="{{ url_for('login') }}" method="post">
       User:
@@ -182,14 +180,14 @@ $(document).ready(function(){
     <a href="{{ url_for('account') }}">{{ g.user.username }}</a>
     <a href="{{ url_for('logout') }}">log out</a>
     {% endif %}
-  </div>
+  </div> -->
 
   <!-- Site information/banner on top left -->
 	<a href="/">
 	<div id="tittxt">
-		<h1>Arxiv Sanity Preserver</h1>
-		Built in spare time by <a href="https://twitter.com/karpathy">@karpathy</a> to accelerate research.<br>
-		Serving last {{ totpapers }} papers from cs.[CV|CL|LG|AI|NE]/stat.ML
+		<h1>Feverbase</h1>
+		<!-- Built in spare time by <a href="https://twitter.com/karpathy">@karpathy</a> to accelerate research.<br>
+		Serving last {{ totpapers }} papers from cs.[CV|CL|LG|AI|NE]/stat.ML -->
 	</div>
 	</a>
 </div>
@@ -222,7 +220,7 @@ $(document).ready(function(){
 
 {% if show_prompt == "yes" %}
 <div id="prompt" style="background-color:#f6ff7a; padding:10px; width:980px; margin-left:auto; margin-right:auto; font-size:14px;">
-Hey there {{ g.user.username }}, sorry to interrupt. Arxiv-sanity costs a non-negligible amount of money to host. 
+Hey there {{ g.user.username }}, sorry to interrupt. Arxiv-sanity costs a non-negligible amount of money to host.
 If you love the site, please consider pitching in:
   <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" style="display:inline-block;">
   <input type="hidden" name="cmd" value="_s-xclick">
@@ -236,12 +234,12 @@ To nuke this message away for a long time click <span id="goaway" style="text-de
 
 <div id="pagebar">
   <div class="pagelink" id="tabrecent"><a href="/">most recent</a></div>
-  <div class="pagelink" id="tabtop"><a href="/top">top recent</a></div>
+  <!-- <div class="pagelink" id="tabtop"><a href="/top">top recent</a></div>
   <div class="pagelink" id="tabtwtr"><a href="/toptwtr">top hype</a></div>
   <div class="pagelink" id="tabfriends"><a href="/friends">friends</a></div>
   <div class="pagelink" id="tabdiscussions"><a href="/discussions">discussions</a></div>
   <div class="pagelink" id="tabrec"><a href="/recommend">recommended</a></div>
-  <div class="pagelink" id="tablib"><a href="/library">library</a></div>
+  <div class="pagelink" id="tablib"><a href="/library">library</a></div> -->
 </div>
 
 <!-- this div will be rendered into dynamcially at init with JS -->
