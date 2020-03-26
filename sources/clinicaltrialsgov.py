@@ -57,8 +57,8 @@ data = sorted(data, key=lambda d: d["date"], reverse=True)
 for d in data:
     d.pop("id", None)
 
-print("Fetched {} results".format(len(data)))
+print(f"Fetched {len(data)} results")
 
 # print(data)
 filepath = utils.save_json(data, FILENAME)
-print("Saved to {}".format(filepath))
+print(f"Saved to {filepath}")
