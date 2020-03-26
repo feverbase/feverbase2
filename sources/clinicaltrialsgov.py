@@ -12,6 +12,7 @@ data = []
 
 print(f"Fetching data for last {POSTED_WITHIN_DAYS} days...")
 
+added_ids = set()
 for term in TERMS:
     url = f"https://clinicaltrials.gov/ct2/results/rss.xml?rcv_d={POSTED_WITHIN_DAYS}&cond={term}&count=10000"
 
@@ -31,8 +32,10 @@ for term in TERMS:
     for entry in feed["entries"]:
         identifier = entry["id"]
         # skip duplicates
-        if any(d["id"] == identifier for d in data):
+        if identifier in added_ids:
             break
+        added_ids.add(identifier)
+
         title = entry["title"]
         url = entry["link"]
         summary = entry["summary"]
@@ -45,7 +48,6 @@ for term in TERMS:
         iso = date.astimezone(timezone.utc).isoformat()
 
         entry_dict = {
-            "id": identifier,
             "title": title,
             "url": url,
             "date": iso,
@@ -53,9 +55,6 @@ for term in TERMS:
         data.append(entry_dict)
 
 data = sorted(data, key=lambda d: d["date"], reverse=True)
-# remove id from data
-for d in data:
-    d.pop("id", None)
 
 print(f"Fetched {len(data)} results")
 
