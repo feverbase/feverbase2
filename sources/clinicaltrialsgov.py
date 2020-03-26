@@ -1,19 +1,21 @@
 import feedparser
 import os
 import utils
+from dateutil import parser
+from datetime import timezone
 
-FILENAME = 'clinicaltrialsgov.json'
+FILENAME = "clinicaltrialsgov.json"
 POSTED_WITHIN_DAYS = 200  # posted within the last X days
 TERMS = utils.get_query_terms()
 
 data = []
 
-print('Fetching data for last {} days...'.format(POSTED_WITHIN_DAYS))
+print(f"Fetching data for last {POSTED_WITHIN_DAYS} days...")
 
 for term in TERMS:
-  url = 'https://clinicaltrials.gov/ct2/results/rss.xml?rcv_d={}&cond={}&count=10000'.format(POSTED_WITHIN_DAYS, term)
+    url = f"https://clinicaltrials.gov/ct2/results/rss.xml?rcv_d={POSTED_WITHIN_DAYS}&cond={term}&count=10000"
 
-  # feed keys:
+    # feed keys:
     # feed
     # entries
     # bozo
@@ -23,31 +25,40 @@ for term in TERMS:
     # encoding
     # version
     # namespaces
-  feed = feedparser.parse(url)
-  print("Fetched results for {}".format(term))
+    feed = feedparser.parse(url)
+    print(f"Fetched results for {term}")
 
-  for entry in feed['entries']:
-    identifier = entry['id']
-    # skip duplicates
-    if any(d['id'] == identifier for d in data):
-      break
-    title = entry['title']
-    link = entry['link']
-    summary = entry['summary']
-    published = entry['published_parsed']
+    for entry in feed["entries"]:
+        identifier = entry["id"]
+        # skip duplicates
+        if any(d["id"] == identifier for d in data):
+            break
+        title = entry["title"]
+        url = entry["link"]
+        summary = entry["summary"]
 
-    entry_dict = {
-      'id': identifier,
-      'title': title,
-      'link': link,
-      'date': published,
-    }
-    data.append(entry_dict)
+        # published = entry['published_parsed']
+        # iso = time.strftime('%Y-%m-%dT%H:%M:%S%z', published)
+        date = parser.parse(
+            entry["published"], tzinfos={"EST": "UTC-5", "EDT": "UTC-4"}
+        )  # '%a, %d %b %Y %H:%M:%S %Z'
+        iso = date.astimezone(timezone.utc).isoformat()
 
-data = sorted(data, key=lambda d: d['date'], reverse=True)
+        entry_dict = {
+            "id": identifier,
+            "title": title,
+            "url": url,
+            "date": iso,
+        }
+        data.append(entry_dict)
 
-print('Fetched {} results'.format(len(data)))
+data = sorted(data, key=lambda d: d["date"], reverse=True)
+# remove id from data
+for d in data:
+    d.pop("id", None)
+
+print("Fetched {} results".format(len(data)))
 
 # print(data)
 filepath = utils.save_json(data, FILENAME)
-print('Saved to {}'.format(filepath))
+print("Saved to {}".format(filepath))
