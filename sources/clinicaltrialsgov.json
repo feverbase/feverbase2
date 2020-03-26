@@ -80,6 +80,26 @@
         "date": "2020-03-26T16:00:00+00:00"
     },
     {
+        "title": "Anti-inflammatory/Antioxidant Oral Nutrition Supplementation in COVID-19",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04323228?cond=covid&sfpd_d=200",
+        "date": "2020-03-26T16:00:00+00:00"
+    },
+    {
+        "title": "Hydroxychloroquine for the Treatment of Patients With Mild to Moderate COVID-19 to Prevent Progression to Severe Infection or Death",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04323631?cond=covid&sfpd_d=200",
+        "date": "2020-03-26T16:00:00+00:00"
+    },
+    {
+        "title": "Use of Ascorbic Acid in Patients With COVID 19",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04323514?cond=covid&sfpd_d=200",
+        "date": "2020-03-26T16:00:00+00:00"
+    },
+    {
+        "title": "Proactive Prophylaxis With Azithromycin and Chloroquine in Hospitalized Patients With COVID-19",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04322396?cond=covid&sfpd_d=200",
+        "date": "2020-03-26T16:00:00+00:00"
+    },
+    {
         "title": "Behavior, Environment And Treatments for Covid-19",
         "url": "https://clinicaltrials.gov/ct2/show/NCT04321811?cond=coronavirus&sfpd_d=200",
         "date": "2020-03-25T16:00:00+00:00"
@@ -135,6 +155,26 @@
         "date": "2020-03-25T16:00:00+00:00"
     },
     {
+        "title": "A Study to Evaluate the Safety and Efficacy of Tocilizumab in Patients With Severe COVID-19 Pneumonia",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04320615?cond=covid&sfpd_d=200",
+        "date": "2020-03-25T16:00:00+00:00"
+    },
+    {
+        "title": "Non-contact Endoscopy at Covid-19 Outbreak",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04320953?cond=covid&sfpd_d=200",
+        "date": "2020-03-25T16:00:00+00:00"
+    },
+    {
+        "title": "Acute Encephalopathy in Critically Ill Patients With SARS-Cov-2 Infection",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04320472?cond=covid&sfpd_d=200",
+        "date": "2020-03-25T16:00:00+00:00"
+    },
+    {
+        "title": "Impact of Swab Site and Sample Collector on Testing Sensitivity for SARS-CoV-2 Virus in Symptomatic Individuals",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04321369?cond=2019-ncov&sfpd_d=200",
+        "date": "2020-03-25T16:00:00+00:00"
+    },
+    {
         "title": "Clinical Trial of Favipiravir Tablets Combine With Chloroquine Phosphate in the Treatment of Novel Coronavirus Pneumonia",
         "url": "https://clinicaltrials.gov/ct2/show/NCT04319900?cond=coronavirus&sfpd_d=200",
         "date": "2020-03-24T16:00:00+00:00"
@@ -185,13 +225,28 @@
         "date": "2020-03-24T16:00:00+00:00"
     },
     {
+        "title": "ACE Inhibitors, Angiotensin II Type-I Receptor Blockers and Severity of COVID-19",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04318418?cond=covid&sfpd_d=200",
+        "date": "2020-03-24T16:00:00+00:00"
+    },
+    {
+        "title": "Mindfulness During COVID-19",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04319445?cond=covid&sfpd_d=200",
+        "date": "2020-03-24T16:00:00+00:00"
+    },
+    {
         "title": "Prevalence of SARS -Cov2 Carriage in Asymptomatic and Mildly-symptomatic Children",
-        "url": "https://clinicaltrials.gov/ct2/show/NCT04318431?cond=sars-cov-2&sfpd_d=200",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04318431?cond=covid&sfpd_d=200",
+        "date": "2020-03-24T16:00:00+00:00"
+    },
+    {
+        "title": "Baricitinib in Symptomatic Patients Infected by COVID-19: an Open-label, Pilot Study.",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04320277?cond=covid&sfpd_d=200",
         "date": "2020-03-24T16:00:00+00:00"
     },
     {
         "title": "A Pilot Study of Human Amniotic Fluid for COVID19 Associated Respiratory Failure",
-        "url": "https://clinicaltrials.gov/ct2/show/NCT04319731?cond=sars-cov-2&sfpd_d=200",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04319731?cond=covid&sfpd_d=200",
         "date": "2020-03-24T16:00:00+00:00"
     },
     {
@@ -207,6 +262,11 @@
     {
         "title": "Hydroxychloroquine Chemoprophylaxis in Healthcare Personnel in Contact With COVID-19 Patients (PHYDRA Trial)",
         "url": "https://clinicaltrials.gov/ct2/show/NCT04318015?cond=coronavirus&sfpd_d=200",
+        "date": "2020-03-23T16:00:00+00:00"
+    },
+    {
+        "title": "Hypertension in Patients Hospitalized With COVID-19",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04318301?cond=covid&sfpd_d=200",
         "date": "2020-03-23T16:00:00+00:00"
     },
     {
@@ -240,8 +300,38 @@
         "date": "2020-03-20T16:00:00+00:00"
     },
     {
+        "title": "Tocilizumab in COVID-19 Pneumonia (TOCIVID-19)",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04317092?cond=covid&sfpd_d=200",
+        "date": "2020-03-20T16:00:00+00:00"
+    },
+    {
+        "title": "NestCell® Mesenchymal Stem Cell to Treat Patients With Severe COVID-19 Pneumonia",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04315987?cond=covid&sfpd_d=200",
+        "date": "2020-03-20T16:00:00+00:00"
+    },
+    {
+        "title": "Acute Kidney Injury in Patients Hospitalized With COVID-19",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04316299?cond=covid&sfpd_d=200",
+        "date": "2020-03-20T16:00:00+00:00"
+    },
+    {
+        "title": "Mechanisms for Organ Dysfunction in Covid-19",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04316884?cond=covid&sfpd_d=200",
+        "date": "2020-03-20T16:00:00+00:00"
+    },
+    {
         "title": "Predictors of Respiratory Failure in SARS-Cov-2 Infection",
-        "url": "https://clinicaltrials.gov/ct2/show/NCT04316949?cond=sars-cov-2&sfpd_d=200",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04316949?cond=2019-ncov&sfpd_d=200",
+        "date": "2020-03-20T16:00:00+00:00"
+    },
+    {
+        "title": "Hydroxychloroquine in ANCA Vasculitis Evaluation",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04316494?cond=hydroxychloroquine&sfpd_d=200",
+        "date": "2020-03-20T16:00:00+00:00"
+    },
+    {
+        "title": "Hydroxychloroquine (HCQ) in Combination With Abemaciclib and Endocrine Therapy in HR+/Her 2- Advanced Breast Cancer After a Lead in Dose Escalation Cohort of HCQ and Abemaciclib in Advanced Solid Tumors",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04316169?cond=hydroxychloroquine&sfpd_d=200",
         "date": "2020-03-20T16:00:00+00:00"
     },
     {
@@ -265,6 +355,11 @@
         "date": "2020-03-19T16:00:00+00:00"
     },
     {
+        "title": "Tocilizumab for SARS-CoV2 Severe Pneumonitis",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04315480?cond=2019-ncov&sfpd_d=200",
+        "date": "2020-03-19T16:00:00+00:00"
+    },
+    {
         "title": "Sequential Oxygen Therapy Strategy for Patients With COVID-19",
         "url": "https://clinicaltrials.gov/ct2/show/NCT04312100?cond=coronavirus&sfpd_d=200",
         "date": "2020-03-18T16:00:00+00:00"
@@ -277,6 +372,31 @@
     {
         "title": "A Phase I Clinical Trial in 18-60 Adults",
         "url": "https://clinicaltrials.gov/ct2/show/NCT04313127?cond=coronavirus&sfpd_d=200",
+        "date": "2020-03-18T16:00:00+00:00"
+    },
+    {
+        "title": "Treatment of COVID-19 Patients Using Wharton's Jelly-Mesenchymal Stem Cells",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04313322?cond=covid&sfpd_d=200",
+        "date": "2020-03-18T16:00:00+00:00"
+    },
+    {
+        "title": "The Use PUL-042 Inhalation Solution to Prevent COVID-19 in Adults Exposed to SARS-CoV-2",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04313023?cond=covid&sfpd_d=200",
+        "date": "2020-03-18T16:00:00+00:00"
+    },
+    {
+        "title": "The Use of PUL-042 Inhalation Solution to Reduce the Severity of COVID-19 in Adults Positive for SARS-CoV-2 Infection",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04312997?cond=covid&sfpd_d=200",
+        "date": "2020-03-18T16:00:00+00:00"
+    },
+    {
+        "title": "Myocardial Damage in COVID-19",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04312464?cond=covid&sfpd_d=200",
+        "date": "2020-03-18T16:00:00+00:00"
+    },
+    {
+        "title": "Artificial Intelligence Algorithms for Discriminating Between COVID-19 and Influenza Pneumonitis Using Chest X-Rays",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04313946?cond=covid&sfpd_d=200",
         "date": "2020-03-18T16:00:00+00:00"
     },
     {
@@ -305,6 +425,16 @@
         "date": "2020-03-17T16:00:00+00:00"
     },
     {
+        "title": "Yinhu Qingwen Granula for the Treatment of Severe CoVID-19",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04310865?cond=covid&sfpd_d=200",
+        "date": "2020-03-17T16:00:00+00:00"
+    },
+    {
+        "title": "Effectiveness of an EHR Interface to Reduce Dosage of Hydroxychloroquine",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04310462?cond=hydroxychloroquine&sfpd_d=200",
+        "date": "2020-03-17T16:00:00+00:00"
+    },
+    {
         "title": "Post-exposure Prophylaxis / Preemptive Therapy for SARS-Coronavirus-2",
         "url": "https://clinicaltrials.gov/ct2/show/NCT04308668?cond=coronavirus&sfpd_d=200",
         "date": "2020-03-16T16:00:00+00:00"
@@ -330,6 +460,16 @@
         "date": "2020-03-13T16:00:00+00:00"
     },
     {
+        "title": "Clinical Trial on Regularity of TCM Syndrome and Differentiation Treatment of COVID-19.",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04306497?cond=covid&sfpd_d=200",
+        "date": "2020-03-13T16:00:00+00:00"
+    },
+    {
+        "title": "Tocilizumab vs CRRT in Management of Cytokine Release Syndrome (CRS) in COVID-19",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04306705?cond=covid&sfpd_d=200",
+        "date": "2020-03-13T16:00:00+00:00"
+    },
+    {
         "title": "Nitric Oxide Gas Inhalation in Severe Acute Respiratory Syndrome in COVID-19",
         "url": "https://clinicaltrials.gov/ct2/show/NCT04306393?cond=coronavirus&sfpd_d=200",
         "date": "2020-03-12T16:00:00+00:00"
@@ -345,6 +485,16 @@
         "date": "2020-03-12T16:00:00+00:00"
     },
     {
+        "title": "Bevacizumab in Severe or Critically Severe Patients With COVID-19 Pneumonia-RCT",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04305106?cond=covid&sfpd_d=200",
+        "date": "2020-03-12T16:00:00+00:00"
+    },
+    {
+        "title": "Blood Donor Recruitment During Epidemic of COVID-19",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04306055?cond=covid&sfpd_d=200",
+        "date": "2020-03-12T16:00:00+00:00"
+    },
+    {
         "title": "Chloroquine Prevention of Coronavirus Disease (COVID-19) in the Healthcare Setting",
         "url": "https://clinicaltrials.gov/ct2/show/NCT04303507?cond=coronavirus&sfpd_d=200",
         "date": "2020-03-11T16:00:00+00:00"
@@ -355,8 +505,18 @@
         "date": "2020-03-11T16:00:00+00:00"
     },
     {
+        "title": "A Pilot Study of Sildenafil in COVID-19",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04304313?cond=covid&sfpd_d=200",
+        "date": "2020-03-11T16:00:00+00:00"
+    },
+    {
+        "title": "Treatment of COVID-19 Cases and Chemoprophylaxis of Contacts as Prevention",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04304053?cond=covid&sfpd_d=200",
+        "date": "2020-03-11T16:00:00+00:00"
+    },
+    {
         "title": "Sars-CoV2 Seroconversion Among Front Line Medical and Paramedical Staff in Emergency, Intensive Care Units and Infectious Disease Departments During the 2020 Epidemic",
-        "url": "https://clinicaltrials.gov/ct2/show/NCT04304690?cond=sars-cov-2&sfpd_d=200",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04304690?cond=2019-ncov&sfpd_d=200",
         "date": "2020-03-11T16:00:00+00:00"
     },
     {
@@ -367,6 +527,21 @@
     {
         "title": "Novel Coronavirus Induced Severe Pneumonia Treated by Dental Pulp Mesenchymal Stem Cells",
         "url": "https://clinicaltrials.gov/ct2/show/NCT04302519?cond=coronavirus&sfpd_d=200",
+        "date": "2020-03-10T16:00:00+00:00"
+    },
+    {
+        "title": "Accurate Classification System for Patients With COVID-19 Pneumonitis",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04302688?cond=covid&sfpd_d=200",
+        "date": "2020-03-10T16:00:00+00:00"
+    },
+    {
+        "title": "An Observational Cohort Study of Clinical Outcomes After Antiviral Treatment of Chronic Hepatitis C",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04301882?cond=interferon&sfpd_d=200",
+        "date": "2020-03-10T16:00:00+00:00"
+    },
+    {
+        "title": "A Cohort Study on Long-term Clinical Outcomes of Antiviral Therapy in Patients With Chronic Hepatitis B and Cirrhosis",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04301908?cond=interferon&sfpd_d=200",
         "date": "2020-03-10T16:00:00+00:00"
     },
     {
@@ -382,6 +557,11 @@
     {
         "title": "Stem Cell Educator Therapy Treat the Viral Inflammation Caused by Severe Acute Respiratory Syndrome Coronavirus 2",
         "url": "https://clinicaltrials.gov/ct2/show/NCT04299152?cond=coronavirus&sfpd_d=200",
+        "date": "2020-03-06T17:00:00+00:00"
+    },
+    {
+        "title": "Safety Related Factors of Endotracheal Intubation in Patients With Severe Covid-19 Pneumonia",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04298814?cond=covid&sfpd_d=200",
         "date": "2020-03-06T17:00:00+00:00"
     },
     {
@@ -425,6 +605,11 @@
         "date": "2020-03-03T17:00:00+00:00"
     },
     {
+        "title": "Prognostic Factors of Patients With COVID-19",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04292964?cond=covid&sfpd_d=200",
+        "date": "2020-03-03T17:00:00+00:00"
+    },
+    {
         "title": "Evaluation of Ganovo （Danoprevir ） Combined With Ritonavir in the Treatment of Novel Coronavirus Infection",
         "url": "https://clinicaltrials.gov/ct2/show/NCT04291729?cond=coronavirus&sfpd_d=200",
         "date": "2020-03-02T17:00:00+00:00"
@@ -437,6 +622,16 @@
     {
         "title": "Nitric Oxide Gas Inhalation Therapy for Mild/Moderate COVID19 Infection",
         "url": "https://clinicaltrials.gov/ct2/show/NCT04290858?cond=coronavirus&sfpd_d=200",
+        "date": "2020-03-02T17:00:00+00:00"
+    },
+    {
+        "title": "The Efficacy and Safety of Huai er in the Adjuvant Treatment of COVID-19",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04291053?cond=covid&sfpd_d=200",
+        "date": "2020-03-02T17:00:00+00:00"
+    },
+    {
+        "title": "Multicenter Study on Nosocomial Transmission of SARS-CoV-2 Virus",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04290780?cond=2019-ncov&sfpd_d=200",
         "date": "2020-03-02T17:00:00+00:00"
     },
     {
@@ -455,8 +650,18 @@
         "date": "2020-02-27T17:00:00+00:00"
     },
     {
+        "title": "Recombinant Human Angiotensin-converting Enzyme 2 (rhACE2) as a Treatment for Patients With COVID-19",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04287686?cond=covid&sfpd_d=200",
+        "date": "2020-02-27T17:00:00+00:00"
+    },
+    {
         "title": "The Effect of T89 on Improving Oxygen Saturation and Clinical Symptoms in Patients With COVID-19",
         "url": "https://clinicaltrials.gov/ct2/show/NCT04285190?cond=coronavirus&sfpd_d=200",
+        "date": "2020-02-26T17:00:00+00:00"
+    },
+    {
+        "title": "Critically Ill Patients With COVID-19 in Hong Kong: a Multicentre Observational Cohort Study",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04285801?cond=covid&sfpd_d=200",
         "date": "2020-02-26T17:00:00+00:00"
     },
     {
@@ -525,9 +730,24 @@
         "date": "2020-02-21T17:00:00+00:00"
     },
     {
+        "title": "The Investigation of the Neonates With or With Risk of COVID-19",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04279899?cond=covid&sfpd_d=200",
+        "date": "2020-02-21T17:00:00+00:00"
+    },
+    {
         "title": "Treatment of Pulmonary Fibrosis Due to 2019-nCoV Pneumonia With Fuzheng Huayu",
         "url": "https://clinicaltrials.gov/ct2/show/NCT04279197?cond=2019-ncov&sfpd_d=200",
         "date": "2020-02-21T17:00:00+00:00"
+    },
+    {
+        "title": "Yinhu Qingwen Decoction for the Treatment of Mild / Common CoVID-19",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04278963?cond=covid&sfpd_d=200",
+        "date": "2020-02-20T17:00:00+00:00"
+    },
+    {
+        "title": "The Study of IBI310 in Combination With IBI308 Compared to High-Dose Interferon In Patients With Acral Melanoma That Has Been Removed by Surgery",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04277663?cond=interferon&sfpd_d=200",
+        "date": "2020-02-20T17:00:00+00:00"
     },
     {
         "title": "A Pilot Clinical Study on Inhalation of Mesenchymal Stem Cells Exosomes Treating Severe Novel Coronavirus Pneumonia",
@@ -552,6 +772,21 @@
     {
         "title": "Immunity and Safety of Covid-19 Synthetic Minigene Vaccine",
         "url": "https://clinicaltrials.gov/ct2/show/NCT04276896?cond=coronavirus&sfpd_d=200",
+        "date": "2020-02-19T17:00:00+00:00"
+    },
+    {
+        "title": "The COVID-19 Mobile Health Study (CMHS)",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04275947?cond=covid&sfpd_d=200",
+        "date": "2020-02-19T17:00:00+00:00"
+    },
+    {
+        "title": "Clinical Study of Anti-CD147 Humanized Meplazumab for Injection to Treat With 2019-nCoV Pneumonia",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04275245?cond=2019-ncov&sfpd_d=200",
+        "date": "2020-02-19T17:00:00+00:00"
+    },
+    {
+        "title": "HYDROxychloroquine in Syndrome Primary AntiPhospholipid",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04275778?cond=hydroxychloroquine&sfpd_d=200",
         "date": "2020-02-19T17:00:00+00:00"
     },
     {
@@ -585,13 +820,13 @@
         "date": "2020-02-18T17:00:00+00:00"
     },
     {
-        "title": "Clinical Characteristics and Long-term Prognosis of 2019-nCoV Infection in Children",
-        "url": "https://clinicaltrials.gov/ct2/show/NCT04270383?cond=2019-ncov&sfpd_d=200",
+        "title": "Prognositc Factors in COVID-19 Patients Complicated With Hypertension",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04272710?cond=covid&sfpd_d=200",
         "date": "2020-02-17T17:00:00+00:00"
     },
     {
-        "title": "Prognositc Factors in COVID-19 Patients Complicated With Hypertension",
-        "url": "https://clinicaltrials.gov/ct2/show/NCT04272710?cond=2019-ncov&sfpd_d=200",
+        "title": "Clinical Characteristics and Long-term Prognosis of 2019-nCoV Infection in Children",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04270383?cond=2019-ncov&sfpd_d=200",
         "date": "2020-02-17T17:00:00+00:00"
     },
     {
@@ -661,7 +896,7 @@
     },
     {
         "title": "Severe 2019-nCoV Remdesivir RCT",
-        "url": "https://clinicaltrials.gov/ct2/show/NCT04257656?cond=remdesivir&sfpd_d=200",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04257656?cond=2019-ncov&sfpd_d=200",
         "date": "2020-02-06T17:00:00+00:00"
     },
     {
@@ -695,6 +930,11 @@
         "date": "2020-02-05T17:00:00+00:00"
     },
     {
+        "title": "Washed Microbiota Transplantation for Patients With 2019-nCoV Infection",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04251767?cond=covid&sfpd_d=200",
+        "date": "2020-02-05T17:00:00+00:00"
+    },
+    {
         "title": "Mild/Moderate 2019-nCoV Remdesivir RCT",
         "url": "https://clinicaltrials.gov/ct2/show/NCT04252664?cond=2019-ncov&sfpd_d=200",
         "date": "2020-02-05T17:00:00+00:00"
@@ -710,13 +950,23 @@
         "date": "2020-02-05T17:00:00+00:00"
     },
     {
-        "title": "Washed Microbiota Transplantation for Patients With 2019-nCoV Infection",
-        "url": "https://clinicaltrials.gov/ct2/show/NCT04251767?cond=2019-ncov&sfpd_d=200",
-        "date": "2020-02-05T17:00:00+00:00"
-    },
-    {
         "title": "Development of a Simple, Fast and Portable Recombinase Aided Amplification Assay for 2019-nCoV",
         "url": "https://clinicaltrials.gov/ct2/show/NCT04245631?cond=coronavirus&sfpd_d=200",
+        "date": "2020-01-29T17:00:00+00:00"
+    },
+    {
+        "title": "Efficacy and Safety of All-Oral Combination of Narlaprevir/Ritonavir and Sofosbuvir in Treatment-naïve Patients With Chronic Hepatitis C Genotype 1",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04246723?cond=ritonavir&sfpd_d=200",
+        "date": "2020-01-29T17:00:00+00:00"
+    },
+    {
+        "title": "Rituximab and Pegylated Interferon α-2b in Patients With Indolent B-cell Lymphoma",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04246359?cond=interferon&sfpd_d=200",
+        "date": "2020-01-29T17:00:00+00:00"
+    },
+    {
+        "title": "Tofacitinib for Immune Skin Conditions in Down Syndrome",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04246372?cond=interferon&sfpd_d=200",
         "date": "2020-01-29T17:00:00+00:00"
     },
     {
@@ -725,14 +975,109 @@
         "date": "2020-01-28T17:00:00+00:00"
     },
     {
+        "title": "Tuberculosis Infection In Children Visiting Friends and Relatives",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04236765?cond=interferon&sfpd_d=200",
+        "date": "2020-01-22T17:00:00+00:00"
+    },
+    {
+        "title": "Second-line Switch to Dolutegravir Study",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04229290?cond=ritonavir&sfpd_d=200",
+        "date": "2020-01-18T17:00:00+00:00"
+    },
+    {
         "title": "Hydroxychloroquine and Unexplained Recurrent Miscarriage",
         "url": "https://clinicaltrials.gov/ct2/show/NCT04228263?cond=hydroxychloroquine&sfpd_d=200",
         "date": "2020-01-14T17:00:00+00:00"
     },
     {
+        "title": "Home Blood Pressure Study for Recent Stroke Survivors With High Blood Pressure *Due to COVID-19 Outbreak in United States the Investigators Have Paused All In-person Enrollment and Will Re-evaluate on May 1st*",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04226157?cond=covid&sfpd_d=200",
+        "date": "2020-01-13T17:00:00+00:00"
+    },
+    {
+        "title": "Pegylated Interferon Alfa-2b Versus Interferon Alfa Therapy in the Treatment of Childhood Essential Thrombocythemia",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04226950?cond=interferon&sfpd_d=200",
+        "date": "2020-01-13T17:00:00+00:00"
+    },
+    {
+        "title": "TES Artemether-lumefantrine for Pf and Chloroquine (CQ) for Pv",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04222088?cond=chloroquine&sfpd_d=200",
+        "date": "2020-01-09T17:00:00+00:00"
+    },
+    {
+        "title": "Study of Combination Therapy With the MEK Inhibitor, Cobimetinib, Immune Checkpoint Blockade, Atezolizumab, and the AUTOphagy Inhibitor, Hydroxychloroquine in KRAS-mutated Advanced Malignancies",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04214418?cond=hydroxychloroquine&sfpd_d=200",
+        "date": "2020-01-02T17:00:00+00:00"
+    },
+    {
+        "title": "A Study of Darunavir in Combination With Cobicistat or Ritonavir, and Dabigatran Etexilate in Healthy Participants",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04208061?cond=ritonavir&sfpd_d=200",
+        "date": "2019-12-23T17:00:00+00:00"
+    },
+    {
+        "title": "Study of the Role of Interferon αon the Endothelial Dysfunction During Septic Shock",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04204694?cond=interferon&sfpd_d=200",
+        "date": "2019-12-19T17:00:00+00:00"
+    },
+    {
+        "title": "A Trial of Dabrafenib, Trametinib and Hydroxychloroquine for Patients With Recurrent LGG or HGG With a BRAF Aberration",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04201457?cond=hydroxychloroquine&sfpd_d=200",
+        "date": "2019-12-17T17:00:00+00:00"
+    },
+    {
+        "title": "GastrOesophageal Varices After Sustained Virological Response",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04191018?cond=interferon&sfpd_d=200",
+        "date": "2019-12-09T17:00:00+00:00"
+    },
+    {
+        "title": "Pharmacodynamic Biomarkers to Support Biosimilar Development: Interferon Beta-1A Products",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04183491?cond=interferon&sfpd_d=200",
+        "date": "2019-12-03T17:00:00+00:00"
+    },
+    {
         "title": "A Clinical Trial to Determine the Safety and Immunogenicity of Healthy Candidate MERS-CoV Vaccine (MERS002)",
         "url": "https://clinicaltrials.gov/ct2/show/NCT04170829?cond=coronavirus&sfpd_d=200",
         "date": "2019-11-20T17:00:00+00:00"
+    },
+    {
+        "title": "Combined Carfilzomib and Hydroxychloroquine in Patients With Relapsed/Refractory Multiple Myeloma",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04163107?cond=hydroxychloroquine&sfpd_d=200",
+        "date": "2019-11-14T17:00:00+00:00"
+    },
+    {
+        "title": "Anti-Inflammatory Drug and Endothelial Function",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04161339?cond=hydroxychloroquine&sfpd_d=200",
+        "date": "2019-11-13T17:00:00+00:00"
+    },
+    {
+        "title": "Hydroxychloroquine for Thrombosis Prevention and Antiphospholipid Antibody Reduction in Primary Antiphospholipid Syndrome",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04153201?cond=hydroxychloroquine&sfpd_d=200",
+        "date": "2019-11-06T17:00:00+00:00"
+    },
+    {
+        "title": "Evaluate the Safety, Tolerability, and Antiviral Activity of GLS4 With Ritonavir in Patients With Chronic HBV Infection",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04147208?cond=ritonavir&sfpd_d=200",
+        "date": "2019-11-01T16:00:00+00:00"
+    },
+    {
+        "title": "Ulixertinib (BVD-523) and Hydroxychloroquine in Patients w Advanced MAPK-Mutated Gastrointestinal Adenocarcinomas",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04145297?cond=hydroxychloroquine&sfpd_d=200",
+        "date": "2019-10-30T16:00:00+00:00"
+    },
+    {
+        "title": "Study of Intratumorally Administered Stimulator of Interferon Genes (STING) Agonist E7766 in Participants With Advanced Solid Tumors or Lymphomas - INSTAL-101",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04144140?cond=interferon&sfpd_d=200",
+        "date": "2019-10-30T16:00:00+00:00"
+    },
+    {
+        "title": "A Study to Assess Effectiveness and Safety of Fixed Dose Combination of Lopinavir/Ritonavir (LPV/r) in Human Immunodeficiency Virus Type 1 (HIV-1) Infected Patients After Switching From Kaletra in the Routine Clinical Settings of Russian Federation",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04138199?cond=ritonavir&sfpd_d=200",
+        "date": "2019-10-24T16:00:00+00:00"
+    },
+    {
+        "title": "Binimetinib and Hydroxychloroquine in Treating Patients With KRAS Mutant Metastatic Pancreatic Cancer",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04132505?cond=hydroxychloroquine&sfpd_d=200",
+        "date": "2019-10-18T16:00:00+00:00"
     },
     {
         "title": "Study of Safety and Immunogenicity of BVRS-GamVac",
@@ -745,8 +1090,33 @@
         "date": "2019-10-16T16:00:00+00:00"
     },
     {
+        "title": "Oral Hydroxychloroquine (HCQ) for Retinitis Pigmentosa Caused by P23H- Rhodopsin (RHO)",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04120883?cond=hydroxychloroquine&sfpd_d=200",
+        "date": "2019-10-09T16:00:00+00:00"
+    },
+    {
         "title": "Randomized, Double-blind, Placebo-controlled, Phase Ib Study to Assess the Safety and Immunogenicity of MVA-MERS-S_DF-1",
         "url": "https://clinicaltrials.gov/ct2/show/NCT04119440?cond=coronavirus&sfpd_d=200",
         "date": "2019-10-08T16:00:00+00:00"
+    },
+    {
+        "title": "MITHRIDATE: Ruxolitinib Versus Hydroxycarbamide or Interferon as First Line Therapy in High Risk Polcythemia Vera",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04116502?cond=interferon&sfpd_d=200",
+        "date": "2019-10-04T16:00:00+00:00"
+    },
+    {
+        "title": "A Study of Stimulator of Interferon Genes (STING) Agonist E7766 in Non-muscle Invasive Bladder Cancer (NMIBC) Including Participants Unresponsive to Bacillus Calmette-Guerin (BCG) Therapy, INPUT-102",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04109092?cond=interferon&sfpd_d=200",
+        "date": "2019-09-30T16:00:00+00:00"
+    },
+    {
+        "title": "Polarized Dendritic Cell (aDC1) Vaccine, Interferon Alpha-2, Rintatolimod, and Celecoxib for the Treatment of HLA-A2+ Refractory Melanoma",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04093323?cond=interferon&sfpd_d=200",
+        "date": "2019-09-18T16:00:00+00:00"
+    },
+    {
+        "title": "Proportion of Clinical Improvement & Type 1 Interferon (IFN) Score Changes in Idiopathic Uveitis Patients With Interferon Gamma Release Assay (IGRA) Positive",
+        "url": "https://clinicaltrials.gov/ct2/show/NCT04088019?cond=interferon&sfpd_d=200",
+        "date": "2019-09-12T16:00:00+00:00"
     }
 ]

@@ -33,7 +33,7 @@ for term in TERMS:
         identifier = entry["id"]
         # skip duplicates
         if identifier in added_ids:
-            break
+            continue
         added_ids.add(identifier)
 
         title = entry["title"]
