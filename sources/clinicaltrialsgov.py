@@ -50,11 +50,11 @@ for term in TERMS:
         entry_dict = {
             "title": title,
             "url": url,
-            "date": iso,
+            "timestamp": iso,
         }
         data.append(entry_dict)
 
-data = sorted(data, key=lambda d: d["date"], reverse=True)
+data = sorted(data, key=lambda d: d["timestamp"], reverse=True)
 
 print(f"Fetched {len(data)} results")
 
