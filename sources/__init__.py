@@ -9,10 +9,10 @@ TERMS = utils.get_query_terms()
 def get_records():
     data = {}
     for query in TERMS:
-        # data.update(chictr.find(query))
+        data.update(chictr.find(query))
         data.update(clinicaltrialsgov.find(query))
-        # data.update(eu.find(query))
-        # data.update(isrctn.find(query))
+        data.update(eu.find(query))
+        data.update(isrctn.find(query))
 
     # sort the data and return it
     items = data.values()
