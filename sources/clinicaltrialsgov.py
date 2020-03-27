@@ -8,18 +8,24 @@ from bs4 import BeautifulSoup
 FILENAME = "clinicaltrialsgov.json"
 POSTED_WITHIN_DAYS = 200  # posted within the last X days
 
+
 def summary_to_dict(summary):
     fields = {}
     soup = BeautifulSoup(summary, "html.parser")
-    for b in soup.findAll('b'):
+    for b in soup.findAll("b"):
         key = b.get_text()
-                                            # remove colon
-        value = b.next_sibling and b.next_sibling[1:].replace(u'\xa0', u' ').strip()
-        if 'recruit' in key.lower() and not value:
-            value = key
-            key = 'Stage'
+        # remove colon
+        value = b.next_sibling and b.next_sibling[1:].replace("\xa0", " ").strip()
+        # if 'recruit' in key.lower() and not value:
+        #     value = key
+        #     key = 'Stage'
         fields[key] = value
+    # last one has value of None, is stage
+    if not fields[key]:
+        fields["Stage"] = key
+        del fields[key]
     return fields
+
 
 def find(term):
     data = {}
@@ -51,7 +57,7 @@ def find(term):
         added_ids.add(identifier)
 
         title = entry["title"]
-        url = entry["link"].replace(f'cond={term}&', '')
+        url = entry["link"].replace(f"cond={term}&", "")
 
         # published = entry['published_parsed']
         # iso = time.strftime('%Y-%m-%dT%H:%M:%S%z', published)
@@ -77,5 +83,3 @@ def find(term):
     print(f"Fetched {len(data)} results")
 
     return data
-
-print(find('coronavirus'))
