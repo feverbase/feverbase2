@@ -17,6 +17,8 @@ import pymongo
 
 from utils import safe_pickle_dump, strip_version, isvalidid, Config
 
+from sources import translate
+
 # various globals
 # -----------------------------------------------------------------------------
 
@@ -95,9 +97,9 @@ def add_header(r):
 def papers_search(qraw):
   qparts = qraw.lower().strip().split()  # split by spaces
   if not len(qparts):
-    papers = db['data']
+    papers = db
   else:
-    papers = list(filter(lambda d: any(part in d['title'].lower() for part in qparts), db['data']))
+    papers = list(filter(lambda d: any(part in d['title'].lower() for part in qparts), db))
   # for pid,p in db.items():
   #   score = sum(SEARCH_DICT[pid].get(q,0) for q in qparts)
   #   if score == 0:
@@ -260,7 +262,7 @@ def intmain():
   # vstr = request.args.get('vfilter', 'all')
   # papers = [db[pid] for pid in DATE_SORTED_PIDS] # precomputed
   # papers = papers_filter_version(papers, vstr)
-  papers = db['data']
+  papers = db
   ctx = default_context(papers, render_format='recent')
   return render_template('main.html', **ctx)
 
@@ -671,7 +673,15 @@ if __name__ == "__main__":
   print('loading the paper database', Config.db_path)
   # db = pickle.load(open(Config.db_path, 'rb'))
   with open(Config.db_path, 'r') as f:
+    # translate json entries to standardized format
     db = json.load(f)
+    db = list(map(translate, db["data"]))
+    # sort descending timestamp
+    db = sorted(
+      db,
+      key=lambda d: "" if d["timestamp"] == None else d["timestamp"],
+      reverse=True,
+    )
 
   # print('loading tfidf_meta', Config.meta_path)
   # meta = pickle.load(open(Config.meta_path, "rb"))

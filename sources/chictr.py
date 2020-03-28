@@ -3,6 +3,7 @@ import re
 import requests
 import utils
 
+SOURCE = "chictr.org.cn"
 FILENAME = "chictr.json"
 BASE_URL = "http://www.chictr.org.cn/"
 QUERY_URL = "{BASE_URL}/searchprojen.aspx?officialname=&subjectid=&secondaryid=&applier=&studyleader=&ethicalcommitteesanction=&sponsor=&studyailment=&studyailmentcode=&studytype=0&studystage=0&studydesign=0&minstudyexecutetime=&maxstudyexecutetime=&recruitmentstatus=0&gender=0&agreetosign=&secsponsor=&regno=&regstatus=0&country=&province=&city=&institution=&institutionlevel=&measure=&intercode=&sourceofspends=&createyear=0&isuploadrf=&whetherpublic=&btngo=btn&verifycode=&title={query}"
@@ -12,7 +13,7 @@ def find(query):
     data = {}
     count = 0
     url = QUERY_URL.format(BASE_URL=BASE_URL, query=query)
-    
+
     page = requests.get(url)
 
     if page.status_code == 200:
@@ -40,18 +41,21 @@ def find(query):
                         url = '{base}{path}'.format(base=BASE_URL, path=url_path)
 
                         info = {
+                            'SOURCE': SOURCE,
                             'url': url,
                             'title': title,
                             'affiliation': affiliation,
                             'timestamp': date
                         }
-                        
+
                         data[url] = info
                         count += 1
 
                     print(f'Page {page_num} out of {num_pages} fetched {len(trials)} results for {query}')
-    
+
     print(f"Fetched {count} results for {query}")
-    
+
     return data
 
+def translate(info):
+    return info

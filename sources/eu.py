@@ -7,10 +7,12 @@ import time
 
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
+SOURCE = "clinicaltrialsregister.eu"
 FILENAME = "eu.json"
 BASE_URL = "https://www.clinicaltrialsregister.eu"
 QUERY_URL = "{BASE_URL}/ctr-search/search?query={query}"
 PAGINATE_QUERY = "&page={page_num}"
+
 
 def find(query):
     data = {}
@@ -59,15 +61,20 @@ def find(query):
                         if link:
                             url = f"{BASE_URL}{link}"
                             data[url] = {
-                                    "url": url,
-                                    "title": title,
-                                    "country": country,
-                                    "timestamp": date,
-                                }
-                            
+                                "SOURCE": SOURCE,
+                                "url": url,
+                                "title": title,
+                                "country": country,
+                                "timestamp": date,
+                            }
+
                             count += 1
-                print(f'Page {page_num + 1} out of {num_pages} fetched for {query}')
+                print(f"Page {page_num + 1} out of {num_pages} fetched for {query}")
 
     print(f"Fetched {count} results for {query}")
-    
+
     return data
+
+
+def translate(info):
+    return info

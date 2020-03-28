@@ -14,12 +14,21 @@ if __name__ == "__main__":
 
     # parse input arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument('--results-per-iteration', type=int,
-                        default=100, help='passed to arxiv API')
-    parser.add_argument('--wait-time', type=float, default=5.0,
-                        help='lets be gentle to arxiv API (in number of seconds)')
-    parser.add_argument('--break-on-no-added', type=int, default=1,
-                        help='break out early if all returned query papers are already in db? 1=yes, 0=no')
+    parser.add_argument(
+        "--results-per-iteration", type=int, default=100, help="passed to arxiv API"
+    )
+    parser.add_argument(
+        "--wait-time",
+        type=float,
+        default=5.0,
+        help="lets be gentle to arxiv API (in number of seconds)",
+    )
+    parser.add_argument(
+        "--break-on-no-added",
+        type=int,
+        default=1,
+        help="break out early if all returned query trials are already in db? 1=yes, 0=no",
+    )
     args = parser.parse_args()
 
     # # lets load the existing database to memory
@@ -36,12 +45,10 @@ if __name__ == "__main__":
     # print('database has %d entries at start' % (len(db), ))
     # num_added_total = 0
 
-    db = {'data': sources.get_records()}
+    db = {"data": sources.get_records()}
 
-    print('Saving database with %d papers to %s' %
-          (len(db), Config.db_path))
+    print("Saving database with %d trials to %s" % (len(db["data"]), Config.db_path))
 
     dirname = os.path.dirname(os.path.abspath(__file__))
-    with open(f'{dirname}/{Config.db_path}', "w", encoding="utf-8") as f:
+    with open(f"{dirname}/{Config.db_path}", "w", encoding="utf-8") as f:
         json.dump(db, f, ensure_ascii=False, indent=4)
-
