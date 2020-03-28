@@ -16,25 +16,6 @@ POSTED_WITHIN_DAYS = (
 STATUS_INDICATORS = ["|", "/", "-", "\\"]
 
 
-
-def summary_to_dict(summary):
-    fields = {}
-    soup = BeautifulSoup(summary, "html.parser")
-    for b in soup.findAll("b"):
-        key = b.get_text()
-        # remove colon
-        value = b.next_sibling and b.next_sibling[1:].replace("\xa0", " ").strip()
-        # if 'recruit' in key.lower() and not value:
-        #     value = key
-        #     key = 'Stage'
-        fields[key] = value
-    # last one has value of None, is stage
-    if not fields[key]:
-        fields["Stage"] = key
-        del fields[key]
-    return fields
-
-
 def find(term):
     data = {}
 
