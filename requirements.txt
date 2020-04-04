@@ -16,5 +16,7 @@ flask
 flask_limiter
 tornado
 pymongo
-
+mongoengine
+python-dotenv
+bs4
 black

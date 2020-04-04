@@ -7,24 +7,24 @@ var QueryString = function () {
   var query_string = {};
   var query = window.location.search.substring(1);
   var vars = query.split("&");
-  for (var i=0;i<vars.length;i++) {
+  for (var i = 0; i < vars.length; i++) {
     var pair = vars[i].split("=");
-        // If first entry with this name
+    // If first entry with this name
     if (typeof query_string[pair[0]] === "undefined") {
       query_string[pair[0]] = decodeURIComponent(pair[1]);
-        // If second entry with this name
+      // If second entry with this name
     } else if (typeof query_string[pair[0]] === "string") {
-      var arr = [ query_string[pair[0]],decodeURIComponent(pair[1]) ];
+      var arr = [query_string[pair[0]], decodeURIComponent(pair[1])];
       query_string[pair[0]] = arr;
-        // If third or later entry with this name
+      // If third or later entry with this name
     } else {
       query_string[pair[0]].push(decodeURIComponent(pair[1]));
     }
   }
-    return query_string;
+  return query_string;
 }();
 
-function jq( myid ) { return myid.replace( /(:|\.|\[|\]|,)/g, "\\$1" ); } // for dealing with ids that have . in them
+function jq(myid) { return myid.replace(/(:|\.|\[|\]|,)/g, "\\$1"); } // for dealing with ids that have . in them
 
 function build_ocoins_str(p) {
   var ocoins_info = {
@@ -44,29 +44,29 @@ function build_ocoins_str(p) {
     "rft.description": p.abstract,
   };
   ocoins_info = $.param(ocoins_info);
-  ocoins_info += "&" + $.map(p.authors, function(a) {
-      return "rft.au=" + encodeURIComponent(a);
-    }).join("&");
+  ocoins_info += "&" + $.map(p.authors, function (a) {
+    return "rft.au=" + encodeURIComponent(a);
+  }).join("&");
 
   return ocoins_info;
 }
 
 function build_authors_html(authors) {
   var res = '';
-  for(var i=0,n=authors.length;i<n;i++) {
+  for (var i = 0, n = authors.length; i < n; i++) {
     var link = '/search?q=' + authors[i].replace(/ /g, "+");
     res += '<a href="' + link + '">' + authors[i] + '</a>';
-    if(i<n-1) res += ', ';
+    if (i < n - 1) res += ', ';
   }
   return res;
 }
 
 function build_categories_html(tags) {
   var res = '';
-  for(var i=0,n=tags.length;i<n;i++) {
+  for (var i = 0, n = tags.length; i < n; i++) {
     var link = '/search?q=' + tags[i].replace(/ /g, "+");
     res += '<a href="' + link + '">' + tags[i] + '</a>';
-    if(i<n-1) res += ' | ';
+    if (i < n - 1) res += ' | ';
   }
   return res;
 }
@@ -82,17 +82,17 @@ var pointer_ix = 0; // points to next paper in line to be added to #rtable
 var showed_end_msg = false;
 function addPapers(num, dynamic) {
   console.log(papers);
-  if(papers.length === 0) { return true; } // nothing to display, and we're done
+  if (papers.length === 0) { return true; } // nothing to display, and we're done
 
   var root = d3.select("#rtable");
 
   var base_ix = pointer_ix;
-  for(var i=0;i<num;i++) {
+  for (var i = 0; i < num; i++) {
     var ix = base_ix + i;
     if (ix >= papers.length) {
       // dont show this for now
-      if(false && !showed_end_msg) {
-        if (ix >= numresults){
+      if (false && !showed_end_msg) {
+        if (ix >= numresults) {
           var msg = 'Results complete.';
         } else {
           var msg = 'You hit the limit of number of papers to show in one result.';
@@ -233,18 +233,18 @@ function addPapers(num, dynamic) {
   return pointer_ix >= papers.length; // are we done?
 }
 
-function timeConverter(UNIX_timestamp){
+function timeConverter(UNIX_timestamp) {
   var a = new Date(UNIX_timestamp * 1000);
-  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   var year = a.getFullYear();
   var month = months[a.getMonth()];
   var date = a.getDate().toString();
   var hour = a.getHours().toString();
   var min = a.getMinutes().toString();
   var sec = a.getSeconds().toString();
-  if(hour.length === 1) { hour = '0' + hour; }
-  if(min.length === 1) { min = '0' + min; }
-  if(sec.length === 1) { sec = '0' + sec; }
-  var time = date + ' ' + month + ' ' + year + ', ' + hour + ':' + min + ':' + sec ;
+  if (hour.length === 1) { hour = '0' + hour; }
+  if (min.length === 1) { min = '0' + min; }
+  if (sec.length === 1) { sec = '0' + sec; }
+  var time = date + ' ' + month + ' ' + year + ', ' + hour + ':' + min + ':' + sec;
   return time;
 }
