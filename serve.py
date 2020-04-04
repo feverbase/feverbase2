@@ -23,6 +23,7 @@ from flask import (
 from flask_limiter import Limiter
 from werkzeug.security import check_password_hash, generate_password_hash
 import pymongo
+from mongoengine.queryset.visitor import Q
 
 from utils import db
 from sources import translate
@@ -67,11 +68,11 @@ def add_header(r):
 def papers_search(qraw):
     qparts = qraw.lower().strip().split()  # split by spaces
     if not len(qparts):
-        papers = list(db.Article.objects())
+        papers = db.Article.objects()
     else:
-        papers = list(
-            db.Article.objects.filter(
-                reduce(lambda a, b: a | b, map(lambda part: Q(title__icontains=part)))
+        papers = db.Article.objects(
+            reduce(
+                lambda a, b: a | b, map(lambda part: Q(title__icontains=part), qparts),
             )
         )
         # papers = list(
