@@ -301,27 +301,43 @@ def find(query):
                                 publication_citations = cleaned_ps[current_index]
                                 current_index += 1
 
+
+                                primary_contact_list = [x.strip() for x in primary_contact["contact_details"].split("\n")]
+
+                                institution = primary_contact_list[0].strip()
+                                phone = primary_contact_list[2].strip()
+                                email = primary_contact_list[3].strip()
+
+                                contact_information = {
+                                        "name": primary_contact["name"],
+                                        "phone": phone,
+                                        "email": email,
+                                        }
+
                                 this_entry = {
                                     # Meta keys
-                                    "id": isrctn_id,
-                                    "SOURCE": SOURCE,
+                                    #"id": isrctn_id,
+                                    "_source": SOURCE,
 
                                     # Essential keys
                                     "title": title.text,
                                     "url": url,
                                     "timestamp": last_edited,
-                                    "target_num_participants": target_num_participants,
+                                    "sample_size": target_num_participants,
                                     "recruiting_status": recruitment_status,
-                                    "age_group": age_group,
                                     "gender": gender,
                                     "target_disease": condition,
                                     "intervention": drug_names,
                                     "sponsor": organization,
                                     "summary": plain_english_summary,
-                                    "contact_information": "",
+                                    "contact_information": contact_information,
+                                    "institution": institution,
                                     # There is logic at the bottom to fix this if needed
                                     "abandoned": True,
                                     "reason_abandoned": reason_abandoned,
+
+                                    # cut (for now)
+                                    # "age_group": age_group,
 
                                     # ISRCTN specific keys
                                     "condition_category": condition_category,
@@ -401,6 +417,9 @@ def find(query):
                                 if reason_abandoned == None:
                                     del this_entry["reason_abandoned"]
                                     this_entry["abandoned"] = False
+
+                                print(this_entry)
+                                print("***")
 
                                 this_entry = clean_empty(this_entry)
                                 data[url] = this_entry
