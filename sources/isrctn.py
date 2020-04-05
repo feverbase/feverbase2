@@ -302,18 +302,34 @@ def find(query):
                                 current_index += 1
 
                                 this_entry = {
+                                    # Meta keys
                                     "id": isrctn_id,
                                     "SOURCE": SOURCE,
+
+                                    # Essential keys
+                                    "title": title.text,
                                     "url": url,
                                     "timestamp": last_edited,
-                                    "title": title.text,
+                                    "target_num_participants": target_num_participants,
+                                    "recruiting_status": recruitment_status,
+                                    "age_group": age_group,
+                                    "gender": gender,
+                                    "target_disease": condition,
+                                    "intervention": drug_names,
+                                    "sponsor": organization,
+                                    "summary": plain_english_summary,
+                                    "contact_information": "",
+                                    # There is logic at the bottom to fix this if needed
+                                    "abandoned": True,
+                                    "reason_abandoned": reason_abandoned,
+
+                                    # ISRCTN specific keys
                                     "condition_category": condition_category,
                                     "date_applied": date_applied,
                                     "date_assigned": date_assigned,
                                     "last_edited": last_edited,
                                     "prospective_retrospective": prospective_retrospective,
                                     "overall_trial_status": overall_trial_status,
-                                    "recruitment_status": recruitment_status,
                                     "summary": summary_data,
                                     "primary_contact": primary_contact,
                                     #"additional_contacts": additional_contacts,
@@ -358,7 +374,7 @@ def find(query):
                                         "countries_of_recruitment": countries_of_recruitment,
                                         #"trial_participation_centers": trial_participation_centers,
                                     },
-                                    "sponsor": {
+                                    "sponsor_info": {
                                         "organization": organization,
                                         "sponsor_details": sponsor_details,
                                         "sponsor_type": sponsor_type,
@@ -381,8 +397,13 @@ def find(query):
                                         "publication_citations": publication_citations,
                                     },
                                 }
+
+                                if reason_abandoned == None:
+                                    del this_entry["reason_abandoned"]
+                                    this_entry["abandoned"] = False
+
                                 this_entry = clean_empty(this_entry)
-                                data[ur] = this_entry
+                                data[url] = this_entry
                                 count += 1
 
     print(f"Fetched {count} results for {query}")
