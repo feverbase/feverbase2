@@ -28,12 +28,10 @@
 
     $.ajaxSetup({
       beforeSend: function () {
-        // show gif here, eg:
-        $("#loading").show();
+        $("#loader").show();
       },
       complete: function () {
-        // hide gif here, eg:
-        $("#loading").hide();
+        $("#loader").hide();
       }
     });
 

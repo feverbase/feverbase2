@@ -83,7 +83,7 @@ var page = 0;
 var showed_end_msg = false;
 var loadingTimeout = null;
 function addPapers() {
-  if (loadingTimeout) {
+  if (loadingTimeout || page === -1) {
     return;
   }
 
@@ -102,6 +102,10 @@ function addPapers() {
       clearTimeout(loadingTimeout);
       loadingTimeout = null;
       page = data.page;
+
+      if (page === -1) {
+        alert('There are no more results!');
+      }
 
       Array.from(data.papers).forEach(function (p) {
         // var div = root.append('div').classed('apaper', true).attr('id', p.pid);

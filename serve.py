@@ -149,6 +149,9 @@ def papers_search(
             max_subjects,
         )
         results.extend(new_results)
+        # let frontend no there are no more
+        if not len(new_results):
+            page = -1
 
     return results, page
 
