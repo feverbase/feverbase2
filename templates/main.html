@@ -26,6 +26,17 @@
     var render_format = "{{ render_format }}";
     var numresults = "{{ numresults }}";
 
+    $.ajaxSetup({
+      beforeSend: function () {
+        // show gif here, eg:
+        $("#loading").show();
+      },
+      complete: function () {
+        // hide gif here, eg:
+        $("#loading").hide();
+      }
+    });
+
     // when page loads...
     $(document).ready(function () {
 
@@ -33,28 +44,28 @@
       // if(msg !== '') { d3.select("#rtable").append('div').classed('msg', true).html(msg); }
 
       // add papers to #rtable
-      var done = addPapers(10, false);
-      if (done) { $("#loadmorebtn").hide(); }
+      addPapers();
+      // if (done) { $("#loadmorebtn").hide(); }
 
-      // set up inifinite scrolling for adding more papers
+      // set up infinite scrolling for adding more papers
       $(window).on('scroll', function () {
         var scrollTop = $(document).scrollTop();
         var windowHeight = $(window).height();
         var bodyHeight = $(document).height() - windowHeight;
         var scrollPercentage = (scrollTop / bodyHeight);
         if (scrollPercentage > 0.9) {
-          var done = addPapers(5, true);
-          if (done) { $("#loadmorebtn").hide(); }
+          addPapers();
+          // if (done) { $("#loadmorebtn").hide(); }
         }
       });
 
       // just in case scrolling is broken somehow, provide a button handler explicit
-      $("#loadmorebtn").on('click', function () {
-        var done = addPapers(5, true);
-        if (done) { $("#loadmorebtn").hide(); }
-      });
+      // $("#loadmorebtn").on('click', function () {
+      //   var done = addPapers(5, true);
+      //   if (done) { $("#loadmorebtn").hide(); }
+      // });
 
-      if (papers.length === 0) { $("#loadmorebtn").hide(); }
+      // if (papers.length === 0) { $("#loadmorebtn").hide(); }
 
       var vf = QueryString.vfilter; if (typeof vf === 'undefined') { vf = 'all'; }
       var tf = QueryString.timefilter; if (typeof tf === 'undefined') { tf = 'week'; }
@@ -245,8 +256,17 @@
 
     <div id="rtable"></div>
 
-    <div id="loadmore">
+    <!-- <div id="loadmore">
       <button id="loadmorebtn">Load more</button>
+    </div> -->
+
+    <div class="center">
+      <div class="lds-ring" id="loader">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
     </div>
 
   </div>

@@ -78,172 +78,200 @@ function strip_version(pidv) {
 
 // populate papers into #rtable
 // we have some global state here, which is gross and we should get rid of later.
-var pointer_ix = 0; // points to next paper in line to be added to #rtable
+// var pointer_ix = 0; // points to next paper in line to be added to #rtable
+var page = 0;
 var showed_end_msg = false;
-function addPapers(num, dynamic) {
-  console.log(papers);
-  if (papers.length === 0) { return true; } // nothing to display, and we're done
+var loadingTimeout = null;
+function addPapers() {
+  if (loadingTimeout) {
+    return;
+  }
+
+  // console.log(papers);
+  // if (papers.length === 0) { return true; } // nothing to display, and we're done
 
   var root = d3.select("#rtable");
 
-  var base_ix = pointer_ix;
-  for (var i = 0; i < num; i++) {
-    var ix = base_ix + i;
-    if (ix >= papers.length) {
-      // dont show this for now
-      if (false && !showed_end_msg) {
-        if (ix >= numresults) {
-          var msg = 'Results complete.';
-        } else {
-          var msg = 'You hit the limit of number of papers to show in one result.';
+  var xhr = $.ajax({
+    type: 'GET',
+    dataType: 'json',
+    contentType: 'application/json',
+    data: { page: page + 1 },
+    success: function (data) {
+      console.log(data);
+      clearTimeout(loadingTimeout);
+      loadingTimeout = null;
+      page = data.page;
+
+      Array.from(data.papers).forEach(function (p) {
+        // var div = root.append('div').classed('apaper', true).attr('id', p.pid);
+        var div = root.append('div').classed('apaper', true);//.attr('id', ix);
+
+        // Generate OpenURL COinS metadata element -- readable by Zotero, Mendeley, etc.
+        // var ocoins_span = div.append('span').classed('Z3988', true).attr('title', build_ocoins_str(p));
+
+        var tdiv = div.append('div').classed('paperdesc', true);
+        const timestamp = moment(p.timestamp.$date);
+        tdiv.append('div').classed('ds', true).html(`${timestamp.format('LL')} &middot; ${p.sponsor}`);
+
+        tdiv.append('div').classed('ts', true).append('a').attr('href', p.url).attr('target', '_blank').html(p.title);
+        // tdiv.append('br');
+
+        const keys = ['title', 'url', 'timestamp', 'recruiting_status', 'sex', 'target_disease', 'intervention', 'sponsor', 'summary', 'location', 'institution', 'contact', 'sample_size', 'abandoned', 'abandoned_reason']
+        for (var key of keys) {
+          if (p[key] == undefined || p[key].length == 0) p[key] = 'Unspecified'
         }
-        root.append('div').classed('msg', true).html(msg);
-        showed_end_msg = true;
-      }
-      break;
+
+        tdiv.append('blockquote').classed('as', true).html(`
+          <b>Condition</b>: ${p.target_disease}<br />
+          <b>Intervention</b>: ${p.intervention}<br />
+          <b>Sample Size</b>: ${p.sample_size}<br />
+          <b>Location</b>: ${p.location}<br />
+          <b>Status</b>: ${p.recruiting_status}`
+        );
+        tdiv.append('br');
+
+        // div.append('div').attr('style', 'clear:both');
+      });
     }
-    pointer_ix++;
+  });
 
-    var p = papers[ix];
-    // var div = root.append('div').classed('apaper', true).attr('id', p.pid);
-    var div = root.append('div').classed('apaper', true).attr('id', ix);
+  loadingTimeout = setTimeout(function () {
+    alert('Sorry! Request timed out.');
+    xhr.abort();
+  }, 30000);
 
-    // Generate OpenURL COinS metadata element -- readable by Zotero, Mendeley, etc.
-    // var ocoins_span = div.append('span').classed('Z3988', true).attr('title', build_ocoins_str(p));
+  return;
 
-    var tdiv = div.append('div').classed('paperdesc', true);
-    const timestamp = moment(p.timestamp.$date);
-    tdiv.append('div').classed('ds', true).html(`${timestamp.format('LL')} &middot; ${p.sponsor}`);
+  // var base_ix = pointer_ix;
+  // for (var i = 0; i < num; i++) {
+  //   var ix = base_ix + i;
+  //   if (ix >= papers.length) {
+  //     // dont show this for now
+  //     if (false && !showed_end_msg) {
+  //       if (ix >= numresults) {
+  //         var msg = 'Results complete.';
+  //       } else {
+  //         var msg = 'You hit the limit of number of papers to show in one result.';
+  //       }
+  //       root.append('div').classed('msg', true).html(msg);
+  //       showed_end_msg = true;
+  //     }
+  //     break;
+  //   }
+  //   pointer_ix++;
 
-    tdiv.append('div').classed('ts', true).append('a').attr('href', p.url).attr('target', '_blank').html(p.title);
-    // tdiv.append('br');
+  // if(p.originally_published_time !== p.published_time) {
+  //   tdiv.append('span').classed('ds2', true).html('(v1: ' + p.originally_published_time + ')');
+  // }
+  // tdiv.append('span').classed('cs', true).html(build_categories_html(p.tags));
+  // tdiv.append('br');
+  // tdiv.append('span').classed('ccs', true).html(p.comment);
 
-    const keys = ['title', 'url', 'timestamp', 'recruiting_status', 'sex', 'target_disease', 'intervention', 'sponsor', 'summary', 'location', 'institution', 'contact', 'sample_size', 'abandoned', 'abandoned_reason']
-    for (var key of keys) {
-      if (p[key] == undefined || p[key].length == 0) p[key] = 'Unspecified'
-    }
+  // action items for each paper
+  // var ldiv = div.append('div').classed('dllinks', true);
+  // show raw arxiv id
+  // ldiv.append('span').classed('spid', true).html(p.pid);
+  // access PDF of the paper
+  // var pdf_link = p.link.replace("abs", "pdf"); // convert from /abs/ link to /pdf/ link. url hacking. slightly naughty
+  // if(pdf_link === p.link) { var pdf_url = pdf_link } // replace failed, lets fall back on arxiv landing page
+  // else { var pdf_url = pdf_link + '.pdf'; }
+  // ldiv.append('a').attr('href', pdf_url).attr('target', '_blank').html('pdf');
 
-    tdiv.append('blockquote').classed('as', true).html(`
-    <b>Condition</b>: ${p.target_disease}<br />
-    <b>Intervention</b>: ${p.intervention}<br />
-    <b>Sample Size</b>: ${p.sample_size}<br />
-    <b>Location</b>: ${p.location}<br />
-    <b>Status</b>: ${p.recruiting_status}`);
-    tdiv.append('br');
+  // rank by tfidf similarity
+  // ldiv.append('br');
+  // var similar_span = ldiv.append('span').classed('sim', true).attr('id', 'sim'+p.pid).html('show similar');
+  // similar_span.on('click', function(pid){ // attach a click handler to redirect for similarity search
+  //   return function() { window.location.replace('/' + pid); }
+  // }(p.pid)); // closer over the paper id
 
-    // if(p.originally_published_time !== p.published_time) {
-    //   tdiv.append('span').classed('ds2', true).html('(v1: ' + p.originally_published_time + ')');
-    // }
-    // tdiv.append('span').classed('cs', true).html(build_categories_html(p.tags));
-    // tdiv.append('br');
-    // tdiv.append('span').classed('ccs', true).html(p.comment);
+  // var review_span = ldiv.append('span').classed('sim', true).attr('style', 'margin-left:5px; padding-left: 5px; border-left: 1px solid black;').append('a').attr('href', 'http://www.shortscience.org/paper?bibtexKey='+p.pid).html('review');
+  // var discuss_text = p.num_discussion === 0 ? 'discuss' : 'discuss [' + p.num_discussion + ']';
+  // var discuss_color = p.num_discussion === 0 ? 'black' : 'red';
+  // var review_span = ldiv.append('span').classed('sim', true).attr('style', 'margin-left:5px; padding-left: 5px; border-left: 1px solid black;')
+  //                   .append('a').attr('href', 'discuss?id='+strip_version(p.pid)).attr('style', 'color:'+discuss_color).html(discuss_text);
+  // ldiv.append('br');
 
-    // action items for each paper
-    // var ldiv = div.append('div').classed('dllinks', true);
-    // show raw arxiv id
-    // ldiv.append('span').classed('spid', true).html(p.pid);
-    // access PDF of the paper
-    // var pdf_link = p.link.replace("abs", "pdf"); // convert from /abs/ link to /pdf/ link. url hacking. slightly naughty
-    // if(pdf_link === p.link) { var pdf_url = pdf_link } // replace failed, lets fall back on arxiv landing page
-    // else { var pdf_url = pdf_link + '.pdf'; }
-    // ldiv.append('a').attr('href', pdf_url).attr('target', '_blank').html('pdf');
+  // var lib_state_img = p.in_library === 1 ? 'static/saved.png' : 'static/save.png';
+  // var saveimg = ldiv.append('img').attr('src', lib_state_img)
+  //                 .classed('save-icon', true)
+  //                 .attr('title', 'toggle save paper to library (requires login)')
+  //                 .attr('id', 'lib'+p.pid);
+  // attach a handler for in-library toggle
+  // saveimg.on('click', function(pid, elt){
+  //   return function() {
+  //     if(username !== '') {
+  //       // issue the post request to the server
+  //       $.post("/libtoggle", {pid: pid})
+  //        .done(function(data){
+  //           // toggle state of the image to reflect the state of the server, as reported by response
+  //           if(data === 'ON') {
+  //             elt.attr('src', 'static/saved.png');
+  //           } else if(data === 'OFF') {
+  //             elt.attr('src', 'static/save.png');
+  //           }
+  //        });
+  //     } else {
+  //       alert('you must be logged in to save papers to library.')
+  //     }
+  //   }
+  // }(p.pid, saveimg)); // close over the pid and handle to the image
 
-    // rank by tfidf similarity
-    // ldiv.append('br');
-    // var similar_span = ldiv.append('span').classed('sim', true).attr('id', 'sim'+p.pid).html('show similar');
-    // similar_span.on('click', function(pid){ // attach a click handler to redirect for similarity search
-    //   return function() { window.location.replace('/' + pid); }
-    // }(p.pid)); // closer over the paper id
+  // if(typeof p.img !== 'undefined') {
+  //   div.append('div').classed('animg', true).append('img').attr('src', p.img);
+  // }
 
-    // var review_span = ldiv.append('span').classed('sim', true).attr('style', 'margin-left:5px; padding-left: 5px; border-left: 1px solid black;').append('a').attr('href', 'http://www.shortscience.org/paper?bibtexKey='+p.pid).html('review');
-    // var discuss_text = p.num_discussion === 0 ? 'discuss' : 'discuss [' + p.num_discussion + ']';
-    // var discuss_color = p.num_discussion === 0 ? 'black' : 'red';
-    // var review_span = ldiv.append('span').classed('sim', true).attr('style', 'margin-left:5px; padding-left: 5px; border-left: 1px solid black;')
-    //                   .append('a').attr('href', 'discuss?id='+strip_version(p.pid)).attr('style', 'color:'+discuss_color).html(discuss_text);
-    // ldiv.append('br');
+  // if(typeof p.abstract !== 'undefined') {
+  //   var abdiv = div.append('span').classed('tt', true).html(p.abstract);
+  //   if(dynamic) {
+  //     MathJax.Hub.Queue(["Typeset",MathJax.Hub,abdiv[0]]); //typeset the added paper
+  //   }
+  // }
 
-    // var lib_state_img = p.in_library === 1 ? 'static/saved.png' : 'static/save.png';
-    // var saveimg = ldiv.append('img').attr('src', lib_state_img)
-    //                 .classed('save-icon', true)
-    //                 .attr('title', 'toggle save paper to library (requires login)')
-    //                 .attr('id', 'lib'+p.pid);
-    // attach a handler for in-library toggle
-    // saveimg.on('click', function(pid, elt){
-    //   return function() {
-    //     if(username !== '') {
-    //       // issue the post request to the server
-    //       $.post("/libtoggle", {pid: pid})
-    //        .done(function(data){
-    //           // toggle state of the image to reflect the state of the server, as reported by response
-    //           if(data === 'ON') {
-    //             elt.attr('src', 'static/saved.png');
-    //           } else if(data === 'OFF') {
-    //             elt.attr('src', 'static/save.png');
-    //           }
-    //        });
-    //     } else {
-    //       alert('you must be logged in to save papers to library.')
-    //     }
-    //   }
-    // }(p.pid, saveimg)); // close over the pid and handle to the image
+  // in friends tab, list users who the user follows who had these papers in libary
+  // if(render_format === 'friends') {
+  //   if(pid_to_users.hasOwnProperty(p.rawpid)) {
+  //     var usrtxt = pid_to_users[p.rawpid].join(', ');
+  //     div.append('div').classed('inlibsof', true).html('In libraries of: ' + usrtxt);
+  //   }
+  // }
 
-    div.append('div').attr('style', 'clear:both');
+  // create the tweets
+  // if(ix < tweets.length) {
+  //   var ix_tweets = tweets[ix].tweets; // looks a little weird, i know
+  //   var tdiv = div.append('div').classed('twdiv', true);
+  //   var tcontentdiv = div.append('div').classed('twcont', true);
+  //   tdiv.append('div').classed('tweetcount', true).text(tweets[ix].num_tweets + ' tweets:');
+  //   for(var j=0,m=ix_tweets.length;j<m;j++) {
+  //     var t = ix_tweets[j];
+  //     var border_col = t.ok ? '#3c3' : '#fff'; // distinguish non-boring tweets visually making their border green
+  //     var timgdiv = tdiv.append('img').classed('twimg', true).attr('src', t.image_url)
+  //                       .attr('style', 'border: 2px solid ' + border_col + ';');
+  //     var act_fun = function(elt, txt, tname, tid, imgelt){  // mouseover handler: show tweet text.
+  //       return function() {
+  //         elt.attr('style', 'display:block;'); // make visible
+  //         elt.html(''); // clear it
+  //         elt.append('div').append('a').attr('href', 'https://twitter.com/' + tname + '/status/' + tid).attr('target', '_blank')
+  //                                      .attr('style', 'font-weight:bold; color:#05f; text-decoration:none;').text('@' + tname + ':'); // show tweet source
+  //         elt.append('div').text(txt) // show tweet text
+  //         imgelt.attr('style', 'border: 2px solid #05f;');
+  //       }
+  //     }(tcontentdiv, t.text, t.screen_name, t.id, timgdiv)
+  //     timgdiv.on('mouseover', act_fun);
+  //     timgdiv.on('click', act_fun);
+  //     timgdiv.on('mouseout', function(elt, col){
+  //       return function() { elt.attr('style', 'border: 2px solid ' + col + ';'); }
+  //     }(timgdiv, border_col));
+  //   }
+  // }
 
-    // if(typeof p.img !== 'undefined') {
-    //   div.append('div').classed('animg', true).append('img').attr('src', p.img);
-    // }
+  // if(render_format == 'paper' && ix === 0) {
+  //   // lets insert a divider/message
+  //   div.append('div').classed('paperdivider', true).html('Most similar papers:');
+  // }
+  // }
 
-    // if(typeof p.abstract !== 'undefined') {
-    //   var abdiv = div.append('span').classed('tt', true).html(p.abstract);
-    //   if(dynamic) {
-    //     MathJax.Hub.Queue(["Typeset",MathJax.Hub,abdiv[0]]); //typeset the added paper
-    //   }
-    // }
-
-    // in friends tab, list users who the user follows who had these papers in libary
-    // if(render_format === 'friends') {
-    //   if(pid_to_users.hasOwnProperty(p.rawpid)) {
-    //     var usrtxt = pid_to_users[p.rawpid].join(', ');
-    //     div.append('div').classed('inlibsof', true).html('In libraries of: ' + usrtxt);
-    //   }
-    // }
-
-    // create the tweets
-    // if(ix < tweets.length) {
-    //   var ix_tweets = tweets[ix].tweets; // looks a little weird, i know
-    //   var tdiv = div.append('div').classed('twdiv', true);
-    //   var tcontentdiv = div.append('div').classed('twcont', true);
-    //   tdiv.append('div').classed('tweetcount', true).text(tweets[ix].num_tweets + ' tweets:');
-    //   for(var j=0,m=ix_tweets.length;j<m;j++) {
-    //     var t = ix_tweets[j];
-    //     var border_col = t.ok ? '#3c3' : '#fff'; // distinguish non-boring tweets visually making their border green
-    //     var timgdiv = tdiv.append('img').classed('twimg', true).attr('src', t.image_url)
-    //                       .attr('style', 'border: 2px solid ' + border_col + ';');
-    //     var act_fun = function(elt, txt, tname, tid, imgelt){  // mouseover handler: show tweet text.
-    //       return function() {
-    //         elt.attr('style', 'display:block;'); // make visible
-    //         elt.html(''); // clear it
-    //         elt.append('div').append('a').attr('href', 'https://twitter.com/' + tname + '/status/' + tid).attr('target', '_blank')
-    //                                      .attr('style', 'font-weight:bold; color:#05f; text-decoration:none;').text('@' + tname + ':'); // show tweet source
-    //         elt.append('div').text(txt) // show tweet text
-    //         imgelt.attr('style', 'border: 2px solid #05f;');
-    //       }
-    //     }(tcontentdiv, t.text, t.screen_name, t.id, timgdiv)
-    //     timgdiv.on('mouseover', act_fun);
-    //     timgdiv.on('click', act_fun);
-    //     timgdiv.on('mouseout', function(elt, col){
-    //       return function() { elt.attr('style', 'border: 2px solid ' + col + ';'); }
-    //     }(timgdiv, border_col));
-    //   }
-    // }
-
-    // if(render_format == 'paper' && ix === 0) {
-    //   // lets insert a divider/message
-    //   div.append('div').classed('paperdivider', true).html('Most similar papers:');
-    // }
-  }
-
-  return pointer_ix >= papers.length; // are we done?
+  // return pointer_ix >= papers.length; // are we done?
 }
 
 function timeConverter(UNIX_timestamp) {

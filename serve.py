@@ -20,6 +20,7 @@ from flask import (
     g,
     flash,
     _app_ctx_stack,
+    jsonify,
 )
 from flask_limiter import Limiter
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -38,6 +39,8 @@ limiter = Limiter(app, global_limits=["100 per hour", "20 per minute"])
 
 ms_client = ms.get_ms_client()
 ms_index = ms.get_ms_trials_index(ms_client)
+
+PAGE_SIZE = 25
 
 # -----------------------------------------------------------------------------
 # connection handlers
@@ -67,6 +70,7 @@ def add_header(r):
 # search/sort functionality
 # -----------------------------------------------------------------------------
 
+
 def filter_sample_size(data, min_subjects, max_subjects):
     # easy case, user did not specify bounds
     if min_subjects == 0 and max_subjects == 0:
@@ -75,16 +79,19 @@ def filter_sample_size(data, min_subjects, max_subjects):
     print(min_subjects, max_subjects)
     for entry in data:
         sample_size = str(entry.get("sample_size"))
-        nums = re.findall(r'^\D*(\d+)', sample_size)
+        nums = re.findall(r"^\D*(\d+)", sample_size)
         if len(nums) >= 1:
             true_num = int(nums[0])
-            if true_num >= min_subjects and (true_num <= max_subjects or max_subjects == 0):
+            if true_num >= min_subjects and (
+                true_num <= max_subjects or max_subjects == 0
+            ):
                 return_data.append(entry)
     return return_data
 
+
 def filter_drug(data, drug):
     drug = drug.lower().strip()
-    return_data = [] 
+    return_data = []
     for entry in data:
         this_drug = entry.get("intervention", "").lower().strip()
         if drug in this_drug:
@@ -92,8 +99,13 @@ def filter_drug(data, drug):
     return return_data
 
 
-def papers_search(qraw, country=None, drug=None, min_subjects=0,
-        max_subjects=0):
+def papers_search(
+    page, num_left, qraw, country=None, drug=None, min_subjects=0, max_subjects=0
+):
+    # prevent infinite loops when looking for more data
+    if (page - 1) * PAGE_SIZE > db.Article.objects.count():
+        return [], page
+
     filterstring = ""
     # right now country is really the only thing we
     # can filter on at the meili level
@@ -102,10 +114,14 @@ def papers_search(qraw, country=None, drug=None, min_subjects=0,
             country = f"'{country}'"
         print(country)
         filterstring += f"location={country}"
-    options = {"filters": filterstring}
+    options = {
+        "filters": filterstring,
+        "offset": (page - 1) * PAGE_SIZE,
+        "limit": page * PAGE_SIZE,
+    }
 
     if qraw == "":
-        papers = db.Article.objects
+        papers = db.Article.objects.skip((page - 1) * PAGE_SIZE).limit(page * PAGE_SIZE)
         results = list(map(lambda p: json.loads(p.to_json()), papers))
     else:
         # perform meilisearch query
@@ -122,7 +138,19 @@ def papers_search(qraw, country=None, drug=None, min_subjects=0,
     # filter on drug type
     results = filter_drug(results, drug)
 
-    return results
+    if len(results) < num_left:
+        new_results, page = papers_search(
+            page + 1,
+            num_left - len(results),
+            qraw,
+            country,
+            drug,
+            min_subjects,
+            max_subjects,
+        )
+        results.extend(new_results)
+
+    return results, page
 
 
 # -----------------------------------------------------------------------------
@@ -134,7 +162,7 @@ def default_context(papers, **kws):
     papers = list(papers)  # make sure is not QuerySet
 
     countries = ["United States", "China"]
-    #types = ["Type 1"]  # extract all possible from papers
+    # types = ["Type 1"]  # extract all possible from papers
 
     if len(papers) > 0 and type(papers[0]) == db.Article:
         papers = list(map(lambda p: json.loads(p.to_json()), papers))
@@ -145,32 +173,57 @@ def default_context(papers, **kws):
         papers=papers,
         numresults=len(papers),
         totpapers=db.Article.objects.count(),
-        filter_options=dict(countries=countries), #types=types),
+        filter_options=dict(countries=countries),  # types=types),
         filters={},
     )
     ans.update(kws)
     return ans
 
 
+def get_page():
+    try:
+        page = int(request.args.get("page", "1"))
+    except:
+        page = 1
+    if page < 1:
+        page = 1
+    return page
+
+
 @app.route("/")
 def intmain():
-    papers = db.Article.objects
-    ctx = default_context(papers, render_format="recent")
-    return render_template("main.html", **ctx)
+    if request.headers.get("Content-Type", "") == "application/json":
+        page = get_page()
+
+        papers = db.Article.objects.skip((page - 1) * PAGE_SIZE).limit(page * PAGE_SIZE)
+        return jsonify(
+            dict(page=page, papers=list(map(lambda p: json.loads(p.to_json()), papers)))
+        )
+    else:
+        ctx = default_context([], render_format="recent")
+        return render_template("main.html", **ctx)
+
 
 @app.route("/filter", methods=["GET"])
-def search():
+def filter():
     filters = request.args  # get the filter requests
-    papers = papers_search(
+
+    if request.headers.get("Content-Type", "") == "application/json":
+        page = get_page()
+
+        papers, page = papers_search(
+            page,
+            PAGE_SIZE,
             filters.get("q", ""),
             filters.get("country", None),
             filters.get("drug", None),
             filters.get("min_subjects", None),
-            filters.get("max_subjects", None)
-    )
-
-    ctx = default_context(papers, render_format="search", filters=filters)
-    return render_template("main.html", **ctx)
+            filters.get("max_subjects", None),
+        )
+        return jsonify(dict(page=page, papers=papers))
+    else:
+        ctx = default_context([], render_format="search", filters=filters)
+        return render_template("main.html", **ctx)
 
 
 # -----------------------------------------------------------------------------
