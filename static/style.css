@@ -1,24 +1,24 @@
 /* Proxima Nova */
 @font-face {
-	src: url("//feverbase.org/assets/fonts/Proxima Nova/proximanova-bold-webfont.ttf");
+	src: url("/assets/fonts/Proxima Nova/proximanova-bold-webfont.ttf");
 	font-family: "Proxima Nova";
 	font-weight: 700;
 }
 
 @font-face {
-	src: url("//feverbase.org/assets/fonts/Proxima Nova/proximanova-semibold-webfont.ttf");
+	src: url("/assets/fonts/Proxima Nova/proximanova-semibold-webfont.ttf");
 	font-family: "Proxima Nova";
 	font-weight: 500;
 }
 
 @font-face {
-	src: url("//feverbase.org/assets/fonts/Proxima Nova/proximanova-light-webfont.ttf");
+	src: url("/assets/fonts/Proxima Nova/proximanova-light-webfont.ttf");
 	font-family: "Proxima Nova";
 	font-weight: 300;
 }
 
 @font-face {
-	src: url("//feverbase.org/assets/fonts/Proxima Nova/proximanova-regular-webfont.ttf");
+	src: url("/assets/fonts/Proxima Nova/proximanova-regular-webfont.ttf");
 	font-family: "Proxima Nova";
 	font-weight: 400;
 }
@@ -188,7 +188,7 @@ li {
 
 	border: none;
 	background-color: transparent;
-	background-image: url(/static/search.png);
+	background-image: url(/assets/search.png);
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: 30px;

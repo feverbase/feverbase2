@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Feverbase</title>
+    <style type="text/css">
+        /* Proxima Nova */
+        @font-face {
+            src: url("/assets/fonts/Proxima Nova/proximanova-bold-webfont.ttf");
+            font-family: "Proxima Nova";
+            font-weight: 700;
+        }
+
+        @font-face {
+            src: url("/assets/fonts/Proxima Nova/proximanova-semibold-webfont.ttf");
+            font-family: "Proxima Nova";
+            font-weight: 500;
+        }
+
+        @font-face {
+            src: url("/assets/fonts/Proxima Nova/proximanova-light-webfont.ttf");
+            font-family: "Proxima Nova";
+            font-weight: 300;
+        }
+
+        @font-face {
+            src: url("/assets/fonts/Proxima Nova/proximanova-regular-webfont.ttf");
+            font-family: "Proxima Nova";
+            font-weight: 400;
+        }
+
+        * {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box
+        }
+
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%
+        }
+
+        body {
+            font-size: 14px;
+            line-height: 20px;
+            font-weight: normal;
+            font-style: normal;
+            font-family: -apple-system, BlinkMacSystemFont, "Proxima Nova", "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            color: #333333;
+            padding: 20px;
+            margin: 0;
+            -webkit-font-smoothing: antialiased;
+            -webkit-text-size-adjust: 100%;
+            max-width: 600px;
+            margin: 0 auto
+        }
+
+        @media (min-width: 992px) {
+            body {
+                padding: 35px 50px
+            }
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            margin-bottom: 1rem;
+            line-height: 1.25;
+            color: #313131
+        }
+
+        h1 {
+            font-size: 2rem
+        }
+
+        h2 {
+            margin-top: 1rem;
+            font-size: 1.5rem
+        }
+
+        h3 {
+            margin-top: 1.5rem;
+            font-size: 1.25rem
+        }
+
+        h4,
+        h5,
+        h6 {
+            margin-top: 1.1rem;
+            font-size: 1.1rem
+        }
+
+        img {
+            max-width: 100%
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+            border-bottom: 1px solid #b1b1b1
+        }
+
+        a:hover {
+            color: #369;
+            border-color: #369
+        }
+
+        blockquote {
+            border-left: 5px solid #a49998;
+            margin: 40px 0;
+            padding: 5px 30px;
+            background: #f8e8d9;
+        }
+
+        #logo {
+            height: 100px;
+            margin-bottom: -20px;
+        }
+
+        .center {
+            text-align: center;
+            margin: 0 auto
+        }
+
+        hr {
+            border: 0;
+            border-bottom: 1px solid #999;
+            margin: 30px 0
+        }
+
+        p {
+            font-size: 14px;
+            line-height: 1.65em;
+            word-wrap: break-word
+        }
+
+        table.contributors {
+            text-align: center;
+            vertical-align: middle;
+            table-layout: fixed;
+            width: 100%;
+        }
+
+        img.prof {
+            position: relative;
+            width: 80%;
+            margin: 0 auto;
+            border-radius: 50%;
+        }
+
+        td>a {
+            text-decoration: none;
+        }
+
+        td {
+            vertical-align: top;
+        }
+
+        li {
+            line-height: 1.65em;
+            word-wrap: break-word
+        }
+
+        .center .nav {
+            margin-top: 25px;
+            text-align: center;
+            text-transform: uppercase;
+            font-family: 'Proxima Nova', -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+            font-weight: bold;
+        }
+
+        .nav a {
+            display: inline;
+            padding-left: 10px;
+            padding-right: 10px;
+            font-size: 12pt;
+            text-decoration: none;
+            border: 0;
+            color: #999;
+        }
+
+        .nav a:hover {
+            color: #000;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="center">
+        <h1>Feverbase</h1>
+        <span>Finding the best, and fastest, way to beat COVID-19.</span>
+        <div class="nav">
+            <a href="/about">About</a>
+            <a href="/">Trial Search</a>
+        </div>
+    </div>
+    <hr />
+    <p>
+        We're an international group of researchers collecting data, in real time, about what's worked, and what hasn't
+        worked, to fight COVID-19. We're interested in the potential for repurposed drugs (e.g. chloroquine,
+        hydroxychloroquine, favipiravir) to reduce or eliminate COVID-19 symptoms. Clinics across the world are
+        beginning to use these drugs but sample sizes remain too small to draw conclusions about what works, and what
+        doesn't. By pooling together data from <strong>all</strong> sites at Feverbase, we can accumulate knowledge and
+        provide well-sourced information reviewed by teams of scientists.
+    </p>
+    <p>
+        <strong>We need your help collecting and understanding data about how we fight COVID-19.</strong> We keep all
+        submitted data fully secure and private and will collate the information into best practices for clinicians and
+        resource-allocators to fight this pandemic.
+    </p>
+
+    <hr />
+
+    <p><strong>How can I help?</strong></p>
+    <p>Send an email to <a href="mailto:private@feverbase.org">private@feverbase.org</a> with patient outcome
+        information from your site. We're looking for patient information (such as age, sex, and comorbidities) and
+        treatment information (drug, dose, timing) matched with the clinical outcome (e.g. quantitatively measured
+        changes in symptom severity, duration, survival). We appreciate &mdash; and badly need &mdash; negative as well
+        as positive results, since resources spent on things that don’t work can detract from other efforts. We may
+        follow up with questions of clarification or to keep you posted about new developments. Time is of the essence!
+    </p>
+    <p>Furthermore, if you have information about drug production capacity, data collection processes, or other clinical
+        trials, we’d love to make a map of such efforts, and improve our recommendations for what additional kinds of
+        data are needed.</p>
+
+    <p><strong>What will we do with the data?</strong></p>
+    <p>We will create an anonymized and pooled dataset from your contributions, which we will analyze to make public
+        recommendations about which drugs seem to work best in treating COVID-19. We want to answer two questions:</p>
+    <ol>
+        <li>
+            What treatments should clinicians use to prevent or treat COVID-19?
+        </li>
+        <li>
+            What drug manufacturing does society need to invest in to best beat COVID-19?
+        </li>
+    </ol>
+    <p>
+        All parts of our analysis are going to be public, so everyone can benefit. If you would like to help analyze the
+        data, please reach out. We will be releasing results periodically after analysis and a quality review of the
+        data.
+    </p>
+
+    <p><strong>Will you share the data or use it to publish papers?</strong></p>
+    <p>We will produce frequent blog posts about what seems to be working based on the data we collect. We will not be
+        publishing this work in academic journals, nor disclosing your identity or affiliation.</p>
+    <hr />
+    <p>This project is a collaboration between researchers at Stanford, MIT, and around the world. Join us by clicking
+        <a href="mailto:team@feverbase.org">here</a>. All feedback welcome!</p><br />
+
+    <table class="contributors">
+        <tr>
+            <td>
+                <img class="prof" src="assets/liphardt.jpg" />
+            </td>
+            <td>
+                <img class="prof" src="assets/deming.jpg" />
+            </td>
+            <td>
+                <img class="prof" src="assets/wall.png" />
+            </td>
+            <td>
+                <img class="prof" src="assets/zilis.jpg" />
+            </td>
+        </tr>
+        <tr style="font-weight: bold;">
+            <td><a href="https://profiles.stanford.edu/jan-liphardt">Jan Liphardt</a></td>
+            <td><a href="https://www.ldeming.com/">Laura Deming</a></td>
+            <td><a href="https://profiles.stanford.edu/dennis-wall">Dennis Wall</a></td>
+            <td><a href="http://www.shivonzilis.com/about">Shivon A. Zilis</a></td>
+        </tr>
+        <tr>
+            <td>Stanford University</td>
+            <td>The Longevity Fund</td>
+            <td>Stanford University</td>
+            <td>Neuralink</td>
+        </tr>
+    </table>
+    <hr />
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-41516705-6']);
+        _gaq.push(['_trackPageview']);
+        (function () {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+</body>
+
+</html>

@@ -16,6 +16,7 @@ from flask import (
     url_for,
     redirect,
     render_template,
+    send_from_directory,
     abort,
     g,
     flash,
@@ -35,7 +36,7 @@ from utils import db, ms
 # various globals
 # -----------------------------------------------------------------------------
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='')
 app.config.from_object(__name__)
 limiter = Limiter(app, global_limits=["100 per hour", "20 per minute"])
 
@@ -237,6 +238,15 @@ def intmain():
         ctx = default_context(render_format="recent")
         return render_template("main.html", **ctx)
 
+@app.route("/about")
+@limiter.exempt
+def about():
+    return app.send_static_file('index.html')
+
+@app.route('/assets/<path:path>')
+@limiter.exempt
+def send_assets(path):
+    return send_from_directory('static/assets', path)
 
 @app.route("/filter", methods=["GET"])
 def filter():
