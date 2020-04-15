@@ -1,8 +1,6 @@
-// populate papers into #rtable
-// we have some global state here, which is gross and we should get rid of later.
 var page = 0;
-var showed_end_msg = false;
 var loadingTimeout = null;
+
 function addPapers() {
   if (loadingTimeout || page === -1) {
     return;
@@ -74,9 +72,6 @@ function addPapers() {
   }, 60000);
 }
 
-// passed in from flask as json
-var render_format = "{{ render_format }}";
-
 $.ajaxSetup({
   beforeSend: function () {
     $("#loader").show();
@@ -104,14 +99,6 @@ $(document).ready(function () {
       addPapers();
     }
   });
-
-  // just in case scrolling is broken somehow, provide a button handler explicit
-  // $("#loadmorebtn").on('click', function () {
-  //   var done = addPapers(5, true);
-  //   if (done) { $("#loadmorebtn").hide(); }
-  // });
-
-  // if (papers.length === 0) { $("#loadmorebtn").hide(); }
 });
 
 function toggleAdvancedFilters() {

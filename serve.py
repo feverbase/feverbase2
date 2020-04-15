@@ -19,8 +19,6 @@ from flask import (
     send_from_directory,
     abort,
     g,
-    flash,
-    _app_ctx_stack,
     jsonify,
 )
 from flask_limiter import Limiter
@@ -36,7 +34,7 @@ from utils import db, ms
 # various globals
 # -----------------------------------------------------------------------------
 
-app = Flask(__name__, static_url_path='')
+app = Flask(__name__, static_url_path="")
 app.config.from_object(__name__)
 limiter = Limiter(app, global_limits=["100 per hour", "20 per minute"])
 
@@ -238,15 +236,18 @@ def intmain():
         ctx = default_context(render_format="recent")
         return render_template("search.html", **ctx)
 
+
 @app.route("/about")
 @limiter.exempt
 def about():
-    return app.send_static_file('index.html')
+    return render_template("about.html")
 
-@app.route('/assets/<path:path>')
+
+@app.route("/assets/<path:path>")
 @limiter.exempt
 def send_assets(path):
-    return send_from_directory('static/assets', path)
+    return send_from_directory("static/assets", path)
+
 
 @app.route("/filter", methods=["GET"])
 def filter():

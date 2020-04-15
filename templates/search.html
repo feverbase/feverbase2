@@ -27,7 +27,7 @@
   </style>
   <img src="{{ url_for('static', filename='search.png') }}" class="load-img-early">
 
-  <script src="{{ url_for('static', filename='papers.js') }}"></script>
+  <script src="{{ url_for('static', filename='search.js') }}"></script>
 
   <script src="https://browser.sentry-cdn.com/5.15.4/bundle.min.js"
     integrity="sha384-Nrg+xiw+qRl3grVrxJtWazjeZmUwoSt0FAVsbthlJ5OMpx0G08bqIq3b/v0hPjhB" crossorigin="anonymous">
@@ -127,10 +127,6 @@
 
     <div id="rtable"></div>
 
-    <!-- <div id="loadmore">
-      <button id="loadmorebtn">Load more</button>
-    </div> -->
-
     <div class="center">
       <div class="lds-ring" id="loader">
         <div></div>
@@ -141,7 +137,7 @@
     </div>
 
     <div id="noresults" style="display: none">
-      <h4>End of results.</h4>
+      <h4>No more results.</h4>
     </div>
 
   </div>
