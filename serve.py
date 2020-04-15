@@ -236,7 +236,7 @@ def intmain():
         )
     else:
         ctx = default_context(render_format="recent")
-        return render_template("main.html", **ctx)
+        return render_template("search.html", **ctx)
 
 @app.route("/about")
 @limiter.exempt
@@ -270,7 +270,7 @@ def filter():
         return jsonify(dict(page=page, papers=papers))
     else:
         ctx = default_context(render_format="search", filters=filters)
-        return render_template("main.html", **ctx)
+        return render_template("search.html", **ctx)
 
 
 # -----------------------------------------------------------------------------
