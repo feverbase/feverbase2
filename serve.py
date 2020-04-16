@@ -154,7 +154,7 @@ def filter_papers(
     else:
         escape = lambda x: x.replace('"', '\\"')
         prebuilt_filters = [
-            f'{key} _= "{escape(value)}"'
+            f'{key} *= "{escape(value)}"'
             for key, value in dynamic_filters.items()
             if value
         ]
