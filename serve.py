@@ -186,6 +186,11 @@ def filter_papers(
         # perform meilisearch query
         results = ms_index.search(qraw, options).get("hits")
 
+        # sort by timestamp descending
+        results = sorted(
+            results, key=lambda r: r.get("timestamp", {}).get("$date", -1), reverse=True
+        )
+
     if len(results) < PAGE_SIZE:
         page = -1
 
@@ -222,7 +227,7 @@ def intmain():
     if request.headers.get("Content-Type", "") == "application/json":
         page = get_page()
 
-        papers = db.Article.objects.skip((page - 1) * PAGE_SIZE).limit(page * PAGE_SIZE)
+        papers = db.Article.objects.skip((page - 1) * PAGE_SIZE).limit(PAGE_SIZE)
         return jsonify(
             dict(page=page, papers=list(map(lambda p: json.loads(p.to_json()), papers)))
         )
