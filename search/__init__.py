@@ -23,8 +23,10 @@ def parse_documents():
 
         # add parsed_sample_size = first number in sample_size
         sample_size = entry_json.get("sample_size")
-        if sample_size:
-            sample_sizes = re.findall(r"^\D*(\d+)")
+        if type(sample_size) == int:
+            entry_json["parsed_sample_size"] = sample_size
+        elif sample_size:
+            sample_sizes = re.findall(r"^\D*(\d+)", str(sample_size))
             if len(sample_sizes):
                 entry_json["parsed_sample_size"] = int(sample_sizes[0])
         else:
