@@ -108,82 +108,90 @@ def filter_sample_size(data, min_subjects, max_subjects):
         data.pop(i)
 
 
-def filter_intervention(data, intervention):
-    if not intervention or not intervention.strip():
+def filter_by_key(data, key, value):
+    if not value or not value.strip():
         return
-    intervention = intervention.lower().strip()
+    value = value.lower().strip()
     idxs_to_remove = []
     for i in range(len(data)):
         entry = data[i]
-        this_intervention = (
-            (
-                (
-                    entry.intervention
-                    if is_article(entry)
-                    else entry.get("intervention", "")
-                )
-                or ""
-            )
+        this_value = (
+            ((eval(f"entry.{key}") if is_article(entry) else entry.get(key, "")) or "")
             .lower()
             .strip()
         )
-        if intervention not in this_intervention:
+        if value not in this_value:
             idxs_to_remove.append(i)
     idxs_to_remove.sort(reverse=True)
     for i in idxs_to_remove:
         data.pop(i)
 
 
-def papers_search(
-    page, num_left, qraw, country=None, intervention="", min_subjects=0, max_subjects=0
+def filter_papers(
+    page,
+    num_left,
+    qraw,
+    dynamic_filters={},
+    min_subjects=0,
+    max_subjects=0,
+    prebuilt_q=None,
 ):
     print(f"papers_search with page={page} num_left={num_left}")
     # prevent infinite loops when looking for more data
     if (page - 1) * PAGE_SIZE > db.Article.objects.count():
         return [], page
 
-    filterstring = ""
-    # right now country is really the only thing we
-    # can filter on at the meili level
-    if country:
-        if " " in country:
-            country = f"'{country}'"
-        print(country)
-        filterstring += f"location={country}"
-    options = {
-        "filters": filterstring,
-        "offset": (page - 1) * PAGE_SIZE,
-        "limit": page * PAGE_SIZE,
-    }
+    if min_subjects < 0:
+        min_subjects = 0
+    if max_subjects < 0:
+        max_subjects = 0
 
-    if qraw == "":
-        results = list(
-            db.Article.objects.skip((page - 1) * PAGE_SIZE).limit(page * PAGE_SIZE)
+    if not qraw:
+        if not prebuilt_q:
+            for key, value in dynamic_filters.items():
+                this_q = eval(f"Q({key}__icontains=value)")
+                if not prebuilt_q:
+                    prebuilt_q = this_q
+                else:
+                    prebuilt_q &= this_q
+
+        results = (
+            db.Article.objects(prebuilt_q).skip((page - 1) * PAGE_SIZE).limit(page * PAGE_SIZE)
         )
+
+        results = list(results)
     else:
+        # filterstring = ""
+        # right now location is really the only thing we
+        # can filter on at the meili level
+        # if location:
+        #     if " " in location:
+        #         location = f"'{location}'"
+        #     print(location)
+        #     filterstring += f"location={location}"
+        options = {
+            # "filters": filterstring,
+            "offset": (page - 1) * PAGE_SIZE,
+            "limit": page * PAGE_SIZE,
+        }
+
         # perform meilisearch query
         results = ms_index.search(qraw, options).get("hits")
 
-    if min_subjects == "" or min_subjects == None:
-        min_subjects = 0
-    if max_subjects == "" or max_subjects == None:
-        max_subjects = 0
+        for key, value in dynamic_filters.items():
+            filter_by_key(results, key, value)
 
-    # filter on sample size
     filter_sample_size(results, int(min_subjects), int(max_subjects))
 
-    # filter on intervention type
-    filter_intervention(results, intervention)
-
     if len(results) < num_left:
-        new_results, page = papers_search(
+        new_results, page = filter_papers(
             page + 1,
             num_left - len(results),
             qraw,
-            country,
-            intervention,
+            dynamic_filters,
             min_subjects,
             max_subjects,
+            prebuilt_q,
         )
         results.extend(new_results)
         # let frontend no there are no more
@@ -199,12 +207,7 @@ def papers_search(
 
 
 def default_context(**kws):
-    # countries = ["United States", "China"]
-    # types = ["Type 1"]  # extract all possible from papers
-
-    ans = dict(
-        filter_options={}, filters={},  # dict(countries=countries),  # types=types),
-    )
+    ans = dict(filter_options={}, filters={})
     ans.update(kws)
     ans["adv_filters_in_use"] = any(
         v for k, v in ans.get("filters", {}).items() if k != "q"
@@ -249,6 +252,15 @@ def send_assets(path):
     return send_from_directory("static/assets", path)
 
 
+ACCEPTED_DYNAMIC_FILTERS = [
+    "sponsor",
+    "target_disease",
+    "intervention",
+    "location",
+    "recruiting_status",
+]
+
+
 @app.route("/filter", methods=["GET"])
 def filter():
     filters = request.args  # get the filter requests
@@ -256,16 +268,31 @@ def filter():
     if request.headers.get("Content-Type", "") == "application/json":
         page = get_page()
 
-        results, page = papers_search(
+        dynamic_filters = {
+            key: value
+            for key, value in filters.items()
+            if key in ACCEPTED_DYNAMIC_FILTERS and type(value) == str and len(value)
+        }
+
+        try:
+            min_subjects = int(filters.get("min-subjects", 0))
+        except:
+            min_subjects = 0
+
+        try:
+            max_subjects = int(filters.get("max-subjects", 0))
+        except:
+            max_subjects = 0
+
+        papers, page = filter_papers(
             page,
             PAGE_SIZE,
             filters.get("q", ""),
-            filters.get("country", None),
-            filters.get("intervention", ""),
-            filters.get("min-subjects", None),
-            filters.get("max-subjects", None),
+            dynamic_filters,
+            min_subjects,
+            max_subjects,
         )
-        papers = results
+
         if len(papers) and is_article(papers[0]):
             papers = list(map(lambda p: json.loads(p.to_json()), papers))
         return jsonify(dict(page=page, papers=papers))
