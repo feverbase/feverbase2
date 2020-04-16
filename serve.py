@@ -152,8 +152,11 @@ def filter_papers(
 
         filter_sample_size(results, int(min_subjects), int(max_subjects))
     else:
+        escape = lambda x: x.replace('"', '\\"')
         prebuilt_filters = [
-            f"{key} _= '{value}'" for key, value in dynamic_filters.items() if value
+            f'{key} _= "{escape(value)}"'
+            for key, value in dynamic_filters.items()
+            if value
         ]
         # parsed_sample_size is -1 if couldn't parse sample_size, so if filtering
         # on sample_size at all, make sure to exclude the invalid entries by adding >= 0
