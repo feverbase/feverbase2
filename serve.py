@@ -153,15 +153,14 @@ def filter_papers(
         filter_sample_size(results, int(min_subjects), int(max_subjects))
     else:
         prebuilt_filters = [
-            f"{key} = '{value}'" for key, value in dynamic_filters.items() if value
+            f"{key} _= '{value}'" for key, value in dynamic_filters.items() if value
         ]
-        # parsed_sample_size = -1 if couldn't parse sample_size, so if filtering
-        # on sample_size at all, make sure to exclude the invalid by adding >= 0
-        # TODO: UNCOMMENT THIS
-        # if min_subjects or max_subjects:
-        #     prebuilt_filters.push(f"parsed_sample_size >= {min_subjects}")
-        # if max_subjects:
-        #     prebuilt_filters.push(f"parsed_sample_size <= {max_subjects}")
+        # parsed_sample_size is -1 if couldn't parse sample_size, so if filtering
+        # on sample_size at all, make sure to exclude the invalid entries by adding >= 0
+        if min_subjects or max_subjects:
+            prebuilt_filters.push(f"parsed_sample_size >= {min_subjects}")
+        if max_subjects:
+            prebuilt_filters.push(f"parsed_sample_size <= {max_subjects}")
 
         prebuilt_filters = "AND".join(prebuilt_filters)
 
@@ -277,11 +276,7 @@ def filter():
             max_subjects = 0
 
         papers, page = filter_papers(
-            page,
-            filters.get("q", ""),
-            dynamic_filters,
-            min_subjects,
-            max_subjects,
+            page, filters.get("q", ""), dynamic_filters, min_subjects, max_subjects,
         )
 
         if len(papers) and is_article(papers[0]):
