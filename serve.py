@@ -128,32 +128,21 @@ def filter_sample_size(data, min_subjects, max_subjects):
 
 
 def filter_papers(
-    page,
-    num_left,
-    qraw,
-    dynamic_filters={},
-    min_subjects=0,
-    max_subjects=0,
-    prebuilt_filters=None,
+    page, qraw, dynamic_filters={}, min_subjects=0, max_subjects=0,
 ):
-    print(f"papers_search with page={page} num_left={num_left}")
-    # prevent infinite loops when looking for more data
-    if (page - 1) * PAGE_SIZE > db.Article.objects.count():
-        return [], page
-
     if min_subjects < 0:
         min_subjects = 0
     if max_subjects < 0:
         max_subjects = 0
 
     if not qraw:
-        if not prebuilt_filters:
-            for key, value in dynamic_filters.items():
-                this_q = eval(f"Q({key}__icontains=value)")
-                if not prebuilt_filters:
-                    prebuilt_filters = this_q
-                else:
-                    prebuilt_filters &= this_q
+        prebuilt_filters = None
+        for key, value in dynamic_filters.items():
+            this_q = eval(f"Q({key}__icontains=value)")
+            if not prebuilt_filters:
+                prebuilt_filters = this_q
+            else:
+                prebuilt_filters &= this_q
 
         results = list(
             db.Article.objects(prebuilt_filters)
@@ -163,20 +152,19 @@ def filter_papers(
 
         filter_sample_size(results, int(min_subjects), int(max_subjects))
     else:
-        if not prebuilt_filters:
-            prebuilt_filters = [
-                f"{key} = '{value}'" for key, value in dynamic_filters.items() if value
-            ]
-            # parsed_sample_size = -1 if couldn't parse sample_size, so if filtering
-            # on sample_size at all, make sure to exclude the invalid by adding >= 0
-            # TODO: UNCOMMENT THIS
-            # if min_subjects or max_subjects:
-            #     prebuilt_filters.push(f"parsed_sample_size >= {min_subjects}")
-            # if max_subjects:
-            #     prebuilt_filters.push(f"parsed_sample_size <= {max_subjects}")
+        prebuilt_filters = [
+            f"{key} = '{value}'" for key, value in dynamic_filters.items() if value
+        ]
+        # parsed_sample_size = -1 if couldn't parse sample_size, so if filtering
+        # on sample_size at all, make sure to exclude the invalid by adding >= 0
+        # TODO: UNCOMMENT THIS
+        # if min_subjects or max_subjects:
+        #     prebuilt_filters.push(f"parsed_sample_size >= {min_subjects}")
+        # if max_subjects:
+        #     prebuilt_filters.push(f"parsed_sample_size <= {max_subjects}")
 
-            prebuilt_filters = "AND".join(prebuilt_filters)
-        
+        prebuilt_filters = "AND".join(prebuilt_filters)
+
         options = {
             "filters": prebuilt_filters,
             "offset": (page - 1) * PAGE_SIZE,
@@ -199,20 +187,8 @@ def filter_papers(
         # perform meilisearch query
         results = ms_index.search(qraw, options).get("hits")
 
-    if len(results) < num_left:
-        new_results, page = filter_papers(
-            page + 1,
-            num_left - len(results),
-            qraw,
-            dynamic_filters,
-            min_subjects,
-            max_subjects,
-            prebuilt_filters,
-        )
-        results.extend(new_results)
-        # let frontend no there are no more
-        if not len(new_results):
-            page = -1
+    if len(results) < PAGE_SIZE:
+        page = -1
 
     return results, page
 
@@ -302,7 +278,6 @@ def filter():
 
         papers, page = filter_papers(
             page,
-            PAGE_SIZE,
             filters.get("q", ""),
             dynamic_filters,
             min_subjects,
