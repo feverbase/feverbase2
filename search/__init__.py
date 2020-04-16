@@ -1,7 +1,10 @@
 import sys
-sys.path.append('../')
-from utils import db, ms
 import json
+import re
+
+sys.path.append("../")
+from utils import db, ms
+
 
 def parse_documents():
     parsed_documents = []
@@ -18,9 +21,19 @@ def parse_documents():
         del entry_json["_id"]
         entry_json["ms-id"] = oid
 
+        # add parsed_sample_size = first number in sample_size
+        sample_size = entry_json.get("sample_size")
+        if sample_size:
+            sample_sizes = re.findall(r"^\D*(\d+)")
+            if len(sample_sizes):
+                entry_json["parsed_sample_size"] = int(sample_sizes[0])
+        else:
+            entry_json["parsed_sample_size"] = -1
+
         parsed_documents.append(entry_json)
     print(f"Retrieved {len(parsed_documents)} documents from MongoDB")
     return parsed_documents
+
 
 def push_to_meili(documents):
     client = ms.get_ms_client()
@@ -39,13 +52,15 @@ def push_to_meili(documents):
     # don't return until all documents have been pushed
     status = None
     while status != "processed":
-       update_status = index.get_update_status(update_id)
-       status = update_status.get("status")
+        update_status = index.get_update_status(update_id)
+        status = update_status.get("status")
     print("Successfully uploaded data to Meilisearch")
+
 
 def mongo_to_meili():
     docs = parse_documents()
     push_to_meili(docs)
+
 
 def perform_meili_search(query):
     client = ms.get_ms_client()
