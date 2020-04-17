@@ -188,8 +188,9 @@ li {
 #logo {
 	font-size: 2.2rem;
 	font-weight: 800;
-	background-image: linear-gradient(-90deg,#5e21d9,#12a5e2);
-	background-image: -webkitlinear-gradient(-90deg,#5e21d9,#12a5e2);
+	background: rgb(238,186,59);
+	background: linear-gradient(0deg, #C04848, #780078);
+	background: -webkit-linear-gradient(0deg, #C04848, #780078);
 	background-size: 175px;
 	background-repeat: no-repeat;
 	background-position: center;
@@ -197,6 +198,7 @@ li {
 	text-fill-color: transparent;
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
+	-webkit-font-smoothing: subpixel-antialiased;
 }
 
 #maindiv {
@@ -283,6 +285,47 @@ li {
 	grid-template-columns: 1fr 3fr;
 	grid-gap: 5px;
 	width: 100%;
+}
+
+#filters-container > label {
+	font-weight: 600;
+	font-size: 16px;
+	margin-top: 4px;
+
+}
+
+input {
+	font-family: 'SF Pro', Arial, sans-serif;
+	font-size: 14px;
+	border: 1px solid #ddd;
+	border-radius: 12px;
+	padding: 5px 7px;
+}
+
+input:focus {
+	outline: none;
+}
+
+button, input[type=submit] {
+	font-family: 'Proxima Nova', 'SF Pro', Arial, sans-serif;
+	text-transform: uppercase;
+	font-size: 14px;
+	border: 0;
+	padding: 6px 0;
+	border-radius: 14px;
+	background: rgb(238,186,59);
+	background: linear-gradient(90deg, #C04848, #780078);
+	color: white
+}
+
+button, input[type=submit]:hover {
+	filter: brightness(80%);
+	-webkit-filter: brightness(80%);
+}
+
+button, input[type=submit]:active {
+	filter: brightness(50%);
+	-webkit-filter: brightness(50%);
 }
 
 .inputs > * {

@@ -85,15 +85,15 @@
 
         <label for="sponsor">Sponsor:</label>
         <input name="sponsor" type="text" id="filter-sponsor"
-          value="{{ filters.sponsor if filters and 'sponsor' in filters else '' }}">
+          value="{{ filters.sponsor if filters and 'sponsor' in filters else '' }}" autocomplete="off" autocapitalize="off" spellcheck="false">
 
         <label for="target_disease">Condition:</label>
         <input name="target_disease" type="text" id="filter-target_disease"
-          value="{{ filters.target_disease if filters and 'target_disease' in filters else '' }}">
+          value="{{ filters.target_disease if filters and 'target_disease' in filters else '' }}" autocomplete="off" autocapitalize="off" spellcheck="false">
 
         <label for="intervention">Intervention:</label>
         <input name="intervention" type="text" id="filter-intervention"
-          value="{{ filters.intervention if filters and 'intervention' in filters else '' }}">
+          value="{{ filters.intervention if filters and 'intervention' in filters else '' }}" autocomplete="off" autocapitalize="off" spellcheck="false">
 
         <!--
           <div class="filter">
@@ -121,18 +121,18 @@
         <label for="subjects">Sample Size:</label>
         <div class="inputs">
           <input name="min-subjects" type="text" id="filter-min-subjects" value="{{ filters.get("min-subjects", "") }}"
-            placeholder="min">
+            placeholder="min" autocomplete="off" autocapitalize="off" spellcheck="false">
           <input name="max-subjects" type="text" id="filter-max-subjects" value="{{ filters.get("max-subjects", "") }}"
-            placeholder="max">
+            placeholder="max" autocomplete="off" autocapitalize="off" spellcheck="false">
         </div>
 
         <label for="location">Location:</label>
         <input name="location" type="text" id="filter-location"
-          value="{{ filters.location if filters and 'location' in filters else '' }}">
+          value="{{ filters.location if filters and 'location' in filters else '' }}" autocomplete="off" autocapitalize="off" spellcheck="false">
 
         <label for="recruiting_status">Status:</label>
         <input name="recruiting_status" type="text" id="filter-recruiting_status"
-          value="{{ filters.recruiting_status if filters and 'recruiting_status' in filters else '' }}">
+          value="{{ filters.recruiting_status if filters and 'recruiting_status' in filters else '' }}" autocomplete="off" autocapitalize="off" spellcheck="false">
 
         <input type="submit" value="Update">
       </div>
