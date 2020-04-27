@@ -110,14 +110,43 @@ $(document).ready(function () {
 });
 
 function toggleAdvancedFilters() {
-  var status = document.getElementById('filters-status');
-  var container = document.getElementById('filters-container');
+  var status = $('#filters-status');
+  var container = $('#filters-container');
 
-  if (container.style.display === 'none') {
-    container.style.display = 'grid';
+  if (container.css('display') === 'none') {
+    container.css('display', 'grid');
     status.innerHTML = 'Hide';
   } else {
-    container.style.display = 'none';
+    container.css('display', 'none');
     status.innerHTML = '';
   }
+}
+
+function toggleFeedback() {
+  var status = $('#feedback-status');
+  var container = $('#feedback-container');
+
+  if (container.css('display') === 'none') {
+    container.css('display', 'grid');
+    status.innerHTML = 'Hide';
+  } else {
+    container.css('display', 'none');
+    status.innerHTML = '';
+  }
+}
+
+function submitFeedback() {
+  var subject = $('#feedback-subject').val().trim();
+  var body = $('#feedback-body').val().trim();
+  var xhr = $.ajax('/feedback', {
+    type: 'GET',
+    data: { subject, body },
+    success: function (data) {
+      toastr.success(data);
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      console.log(jqXHR, textStatus, errorThrown);
+      toastr.error(jqXHR.responseText);
+    }
+  });
 }

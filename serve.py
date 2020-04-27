@@ -27,8 +27,8 @@ import pymongo
 from mongoengine.queryset.visitor import Q
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
-from github import Github
 from dotenv import load_dotenv
+import requests
 
 from utils import db, ms
 
@@ -45,12 +45,7 @@ limiter = Limiter(app, global_limits=["100 per hour", "20 per minute"])
 ms_client = ms.get_ms_client()
 ms_index = ms.get_ms_trials_index(ms_client)
 
-git = Github(os.environ.get("GIT_ACCESS_TOKEN"))
-repo = git.get_repo("feverbase/feverbase")
-feedback_label = repo.get_label("feedback")
-create_issue = lambda title, body: repo.create_issue(
-    title, body=body, labels=[feedback_label]
-)
+slack_api_url = os.environ.get("SLACK_WEBHOOK_URL", "")
 
 PAGE_SIZE = 25
 
@@ -254,6 +249,19 @@ def intmain():
 @limiter.exempt
 def about():
     return render_template("about.html")
+
+
+@app.route("/feedback")
+def feedback():
+    subject = request.args.get("subject", "")
+    body = request.args.get("body", "")
+    print(subject, body)
+    if not subject or not body:
+        return "Please include both subject and body.", 400
+
+    requests.post(slack_api_url, json={"text": f"{subject}:\n{body}"})
+
+    return "Thank you for submitting feedback!"
 
 
 @app.route("/assets/<path:path>")

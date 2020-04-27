@@ -57,8 +57,10 @@
     </div>
 
     <div id="filters-box">
-      <a onclick="toggleAdvancedFilters()"><span id="filters-status">{{ 'Hide' if adv_filters_in_use else '' }}</span>
-        Advanced Filters</a>
+      <a onclick="toggleAdvancedFilters()">
+        <span id="filters-status">{{ 'Hide' if adv_filters_in_use else '' }}</span>
+        Advanced Filters
+      </a>
       <br>
       <div id="filters-container" style="display: {{ 'grid' if adv_filters_in_use else 'none' }};">
         {% if false %}
@@ -138,6 +140,23 @@
       </div>
     </div>
   </form>
+
+  <div id="feedback-box">
+    <a onclick="toggleFeedback()">
+      <span id="feedback-status"></span>
+      Feedback Form
+    </a>
+    <br>
+    <div id="feedback-container" style="display: none;">
+      <label for="subject">Subject:</label>
+      <input name="subject" type="text" id="feedback-subject">
+
+      <label for="body">Body:</label>
+      <textarea name="body" id="feedback-body" rows="7"></textarea>
+
+      <input type="submit" value="Submit" onclick="submitFeedback()">
+    </div>
+  </div>
 
   <div id="maindiv">
 
