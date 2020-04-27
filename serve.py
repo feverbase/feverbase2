@@ -27,8 +27,12 @@ import pymongo
 from mongoengine.queryset.visitor import Q
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
+from github import Github
+from dotenv import load_dotenv
 
 from utils import db, ms
+
+load_dotenv()
 
 # -----------------------------------------------------------------------------
 # various globals
@@ -40,6 +44,13 @@ limiter = Limiter(app, global_limits=["100 per hour", "20 per minute"])
 
 ms_client = ms.get_ms_client()
 ms_index = ms.get_ms_trials_index(ms_client)
+
+git = Github(os.environ.get("GIT_ACCESS_TOKEN"))
+repo = git.get_repo("feverbase/feverbase")
+feedback_label = repo.get_label("feedback")
+create_issue = lambda title, body: repo.create_issue(
+    title, body=body, labels=[feedback_label]
+)
 
 PAGE_SIZE = 25
 

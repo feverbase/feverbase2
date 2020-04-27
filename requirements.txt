@@ -26,3 +26,4 @@ black
 dnspython
 meilisearch
 sentry-sdk[flask]
+pygithub
