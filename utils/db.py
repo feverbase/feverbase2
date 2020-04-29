@@ -85,7 +85,6 @@ def create(articles):
     """
     objects = []
     for a in articles:
-        print(a)
         obj = Article(**a)
         objects.append(obj)
     Article.smart_insert(objects)
