@@ -5,6 +5,7 @@ from mongoengine import (
     connect,
     BooleanField,
     DateTimeField,
+    DecimalField,
     Document,
     EmailField,
     EmbeddedDocument,
@@ -24,6 +25,17 @@ if os.environ.get("MONGODB_URI"):
     connect(host=os.environ.get("MONGODB_URI"))
 else:
     raise Exception("No MongoDB URI specified.")
+
+
+class LocationDetails(EmbeddedDocument):
+    address = StringField()
+    latitude = DecimalField()
+    longitude = DecimalField()
+
+
+class Location(ExtendedDocument):
+    institution = StringField()
+    location = EmbeddedDocumentField(LocationDetails)
 
 
 class Identity(EmbeddedDocument):
@@ -73,6 +85,7 @@ def create(articles):
     """
     objects = []
     for a in articles:
+        print(a)
         obj = Article(**a)
         objects.append(obj)
     Article.smart_insert(objects)
