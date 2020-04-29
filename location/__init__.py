@@ -13,8 +13,7 @@ load_dotenv()
 
 if os.environ.get("GOOGLE_MAPS_KEY"):
     key = os.environ.get("GOOGLE_MAPS_KEY")
-    REQUEST_URL = f"https://maps.googleapis.com/maps/api/geocode/json?key={key}"
-    REQUEST_URL += "&address={}"
+    BASE_URL = f"https://mapas.googleapis.com/maps/api/geocode/json?key={key}"
 
 
 def get_location(query):
@@ -31,7 +30,8 @@ def get_location(query):
         }
     # if it doesn't exist in mongo, add it then return
     else:
-        data = requests.get(REQUEST_URL.format(query)).json().get("results")
+        url = BASE_URL + f"&address={query}" 
+        data = requests.get(url).json().get("results")
 
         if data:
             # always just take the first item for now
