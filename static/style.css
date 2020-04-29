@@ -185,13 +185,19 @@ li {
 	word-wrap: break-word
 }
 
+header {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
 #logo {
+	display: inline-block;
 	font-size: 2.3rem;
 	font-weight: 700;
 	background: rgb(238,186,59);
 	background: linear-gradient(0deg, #C04848, #780078);
 	background: -webkit-linear-gradient(0deg, #C04848, #780078);
-	background-size: 190px;
 	padding-top: 0.5em;
 	margin-top: 0.1em;
 	padding-bottom: 0.5em;
