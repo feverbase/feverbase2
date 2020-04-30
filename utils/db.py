@@ -14,6 +14,7 @@ from mongoengine import (
     StringField,
     URLField,
     IntField,
+    ObjectIdField
 )
 from mongoengine_mate import ExtendedDocument
 
@@ -27,15 +28,11 @@ else:
     raise Exception("No MongoDB URI specified.")
 
 
-class LocationDetails(EmbeddedDocument):
+class Location(ExtendedDocument):
+    institution = StringField()
     address = StringField()
     latitude = DecimalField()
     longitude = DecimalField()
-
-
-class Location(ExtendedDocument):
-    institution = StringField()
-    location = EmbeddedDocumentField(LocationDetails)
 
 
 class Identity(EmbeddedDocument):
@@ -61,6 +58,8 @@ class Article(ExtendedDocument):
     location = StringField()
     institution = StringField()
     contact = EmbeddedDocumentField(Identity)
+
+    location_data = ObjectIdField()
 
     # optional fields
     sample_size = IntField()
@@ -88,3 +87,50 @@ def create(articles):
         obj = Article(**a)
         objects.append(obj)
     Article.smart_insert(objects)
+
+
+class TestArticle(ExtendedDocument):
+    # primary fields
+    title = StringField()
+    url = URLField(unique=True)
+    timestamp = DateTimeField()
+
+    # additional fields
+    recruiting_status = StringField()
+    sex = ListField(StringField(), default=["male", "female"])
+    target_disease = StringField()
+    intervention = StringField()
+    sponsor = StringField()
+    summary = StringField()
+    location = StringField()
+    institution = StringField()
+    contact = EmbeddedDocumentField(Identity)
+
+    location_data = ObjectIdField()
+
+    # optional fields
+    sample_size = IntField()
+    abandoned = BooleanField()
+    abandoned_reason = StringField()
+
+    # default sort timestamp descending
+    meta = {
+        "ordering": ["-timestamp"],
+    }
+
+    def __str__(self):
+        return self.url
+
+
+def test_create(articles):
+    """
+    Input: list of articles (dictionaries).
+    Output: None
+
+    Posts a list of articles to Mongo.
+    """
+    objects = []
+    for a in articles:
+        obj = TestArticle(**a)
+        objects.append(obj)
+    TestArticle.smart_insert(objects)
