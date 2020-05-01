@@ -6,3 +6,6 @@
 env/
 venv/
 .env
+
+*.swp
+*.swo
