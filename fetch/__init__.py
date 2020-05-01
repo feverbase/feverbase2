@@ -20,7 +20,7 @@ TERMS = utils.get_query_terms()
 
 def get_records():
     data = {}
-    for query in TERMS:
+    for query in TERMS[0:2]:
         # try:
         #     print(f"Crawling {chictr.SOURCE}...")
         #     data.update(chictr.find(query))
@@ -33,17 +33,17 @@ def get_records():
         except Exception as e:
             print(e)
 
-        #try:
-        #    print(f"Crawling {eu.SOURCE}...")
-        #    data.update(eu.find(query))
-        #except Exception as e:
-        #    print(e)
+        try:
+            print(f"Crawling {eu.SOURCE}...")
+            data.update(eu.find(query))
+        except Exception as e:
+            print(e)
 
-        #try:
-        #    print(f"Crawling {isrctn.SOURCE}...")
-        #    data.update(isrctn.find(query))
-        #except Exception as e:
-        #    print(e)
+        try:
+            print(f"Crawling {isrctn.SOURCE}...")
+            data.update(isrctn.find(query))
+        except Exception as e:
+            print(e)
 
     articles = [translate(i) for i in data.values()]
 
@@ -57,7 +57,7 @@ def get_records():
         article.pop("location_data", None)
 
     # re-index the meilisearch index
-    mongo_to_meili()
+    #mongo_to_meili()
     return articles
 
 
