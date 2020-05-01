@@ -4,8 +4,7 @@ import json
 import re
 import requests
 
-sys.path.append("../")
-from utils import db, ms
+import db
 
 from dotenv import load_dotenv
 
@@ -147,3 +146,6 @@ def geocode_query(query):
             }
 
             return location_details
+
+if __name__ == "__main__":
+    print("HELLO")
