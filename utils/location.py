@@ -29,13 +29,16 @@ def add_location_data(articles):
 
     Return the list of articles
     """
+    print("Beginning to add location data...")
     institutions = [a.get("institution") for a in articles]
 
     # determine which institutions are not already in Mongo,
     # and add them
     new_locations = fetch_new_locations(institutions)
 
-    db.insert_locations(new_locations)
+    print("Inserting new locations into database...")
+    if len(new_locations) > 0:
+        db.insert_locations(new_locations)
 
     # get all mongo ids so we have a mapping from
     # institution -> location_id, including the
@@ -70,14 +73,16 @@ def fetch_new_locations(queries):
     all_location_objects = db.Location.objects()
     stored_institutions = [i.institution for i in all_location_objects]
 
-    # iterate list of institutions. if not present in the list of
-    # stored institutions, geocode them and add to array
+    # for every 'new' instution (i.e. not present in stored_institution),
+    # geocode using Google Maps API
+    new_location_names = [inst for inst in queries if inst not in stored_institutions]
     new_location_data = []
-    for query in queries:
-        if query not in stored_institutions:
-            this_location_data = geocode_query(query)
-            if this_location_data:
-                new_location_data.append(this_location_data)
+
+    for i, inst in enumerate(new_location_names):
+        this_location_data = geocode_query(inst)
+        if this_location_data:
+            new_location_data.append(this_location_data)
+        print(f"Geocoded institution {i + 1}/{len(new_location_names)}")
 
     return new_location_data
 
@@ -94,7 +99,7 @@ def get_mongo_ids():
     """
 
     # get all locations from mongo
-    all_locations = db.Location.objects()
+    all_locations = db.Location.objects.only("institution")
     # read into dictionary structure
     mappings = {}
     for location in all_locations:
@@ -133,6 +138,3 @@ def geocode_query(query):
 
             return location_details
 
-if __name__ == "__main__":
-    queries = ["Gunn High School", "Palo Alto High School", "International school of beijing"]
-    insert_new_locations(queries)
