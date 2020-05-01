@@ -4,7 +4,7 @@ import json
 import re
 import requests
 
-import db
+from . import db
 
 from dotenv import load_dotenv
 
@@ -33,7 +33,9 @@ def add_location_data(articles):
 
     # determine which institutions are not already in Mongo,
     # and add them
-    insert_new_locations(institutions)
+    new_locations = fetch_new_locations(institutions)
+
+    db.insert_locations(new_locations)
 
     # get all mongo ids so we have a mapping from
     # institution -> location_id, including the
@@ -56,7 +58,7 @@ def add_location_data(articles):
     return articles
 
 
-def insert_new_locations(queries):
+def fetch_new_locations(queries):
     """Return a list of locations that are not in Mongo
 
     Pull every location from MongoDB. Iterate through queries
@@ -76,13 +78,7 @@ def insert_new_locations(queries):
             this_location_data = geocode_query(query)
             new_location_data.append(this_location_data)
 
-    # only make DB call if we have data to add
-    if len(new_location_data) > 0:
-        batch_insert_locations(new_location_data)
-        print(f"Inserted {len(new_location_data)} locations into Mongo")
-    else:
-        print("No new locations")
-
+    return new_location_data
 
 
 def get_mongo_ids():
@@ -103,15 +99,6 @@ def get_mongo_ids():
     for location in all_locations:
         mappings[location["institution"]] = location.id
     return mappings
-
-
-def batch_insert_locations(locations):
-    """Insert an array of location_data dictionaries to Mongo"""
-    objects = []
-    for location in locations:
-        obj = db.Location(**location)
-        objects.append(obj)
-    db.Location.smart_insert(objects)
 
 
 def geocode_query(query):

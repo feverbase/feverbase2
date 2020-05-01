@@ -88,3 +88,16 @@ def create(articles):
         objects.append(obj)
     Article.smart_insert(objects)
 
+
+def insert_locations(locations):
+    """
+    Input: list of locations (dictionaries).
+    Output: None
+
+    Posts a list of locations to Mongo.
+    """
+    objects = []
+    for l in locations:
+        obj = Location(**l)
+        objects.append(obj)
+    Location.smart_insert(objects)

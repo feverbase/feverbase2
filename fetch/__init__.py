@@ -10,7 +10,6 @@ sys.path.append('../')
 from utils import db, ms, location
 
 from search import mongo_to_meili
-from location import add_location_data
 
 TERMS = utils.get_query_terms()
 
@@ -33,17 +32,17 @@ def get_records():
         except Exception as e:
             print(e)
 
-        try:
-            print(f"Crawling {eu.SOURCE}...")
-            data.update(eu.find(query))
-        except Exception as e:
-            print(e)
+        #try:
+        #    print(f"Crawling {eu.SOURCE}...")
+        #    data.update(eu.find(query))
+        #except Exception as e:
+        #    print(e)
 
-        try:
-            print(f"Crawling {isrctn.SOURCE}...")
-            data.update(isrctn.find(query))
-        except Exception as e:
-            print(e)
+        #try:
+        #    print(f"Crawling {isrctn.SOURCE}...")
+        #    data.update(isrctn.find(query))
+        #except Exception as e:
+        #    print(e)
 
     articles = [translate(i) for i in data.values()]
 
