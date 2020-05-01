@@ -16,18 +16,26 @@ if os.environ.get("GOOGLE_MAPS_KEY"):
     BASE_URL = f"https://maps.googleapis.com/maps/api/geocode/json?key={key}"
 
 
-"""
-run from fetch/__init__.py, take the entire list of
-articles as input, and output the same list with each
-article's location data
-"""
 def add_location_data(articles):
+    """Add location information to every article in a list
+
+    For every article in a list, extract the institution name.
+    Every institution name is looked-up in the Mongo database,
+    if there is already a name->location mapping for the institution,
+    skip it. If there isn't a mapping, make a Google Maps API call.
+
+    Once we have ensured every institution name has a corresponding
+    Mongo ID, iterate through articles, looking up each institution
+    name locaiton_mappings.
+
+    Return the list of articles
+    """
     institutions = [a.get("institution") for a in articles]
 
     # geocode all locations (this only peforms the
     # operation if the location is not already in the
     # database.)
-    new_locations = [l for l in get_locations(institutions) if l]
+    new_locations = [l for l in get_new_locations(institutions) if l]
 
     # push all these newly-fetched locations to the
     # database
@@ -53,11 +61,19 @@ def add_location_data(articles):
 
     return articles
 
-"""
-run this first on every article, return a list of
-all 'new' locations. to be bulk inserted into mongo
-"""
-def get_locations(queries):
+
+def get_new_locations(queries):
+    """Return a list of locations that are not in Mongo
+
+    For every institution in queries, check if the
+    institution exists in Mongo (with location_in_db).
+    
+    If it does exist, do nothing.
+
+    If it does not exist, geocode the query with Google
+    Maps and then add the returned location data to the
+    return list.
+    """
     location_data = []
     for query in queries:
         # if location is already in the db, skip
@@ -68,9 +84,21 @@ def get_locations(queries):
 
 
 def location_in_db(query):
+    """Check if a given institution's location info is stored in Mongo"""
     return len(db.Location.objects(institution=query)) > 0
 
+
 def get_mongo_ids():
+    """Return a mapping of every location name to its Mongo ID
+
+    Every entry in the MongoDB "Location" collection has a location
+    data ID. We use these IDs to represent relationships from
+    Articles to their corresponding location data.
+
+    This function returns a dictionary with institution names as
+    keys, and MongoDB IDs as values.
+    """
+
     # get all locations from mongo
     all_locations = db.Location.objects()
     # read into dictionary structure
@@ -79,17 +107,23 @@ def get_mongo_ids():
         mappings[location["institution"]] = location.id
     return mappings
 
+
 def batch_insert_locations(locations):
+    """Insert an array of location_data dictionaries to Mongo"""
     objects = []
     for location in locations:
         obj = db.Location(**location)
         objects.append(obj)
     db.Location.smart_insert(objects)
 
-"""
-returns {"address": ..., "latitude": ..., "longitude": .. }
-"""
+
 def geocode_query(query):
+    """Input the name of an institution and geocode with Google Maps API
+
+    Construct appropriate URL for GET request to Google Maps API. Parse
+    the resulting JSON for only the latitude, longitude, and address
+    of the inputted institution name.
+    """
     url = BASE_URL + f"&address={query}"
     data = requests.get(url).json().get("results")
 
@@ -113,4 +147,3 @@ def geocode_query(query):
             }
 
             return location_details
-
