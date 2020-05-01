@@ -32,23 +32,17 @@ def add_location_data(articles):
     print("Beginning to add location data...")
     institutions = [a.get("institution") for a in articles]
 
-    # determine which institutions are not already in Mongo,
-    # and add them
+    # add locations not already stored in mongo
     new_locations = fetch_new_locations(institutions)
 
     print("Inserting new locations into database...")
     if len(new_locations) > 0:
         db.insert_locations(new_locations)
 
-    # get all mongo ids so we have a mapping from
-    # institution -> location_id, including the
-    # new ones we just pushed. note that this includes the
-    # locations added in insert_new_locations()
+    # get institution name and location_data $id pairs from mongo
     location_mappings = get_mongo_ids()
 
-    # for every article, lookup related institution
-    # in our mapping, and add the object_id relating
-    # to its location data
+    # add an article's location data, based on its institution
     for article in articles:
         institution = article.get("institution", None)
         if institution:
@@ -82,7 +76,7 @@ def fetch_new_locations(queries):
         this_location_data = geocode_query(inst)
         if this_location_data:
             new_location_data.append(this_location_data)
-        print(f"Geocoded institution {i + 1}/{len(new_location_names)}")
+        print(f"Geocoded institution {i + 1}/{len(new_location_names)} - {inst}")
 
     return new_location_data
 
@@ -137,4 +131,3 @@ def geocode_query(query):
             }
 
             return location_details
-
