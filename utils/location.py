@@ -31,19 +31,14 @@ def add_location_data(articles):
     """
     institutions = [a.get("institution") for a in articles]
 
-    # geocode all locations (this only peforms the
-    # operation if the location is not already in the
-    # database.)
-    new_locations = [l for l in get_new_locations(institutions) if l]
-
-    # push all these newly-fetched locations to the
-    # database
-    if len(new_locations) > 0:
-        batch_insert_locations(new_locations)
+    # determine which institutions are not already in Mongo,
+    # and add them
+    insert_new_locations(institutions)
 
     # get all mongo ids so we have a mapping from
     # institution -> location_id, including the
-    # new ones we just pushed
+    # new ones we just pushed. note that this includes the
+    # locations added in insert_new_locations()
     location_mappings = get_mongo_ids()
 
     # for every article, lookup related institution
@@ -61,30 +56,33 @@ def add_location_data(articles):
     return articles
 
 
-def get_new_locations(queries):
+def insert_new_locations(queries):
     """Return a list of locations that are not in Mongo
 
-    For every institution in queries, check if the
-    institution exists in Mongo (with location_in_db).
-    
-    If it does exist, do nothing.
-
-    If it does not exist, geocode the query with Google
-    Maps and then add the returned location data to the
-    return list.
+    Pull every location from MongoDB. Iterate through queries
+    (every institution in articles) and see which ones are already
+    present in MongoDB (Location collection). For those that are not,
+    make a call to Maps API and store result in an array. At the end,
+    insert all "new" location_data to Location collection.
     """
-    location_data = []
+    all_location_objects = db.Location.objects()
+    stored_institutions = [i.institution for i in all_location_objects]
+
+    # iterate list of institutions. if not present in the list of
+    # stored institutions, geocode them and add to array
+    new_location_data = []
     for query in queries:
-        # if location is already in the db, skip
-        if not location_in_db(query):
+        if query not in stored_institutions:
             this_location_data = geocode_query(query)
-            location_data.append(this_location_data)
-    return location_data
+            new_location_data.append(this_location_data)
 
+    # only make DB call if we have data to add
+    if len(new_location_data) > 0:
+        batch_insert_locations(new_location_data)
+        print(f"Inserted {len(new_location_data)} locations into Mongo")
+    else:
+        print("No new locations")
 
-def location_in_db(query):
-    """Check if a given institution's location info is stored in Mongo"""
-    return len(db.Location.objects(institution=query)) > 0
 
 
 def get_mongo_ids():
@@ -148,4 +146,5 @@ def geocode_query(query):
             return location_details
 
 if __name__ == "__main__":
-    print("HELLO")
+    queries = ["Gunn High School", "Palo Alto High School", "International school of beijing"]
+    insert_new_locations(queries)
