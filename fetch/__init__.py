@@ -7,7 +7,7 @@ from faucets import isrctn
 from . import utils
 
 sys.path.append('../')
-from utils import db, ms
+from utils import db, ms, location
 
 from search import mongo_to_meili
 from location import add_location_data
@@ -47,7 +47,7 @@ def get_records():
 
     articles = [translate(i) for i in data.values()]
 
-    articles_with_location = add_location_data(articles)
+    articles_with_location = location.add_location_data(articles)
     
     db.create(articles_with_location)
 
