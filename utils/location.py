@@ -76,7 +76,8 @@ def fetch_new_locations(queries):
     for query in queries:
         if query not in stored_institutions:
             this_location_data = geocode_query(query)
-            new_location_data.append(this_location_data)
+            if this_location_data:
+                new_location_data.append(this_location_data)
 
     return new_location_data
 
