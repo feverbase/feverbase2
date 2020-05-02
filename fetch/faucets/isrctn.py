@@ -94,7 +94,7 @@ def find(query):
             #TODO: Fix this
             this_entry["institution"] = None
 
-            print(this_entry, "\n")
+            #print(this_entry, "\n")
 
             data[url] = this_entry
             count += 1
