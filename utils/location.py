@@ -70,12 +70,24 @@ def fetch_new_locations(queries):
     # for every 'new' instution (i.e. not present in stored_institution),
     # geocode using Google Maps API
     new_location_names = [inst for inst in queries if inst not in stored_institutions]
+    # remove duplicates
+    new_location_names = list(set(new_location_names))
     new_location_data = []
 
     for i, inst in enumerate(new_location_names):
         this_location_data = geocode_query(inst)
         if this_location_data:
             new_location_data.append(this_location_data)
+        else:
+            # geocoding didn't return any results, still add to database
+            new_location_data.append(
+                {
+                    "institution": inst,
+                    "address": None,
+                    "latitude": None,
+                    "longitude": None,
+                }
+            )
         print(f"Geocoded institution {i + 1}/{len(new_location_names)} - {inst}")
 
     return new_location_data
