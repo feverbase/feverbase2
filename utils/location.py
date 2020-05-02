@@ -78,6 +78,7 @@ def fetch_new_locations(queries):
         this_location_data = geocode_query(inst)
         if this_location_data:
             new_location_data.append(this_location_data)
+            print(f"[{i + 1}/{len(new_location_names)}] Geocoded institution {inst}")
         else:
             # geocoding didn't return any results, still add to database
             new_location_data.append(
@@ -88,7 +89,9 @@ def fetch_new_locations(queries):
                     "longitude": None,
                 }
             )
-        print(f"Geocoded institution {i + 1}/{len(new_location_names)} - {inst}")
+            print(
+                f"[{i + 1}/{len(new_location_names)}] Unable to geocode institution {inst}"
+            )
 
     return new_location_data
 
