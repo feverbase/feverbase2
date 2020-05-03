@@ -281,6 +281,8 @@ def search():
     if request.headers.get("Content-Type", "") == "application/json":
         page = get_page()
 
+        errors = []
+
         # { key, op, value }
         # all 2-tuples, first mongo, second meili
         dynamic_filters = []
@@ -302,13 +304,17 @@ def search():
             value = (ovalue, ovalue)
 
             if okey == "timestamp":
-                d = dateutil.parser.parse(ovalue)
-                ts = int(d.timestamp())
-                value = (
-                    f"datetime.fromtimestamp({ts})",
-                    str(ts),
-                )
-                key = ("timestamp", "parsed_timestamp")
+                try:
+                    d = dateutil.parser.parse(ovalue)
+                    ts = int(d.timestamp())
+                    value = (
+                        f"datetime.fromtimestamp({ts})",
+                        str(ts),
+                    )
+                    key = ("timestamp", "parsed_timestamp")
+                except:
+                    errors.append(f"Could not parse date filter: {ovalue}")
+                    continue
             elif okey == "sample_size":
                 try:
                     v = int(ovalue)
@@ -328,8 +334,8 @@ def search():
         stats = f"returned"
         if total_hits:
             stats += f" {total_hits} result{'' if total_hits == 1 else 's'}"
-        if query_time:
-            stats += f" in {query_time}ms"
+        if query_time or query_time == 0:
+            stats += f" in {query_time if query_time else '<1'}ms"
 
         if len(papers) and is_article(papers[0]):
             papers = list(map(lambda p: json.loads(p.to_json()), papers))
@@ -339,7 +345,7 @@ def search():
             if type(p.get("timestamp")) != int:
                 p["timestamp"] = p.get("timestamp", {}).get("$date", -1)
 
-        return jsonify(dict(page=page, papers=papers, stats=stats))
+        return jsonify(dict(page=page, papers=papers, stats=stats, errors=errors))
     else:
         return render_template("search.html", **ctx)
 

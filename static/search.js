@@ -29,6 +29,12 @@ function addPapers() {
         return;
       }
 
+      if (data.errors && data.errors.length) {
+        for (const m of data.errors) {
+          toastr.error(m);
+        }
+      }
+
       if (page === -1) {
         $('#noresults').show();
       }
