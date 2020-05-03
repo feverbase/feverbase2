@@ -109,14 +109,7 @@ def get_cmd_matches(qraw):
     return qraw.strip(), cmd_matches
 
 
-def filter_papers(
-    page, qraw, dynamic_filters=[], min_subjects=0, max_subjects=0,
-):
-    if min_subjects < 0:
-        min_subjects = 0
-    if max_subjects < 0:
-        max_subjects = 0
-
+def filter_papers(page, qraw, dynamic_filters=[]):
     if not qraw:
         qs = []
         for f in dynamic_filters:
@@ -124,13 +117,6 @@ def filter_papers(
             op = f["op"][0]
             value = f["value"][0]
             qs.append(eval(f"Q({key}__{op}={value})"))
-
-        # parsed_sample_size is -1 if couldn't parse sample_size, so if filtering
-        # on sample_size at all, make sure to exclude the invalid entries by adding >= 0
-        if min_subjects or max_subjects:
-            qs.append(Q(parsed_sample_size__gte=min_subjects))
-        if max_subjects:
-            qs.append(Q(parsed_sample_size__lte=max_subjects))
 
         advanced_filters = reduce(lambda x, y: x & y, qs) if len(qs) else None
 
@@ -146,13 +132,6 @@ def filter_papers(
             op = f["op"][1]
             value = escape(f["value"][1])
             advanced_filters.append(f'{key} {op} "{value}"')
-
-        # parsed_sample_size is -1 if couldn't parse sample_size, so if filtering
-        # on sample_size at all, make sure to exclude the invalid entries by adding >= 0
-        if min_subjects or max_subjects:
-            advanced_filters.append(f"parsed_sample_size >= {min_subjects}")
-        if max_subjects:
-            advanced_filters.append(f"parsed_sample_size <= {max_subjects}")
 
         advanced_filters = "AND".join(advanced_filters)
 
@@ -289,6 +268,8 @@ ACCEPTED_DYNAMIC_FILTERS = [
     "recruiting_status",
     "min-timestamp",
     "max-timestamp",
+    "min-subjects",
+    "max-subjects",
 ]
 
 
@@ -303,43 +284,44 @@ def search():
         # { key, op, value }
         # all 2-tuples, first mongo, second meili
         dynamic_filters = []
-        for key, value in filters.items():
-            if key not in ACCEPTED_DYNAMIC_FILTERS or not value:
+        # o = original
+        for okey, ovalue in filters.items():
+            if okey not in ACCEPTED_DYNAMIC_FILTERS or not ovalue:
                 continue
 
-            if key.startswith("min-"):
+            if okey.startswith("min-"):
                 op = ("gte", ">=")
-            elif key.startswith("max-"):
+            elif okey.startswith("max-"):
                 op = ("lte", "<=")
             else:
                 op = ("icontains", "*=")
 
-            if "timestamp" in key:
-                d = dateutil.parser.parse(value)
+            key = (okey, okey)
+            value = (ovalue, ovalue)
+
+            if "timestamp" in okey:
+                d = dateutil.parser.parse(ovalue)
                 ts = int(d.timestamp())
                 value = (
                     f"datetime.fromtimestamp({ts})",
                     str(ts),
                 )
                 key = ("timestamp", "parsed_timestamp")
-            else:
-                key = (key, key)
-                value = (value, value)
+            elif "subjects" in okey:
+                key = ("sample_size", "sample_size")
+                try:
+                    v = int(ovalue)
+                    if v < 0:
+                        v = 0
+                    v = str(v)
+                    value = (v, v)
+                except:
+                    value = ("0", "0")
 
             dynamic_filters.append({"key": key, "op": op, "value": value})
 
-        try:
-            min_subjects = int(filters.get("min-subjects", 0))
-        except:
-            min_subjects = 0
-
-        try:
-            max_subjects = int(filters.get("max-subjects", 0))
-        except:
-            max_subjects = 0
-
         papers, page, total_hits, query_time = filter_papers(
-            page, filters.get("q", ""), dynamic_filters, min_subjects, max_subjects,
+            page, filters.get("q", ""), dynamic_filters
         )
 
         stats = f"returned"

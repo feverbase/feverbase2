@@ -21,16 +21,10 @@ def parse_documents():
         del entry_json["_id"]
         entry_json["ms-id"] = oid
 
-        # add parsed_sample_size = first number in sample_size
-        sample_size = entry_json.get("sample_size")
-        if type(sample_size) == int:
-            entry_json["parsed_sample_size"] = sample_size
-        elif sample_size:
-            sample_sizes = re.findall(r"^\D*(\d+)", str(sample_size))
-            if len(sample_sizes):
-                entry_json["parsed_sample_size"] = int(sample_sizes[0])
-        else:
-            entry_json["parsed_sample_size"] = -1
+        sample_size = entry_json.get("sample_size", 0)
+        if sample_size == 0:
+            sample_size = -1
+        entry_json["sample_size"] = sample_size
 
         # convert timestamp to epoch
         if doc.timestamp:

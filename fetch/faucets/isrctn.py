@@ -42,6 +42,8 @@ def find(query):
             title = main.find("public_title").text
             sponsor = main.find("primary_sponsor").text
             sample_size = int(main.find("target_size").text)
+            if sample_size == 0:
+                sample_size = None
             url = main.find("url").text
             recruitment_status = main.find("recruitment_status").text
             sex = trial.find("criteria").find("gender").text
@@ -92,7 +94,6 @@ def find(query):
             this_entry["summary"] = summary
             # TODO: Fix this
             this_entry["institution"] = None
-
 
             data[url] = this_entry
             count += 1
