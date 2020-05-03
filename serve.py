@@ -7,6 +7,7 @@ import dateutil.parser
 from random import shuffle, randrange, uniform
 from functools import reduce
 import re
+from datetime import datetime
 
 from hashlib import md5
 from flask import (
@@ -82,6 +83,22 @@ def is_article(a):
     return type(a) == db.Article
 
 
+# `"April 1, 2020"` or `April1,2020`
+quoted_or_single_word = '\\s*(?:(?:"(.*)")|(?:([^\\s]*)))'
+CMDS = {
+    f"mindate:{quoted_or_single_word}": {
+        "type": "date",
+        "key": "timestamp",
+        "op": ("gte", ">="),
+    },
+    f"maxdate:{quoted_or_single_word}": {
+        "type": "date",
+        "key": "timestamp",
+        "op": ("lte", "<="),
+    },
+}
+
+
 def filter_papers(
     page, qraw, dynamic_filters={}, min_subjects=0, max_subjects=0,
 ):
@@ -90,10 +107,41 @@ def filter_papers(
     if max_subjects < 0:
         max_subjects = 0
 
+    cmd_filters = []
+    if qraw:
+        # detect commands
+        for cmd, options in CMDS.items():
+            match = re.search(cmd, qraw)
+            if match:
+                # remove from qraw
+                whole_thing = match.group(0)
+                qraw = qraw.replace(whole_thing, "")
+
+                if options["type"] == "date":
+                    # get first truthy value
+                    datestring = next(m for m in match.groups() if m)
+                    try:
+                        d = dateutil.parser.parse(datestring)
+                        ts = int(d.timestamp())
+                        cmd_filters.append(
+                            (
+                                f"Q({options['key']}__{options['op'][0]}=datetime.utcfromtimestamp({ts}))",
+                                f"{options['key']} {options['op'][1]} {ts * 1000}",
+                            )
+                        )
+                        print(cmd_filters)
+                    except Exception as e:
+                        print(e)
+
+    qraw = qraw.strip()
+
     if not qraw:
         qs = [
             eval(f"Q({key}__icontains=value)") for key, value in dynamic_filters.items()
         ]
+        for cmd_filter in cmd_filters:
+            qs.append(eval(cmd_filter[0]))
+            print(cmd_filter[0])
 
         # parsed_sample_size is -1 if couldn't parse sample_size, so if filtering
         # on sample_size at all, make sure to exclude the invalid entries by adding >= 0
@@ -115,6 +163,9 @@ def filter_papers(
             for key, value in dynamic_filters.items()
             if value
         ]
+        for cmd_filter in cmd_filters:
+            advanced_filters.append(cmd_filter[1])
+
         # parsed_sample_size is -1 if couldn't parse sample_size, so if filtering
         # on sample_size at all, make sure to exclude the invalid entries by adding >= 0
         if min_subjects or max_subjects:
@@ -160,9 +211,7 @@ def filter_papers(
 
         # sort by timestamp descending
         results = sorted(
-            results.get("hits"),
-            key=lambda r: r.get("timestamp", {}).get("$date", -1),
-            reverse=True,
+            results.get("hits"), key=lambda r: r.get("timestamp", -1), reverse=True,
         )
         # get formatted results for highlighting terms
         results = list(map(lambda r: r.get("_formatted", r), results))
@@ -280,7 +329,14 @@ def search():
             stats += f" in {query_time}ms"
 
         if len(papers) and is_article(papers[0]):
-            papers = list(map(lambda p: json.loads(p.to_json()), papers))
+
+            def transform(p):
+                j = json.loads(p.to_json())
+                if j.get("timestamp"):
+                    j["timestamp"] = j.get("timestamp", {}).get("$date", -1)
+                return j
+
+            papers = list(map(transform, papers))
         return jsonify(dict(page=page, papers=papers, stats=stats))
     else:
         ctx = default_context(render_format="search", filters=filters)

@@ -46,13 +46,15 @@
   <form action="/search" method="get" {{ 'class=horizontal' if url_for(request.endpoint) != '/' else '' }}>
     <header class="center">
       <h1 id="logo"><a href="/">feverbase</a></h1>
-      <span id="blurb" {{ 'style=display:none' if url_for(request.endpoint) != '/' else '' }}>Search {{ total_count }} clinical trials from around the world.</span>
+      <span id="blurb">Search {{ total_count }} clinical trials from around the world.</span>
 
       <div id="sbox">
         <input type="submit" alt="Search" id="search-icon" value="">
         <input name="q" type="text" id="qfield" value="{{ filters.q if filters and 'q' in filters else '' }}"
           autocomplete="off" autocapitalize="off" spellcheck="false">
       </div>
+
+      <span id="hint">Hint: try using <em>mindate:"April 1, 2020"</em> or <em>maxdate:2020-03-15</em>.</span>
     </header>
 
     <div id="filters-box" {{ 'style=display:none' if url_for(request.endpoint) == '/' else '' }}>

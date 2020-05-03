@@ -220,6 +220,10 @@ form.horizontal > header > #sbox {
 	margin-top: 0;
 }
 
+form.horizontal > header > span {
+	display: none;
+}
+
 #logo {
 	display: inline-block;
 	font-size: 2.3rem;
@@ -244,6 +248,16 @@ form.horizontal > header > #sbox {
 
 #blurb {
 	margin: 0.6rem;
+}
+
+#hint {
+	margin-top: 1rem;
+	color: #aaa;
+}
+
+#hint > em {
+	background-color: rgba(27,31,35,.05);
+	padding: 0.2em 0.4em;
 }
 
 #sbox {

@@ -7,7 +7,7 @@ from faucets import eu
 from faucets import isrctn
 from . import utils
 
-sys.path.append('../')
+sys.path.append("../")
 from utils import db, ms, location
 
 from search import mongo_to_meili
@@ -38,9 +38,10 @@ def run():
 
     mongo_to_meili()
 
+
 def translate(info):
-    source = info["_source"]
-    faucet = DRIPPING_FAUCETS[source]
+    source = info.get("_source")
+    faucet = DRIPPING_FAUCETS.get(source)
     if faucet:
         return faucet.translate(info)
     return info
