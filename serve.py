@@ -268,8 +268,8 @@ ACCEPTED_DYNAMIC_FILTERS = [
     "recruiting_status",
     "min-timestamp",
     "max-timestamp",
-    "min-subjects",
-    "max-subjects",
+    "min-sample_size",
+    "max-sample_size",
 ]
 
 
@@ -291,15 +291,17 @@ def search():
 
             if okey.startswith("min-"):
                 op = ("gte", ">=")
+                okey = okey[4:]
             elif okey.startswith("max-"):
                 op = ("lte", "<=")
+                okey = okey[4:]
             else:
                 op = ("icontains", "*=")
 
             key = (okey, okey)
             value = (ovalue, ovalue)
 
-            if "timestamp" in okey:
+            if okey == "timestamp":
                 d = dateutil.parser.parse(ovalue)
                 ts = int(d.timestamp())
                 value = (
@@ -307,8 +309,7 @@ def search():
                     str(ts),
                 )
                 key = ("timestamp", "parsed_timestamp")
-            elif "subjects" in okey:
-                key = ("sample_size", "sample_size")
+            elif okey == "sample_size":
                 try:
                     v = int(ovalue)
                     if v < 0:
