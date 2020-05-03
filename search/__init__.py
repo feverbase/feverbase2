@@ -47,7 +47,7 @@ def push_to_meili(documents):
     while status != "processed":
         update_status = index.get_update_status(delete_id)
         status = update_status.get("status")
-    print("Successfully cleared previous documents")
+    print("[Meili] Successfully cleared previous documents")
 
     update_id = index.add_documents(documents).get("updateId")
 
@@ -56,7 +56,7 @@ def push_to_meili(documents):
     while status != "processed":
         update_status = index.get_update_status(update_id)
         status = update_status.get("status")
-    print("Successfully uploaded data to Meilisearch")
+    print("[Meili] Successfully uploaded data to Meilisearch")
 
 
 def mongo_to_meili():

@@ -36,3 +36,18 @@ jobs:
           echo "Deploying to $ip..."
           ssh -oStrictHostKeyChecking=no -i ./key_file -p ${{ secrets.PORT }} "${{ secrets.USERNAME }}@$ip" '/root/app/scripts/deploy.sh'
         done
+    - name: Purge Cloudflare cache
+      uses: jakejarvis/cloudflare-purge-action@master
+      env:
+        CLOUDFLARE_ZONE: ${{ secrets.CLOUDFLARE_ZONE }}
+        CLOUDFLARE_TOKEN: ${{ secrets.CLOUDFLARE_TOKEN }}
+    - name: Slack Notification
+      uses: homoluctus/slatify@master
+      if: always()
+      with:
+        type: ${{ job.status }}
+        job_name: 'Deploy'
+        mention: 'here'
+        mention_if: 'failure'
+        channel: '#production'
+        url: ${{ secrets.SLACK_WEBHOOK }}

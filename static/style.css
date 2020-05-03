@@ -78,7 +78,7 @@ body {
 	-webkit-font-smoothing: antialiased;
 	-webkit-text-size-adjust: 100%;
 	max-width: 1024px;
-	margin: 0 auto
+	margin: 0 auto;
 }
 
 @media (min-width: 992px) {
@@ -126,7 +126,7 @@ img {
 a {
 	color: inherit;
 	text-decoration: none;
-	border-bottom: 1px solid #b1b1b1
+	border-bottom: 1px solid #b1b1b1;
 }
 
 a:hover {
@@ -139,6 +139,7 @@ blockquote {
 	margin: 10px 0;
 	padding: 10px 10px;
 	background: #eee;
+	word-wrap: break-word;
 }
 
 .center {
@@ -180,22 +181,54 @@ td {
 	vertical-align: top;
 }
 
+tr.spacer > td {
+    padding-bottom: 1.25em;
+}
+
 li {
 	line-height: 1.65em;
 	word-wrap: break-word
 }
 
+form {
+	margin-top: 40px; /* account for nav of height 40px */
+	padding-top: 20vh;
+}
+
+form.horizontal {
+	padding-top: 0;
+}
+
+header {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-bottom: 1rem !important;
+}
+
+form.horizontal > header {
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: flex-start;
+}
+
+form.horizontal > header > #logo {
+	margin-right: 1rem;
+}
+
+form.horizontal > header > #sbox {
+	margin-top: 0;
+}
+
 #logo {
+	display: inline-block;
 	font-size: 2.3rem;
 	font-weight: 700;
 	background: rgb(238,186,59);
 	background: linear-gradient(0deg, #C04848, #780078);
 	background: -webkit-linear-gradient(0deg, #C04848, #780078);
-	background-size: 190px;
-	padding-top: 0.5em;
-	margin-top: 0.1em;
-	padding-bottom: 0.5em;
-	margin-bottom: -0.1em;
+	margin: 0;
+	padding: 0;
 	background-repeat: no-repeat;
 	background-position: center;
 	background-clip: text;
@@ -205,10 +238,36 @@ li {
 	-webkit-font-smoothing: subpixel-antialiased;
 }
 
-#maindiv {
-	margin-left: auto;
-	margin-right: auto;
-	background-color: white;
+#logo > a {
+	border-bottom: none;
+}
+
+#blurb {
+	margin: 0.6rem;
+}
+
+#sbox {
+	width: 70%;
+	text-align: left;
+	margin-top: 1rem;
+}
+
+@media only screen and (max-width: 660px) {
+	form.horizontal > header {
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: center;
+	}
+
+	form.horizontal > header > #logo {
+		margin-top: -0.8rem;
+		margin-bottom: 0.5rem;
+		margin-right: 0;
+	}
+
+	#sbox {
+		width: 100%;
+	}
 }
 
 #qfield {
@@ -222,8 +281,7 @@ li {
   font-family: 'SF Pro';
   font-weight: 300;
   padding-left: 40px;
-  margin-bottom: 10px;
-  outline:0;
+  outline: 0;
 }
 
 #search-icon {
@@ -240,9 +298,10 @@ li {
 	background-size: 30px;
 }
 
-#sbox {
-	margin-top: 10px;
-  text-align: center;
+#maindiv {
+	margin-left: auto;
+	margin-right: auto;
+	background-color: white;
 }
 
 .ts {
@@ -266,29 +325,25 @@ li {
 	line-height: 1.25
 }
 
-#filters-box,
-#feedback-box {
+#filters-box {
 	padding: 5px;
 	background-color: rgb(240, 240, 240);
-	margin: 10px auto 5px auto;
+	margin: -0.5rem auto 1rem auto;
 	border: solid 1px #D6D3C5;
 	width: 100%;
 }
 
-#filters-box > a,
-#feedback-box > a {
+#filters-box > a {
 	color: gray;
 	cursor: pointer;
 	user-select: none;
 }
 
-#filters-box > a:hover,
-#feedback-box > a:hover {
+#filters-box > a:hover {
 	text-decoration: underline;
 }
 
-#filters-container,
-#feedback-container {
+#filters-container {
 	margin-top: 0.6rem;
 	display: grid;
 	grid-template-columns: 1fr 3fr;
@@ -296,15 +351,57 @@ li {
 	width: 100%;
 }
 
-#filters-container > label,
-#feedback-container > label {
+#filters-container > label {
 	font-weight: 600;
 	font-size: 16px;
 	margin-top: 4px;
 }
 
+#feedback {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-color: rgba(0, 0, 0, 0.6);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 100;
+}
+
 #feedback-box {
 	margin-bottom: 20px;
+	background-color: rgb(245, 245, 245);
+	width: 360px;
+	max-width: 95%;
+	max-height: 95%;
+	padding: 10px;
+	border-radius: 6px;
+	overflow: auto;
+}
+
+#feedback-title {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	align-items: flex-start;
+}
+
+#feedback-title > p {
+	display: inline-block;
+	margin: 0;
+	font-size: 20px;
+}
+
+#feedback-container {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+}
+
+#feedback-container > * {
+	margin-top: 0.3rem;
 }
 
 input, textarea {
@@ -320,7 +417,7 @@ input:focus, textarea:focus {
 }
 
 button, input[type=submit] {
-	font-family: 'Proxima Nova', 'SF Pro', Arial, sans-serif;
+	font-family: 'Proxima Nova', 'SF Pro', -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
 	text-transform: uppercase;
 	font-size: 14px;
 	border: 0;
@@ -328,7 +425,8 @@ button, input[type=submit] {
 	border-radius: 14px;
 	background: rgb(238,186,59);
 	background: linear-gradient(90deg, #C04848, #780078);
-	color: white
+	color: white;
+	cursor: pointer;
 }
 
 button, input[type=submit]:hover {
@@ -339,6 +437,12 @@ button, input[type=submit]:hover {
 button, input[type=submit]:active {
 	filter: brightness(50%);
 	-webkit-filter: brightness(50%);
+}
+
+button.textbn {
+	margin: 0;
+	padding: 0;
+	background: transparent;
 }
 
 .inputs > * {
@@ -386,29 +490,65 @@ button, input[type=submit]:active {
   }
 }
 
-#noresults > * {
+#noresults > *, #stats {
 	font-family: 'Menlo', Monaco, monospace;
 	color: #666;
 }
 
-.center .nav {
-	margin-top: 25px;
-	text-align: center;
+#stats {
+	/* border-bottom: solid 1px rgba(0, 0, 0, 0.2); */
+	margin-bottom: 2rem;
+	font-size: 14px;
+}
+
+nav {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	height: 40px;
+	padding: 0 10px;
+	background: rgb(230, 230, 230);
+	border-bottom: solid 1px #D6D3C5;
+}
+
+nav *, #goto-search {
+	display: inline;
 	text-transform: uppercase;
+	color: #aaa;
+	text-decoration: none;
+	border: none;
+	margin: 0 20px;
 	font-family: 'Proxima Nova', 'SF Pro', -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
 	font-weight: bold;
-}
-
-.nav a {
-	display: inline;
-	padding-left: 10px;
-	padding-right: 10px;
+	filter: none !important;
+	-webkit-filter: none !important;
+	background: none;
 	font-size: 12pt;
-	text-decoration: none;
-	border: 0;
-	color: #999;
+	line-height: 12pt;
 }
 
-.nav a:hover {
-	color: #000;
+nav *:first-child {
+	margin-left: 0;
+}
+nav *:last-child {
+	margin-right: 0;
+}
+
+nav *:hover, #goto-search:hover {
+	color: #555;
+}
+
+#goto-search {
+	margin-top: 1rem;
+}
+
+em {
+	font-style: normal;
+	background-color: #F0E68C;
 }

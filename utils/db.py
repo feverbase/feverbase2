@@ -62,13 +62,15 @@ class Article(ExtendedDocument):
     location_data = ObjectIdField()
 
     # optional fields
-    sample_size = IntField()
+    sample_size = IntField(default=0)
+    parsed_sample_size = IntField(default=0)
     abandoned = BooleanField()
     abandoned_reason = StringField()
 
     # default sort timestamp descending
     meta = {
         "ordering": ["-timestamp"],
+        "strict": False,
     }
 
     def __str__(self):
@@ -82,10 +84,7 @@ def create(articles):
 
     Posts a list of articles to Mongo.
     """
-    objects = []
-    for a in articles:
-        obj = Article(**a)
-        objects.append(obj)
+    objects = list(map(lambda a: Article(**a), articles))
     Article.smart_insert(objects)
 
 

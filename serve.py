@@ -82,57 +82,6 @@ def is_article(a):
     return type(a) == db.Article
 
 
-def filter_sample_size(data, min_subjects, max_subjects):
-    # easy case, user did not specify bounds
-    if min_subjects == 0 and max_subjects == 0:
-        return
-    idxs_to_remove = []
-    for i in range(len(data)):
-        entry = data[i]
-        nums = re.findall(
-            r"^\D*(\d+)",
-            str(
-                (
-                    entry.sample_size
-                    if is_article(entry)
-                    else entry.get("sample_size", "")
-                )
-                or ""
-            ),
-        )
-        if len(nums) >= 1:
-            true_num = int(nums[0])
-            if not (
-                true_num >= min_subjects
-                and (true_num <= max_subjects or max_subjects == 0)
-            ):
-                idxs_to_remove.append(i)
-        else:
-            idxs_to_remove.append(i)
-    idxs_to_remove.sort(reverse=True)
-    for i in idxs_to_remove:
-        data.pop(i)
-
-
-# def filter_by_key(data, key, value):
-#     if not value or not value.strip():
-#         return
-#     value = value.lower().strip()
-#     idxs_to_remove = []
-#     for i in range(len(data)):
-#         entry = data[i]
-#         this_value = (
-#             ((eval(f"entry.{key}") if is_article(entry) else entry.get(key, "")) or "")
-#             .lower()
-#             .strip()
-#         )
-#         if value not in this_value:
-#             idxs_to_remove.append(i)
-#     idxs_to_remove.sort(reverse=True)
-#     for i in idxs_to_remove:
-#         data.pop(i)
-
-
 def filter_papers(
     page, qraw, dynamic_filters={}, min_subjects=0, max_subjects=0,
 ):
@@ -142,24 +91,26 @@ def filter_papers(
         max_subjects = 0
 
     if not qraw:
-        prebuilt_filters = None
-        for key, value in dynamic_filters.items():
-            this_q = eval(f"Q({key}__icontains=value)")
-            if not prebuilt_filters:
-                prebuilt_filters = this_q
-            else:
-                prebuilt_filters &= this_q
+        qs = [
+            eval(f"Q({key}__icontains=value)") for key, value in dynamic_filters.items()
+        ]
 
-        results = list(
-            db.Article.objects(prebuilt_filters)
-            .skip((page - 1) * PAGE_SIZE)
-            .limit(PAGE_SIZE)
-        )
+        # parsed_sample_size is -1 if couldn't parse sample_size, so if filtering
+        # on sample_size at all, make sure to exclude the invalid entries by adding >= 0
+        if min_subjects or max_subjects:
+            qs.append(Q(parsed_sample_size__gte=min_subjects))
+        if max_subjects:
+            qs.append(Q(parsed_sample_size__lte=max_subjects))
 
-        filter_sample_size(results, int(min_subjects), int(max_subjects))
+        advanced_filters = reduce(lambda x, y: x & y, qs) if len(qs) else None
+
+        query_set = db.Article.objects(advanced_filters)
+        results = list(query_set.skip((page - 1) * PAGE_SIZE).limit(PAGE_SIZE))
+        total_hits = len(query_set)
+        query_time = None  # cant find rn
     else:
         escape = lambda x: x.replace('"', '\\"')
-        prebuilt_filters = [
+        advanced_filters = [
             f'{key} *= "{escape(value)}"'
             for key, value in dynamic_filters.items()
             if value
@@ -167,43 +118,47 @@ def filter_papers(
         # parsed_sample_size is -1 if couldn't parse sample_size, so if filtering
         # on sample_size at all, make sure to exclude the invalid entries by adding >= 0
         if min_subjects or max_subjects:
-            prebuilt_filters.append(f"parsed_sample_size >= {min_subjects}")
+            advanced_filters.append(f"parsed_sample_size >= {min_subjects}")
         if max_subjects:
-            prebuilt_filters.append(f"parsed_sample_size <= {max_subjects}")
+            advanced_filters.append(f"parsed_sample_size <= {max_subjects}")
 
-        prebuilt_filters = "AND".join(prebuilt_filters)
+        advanced_filters = "AND".join(advanced_filters)
 
         options = {
-            "filters": prebuilt_filters,
+            "filters": advanced_filters,
             "offset": (page - 1) * PAGE_SIZE,
             "limit": PAGE_SIZE,
-            "attributesToHighlight": [
-                "title",
-                "recruiting_status",
-                "sex",
-                "target_disease",
-                "intervention",
-                "sponsor",
-                "summary",
-                "location",
-                "institution",
-                "contact",
-                "abandoned_reason",
-            ],
+            "attributesToHighlight": "*",
         }
 
         # perform meilisearch query
-        results = ms_index.search(qraw, options).get("hits")
+
+        results = ms_index.search(qraw, options)
+
+        # was going to use results.get('exhaustiveNbHits')
+        # and prepend 'about' if it is False, but source
+        # code of MeiliSearch seems to indicate that it
+        # always returns false, so let's just trust this
+        # number :)
+        # EDIT: nbHits for some reason does not take into account filters, so ignore for now
+        # total_hits = results.get("nbHits")
+        total_hits = None
+
+        query_time = results.get("processingTimeMs")
 
         # sort by timestamp descending
         results = sorted(
-            results, key=lambda r: r.get("timestamp", {}).get("$date", -1), reverse=True
+            results.get("hits"),
+            key=lambda r: r.get("timestamp", {}).get("$date", -1),
+            reverse=True,
         )
+        # get formatted results for highlighting terms
+        results = list(map(lambda r: r.get("_formatted", r), results))
 
     if len(results) < PAGE_SIZE:
         page = -1
 
-    return results, page
+    return results, page, total_hits, query_time
 
 
 # -----------------------------------------------------------------------------
@@ -212,7 +167,7 @@ def filter_papers(
 
 
 def default_context(**kws):
-    ans = dict(filter_options={}, filters={})
+    ans = dict(filter_options={}, filters={}, total_count=db.Article.objects.count())
     ans.update(kws)
     ans["adv_filters_in_use"] = any(
         v for k, v in ans.get("filters", {}).items() if k != "q"
@@ -233,16 +188,16 @@ def get_page():
 
 @app.route("/")
 def intmain():
-    if request.headers.get("Content-Type", "") == "application/json":
-        page = get_page()
+    # if request.headers.get("Content-Type", "") == "application/json":
+    #     page = get_page()
 
-        papers = db.Article.objects.skip((page - 1) * PAGE_SIZE).limit(PAGE_SIZE)
-        return jsonify(
-            dict(page=page, papers=list(map(lambda p: json.loads(p.to_json()), papers)))
-        )
-    else:
-        ctx = default_context(render_format="recent")
-        return render_template("search.html", **ctx)
+    #     papers = db.Article.objects.skip((page - 1) * PAGE_SIZE).limit(PAGE_SIZE)
+    #     return jsonify(
+    #         dict(page=page, papers=list(map(lambda p: json.loads(p.to_json()), papers)))
+    #     )
+    # else:
+    ctx = default_context(render_format="recent")
+    return render_template("search.html", **ctx)
 
 
 @app.route("/about")
@@ -279,8 +234,8 @@ ACCEPTED_DYNAMIC_FILTERS = [
 ]
 
 
-@app.route("/filter", methods=["GET"])
-def filter():
+@app.route("/search", methods=["GET"])
+def search():
     filters = request.args  # get the filter requests
 
     if request.headers.get("Content-Type", "") == "application/json":
@@ -302,13 +257,19 @@ def filter():
         except:
             max_subjects = 0
 
-        papers, page = filter_papers(
+        papers, page, total_hits, query_time = filter_papers(
             page, filters.get("q", ""), dynamic_filters, min_subjects, max_subjects,
         )
 
+        stats = f"returned"
+        if total_hits:
+            stats += f" {total_hits} result{'' if total_hits == 1 else 's'}"
+        if query_time:
+            stats += f" in {query_time}ms"
+
         if len(papers) and is_article(papers[0]):
             papers = list(map(lambda p: json.loads(p.to_json()), papers))
-        return jsonify(dict(page=page, papers=papers))
+        return jsonify(dict(page=page, papers=papers, stats=stats))
     else:
         ctx = default_context(render_format="search", filters=filters)
         return render_template("search.html", **ctx)

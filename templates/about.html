@@ -15,46 +15,81 @@
 </head>
 
 <body>
-    <div class="center">
-        <h1 id="logo">feverbase</h1>
-        <span>Finding the best, and fastest, way to beat COVID-19.</span>
-        <div class="nav">
-            <a href="/about">About</a>
-            <a href="/">Trial Search</a>
-        </div>
-    </div>
+
+    <header class="center">
+        <h1 id="logo"><a href="/">feverbase</a></h1>
+        <a id="goto-search" href="/">Go to Search</a>
+    </header>
     <hr />
     <p>
-        We're an international group of researchers collecting data, in real time, about what's worked, and what hasn't
-        worked, to fight COVID-19. We're interested in the potential for repurposed drugs (e.g. chloroquine,
-        hydroxychloroquine, favipiravir) to reduce or eliminate COVID-19 symptoms. Clinics across the world are
-        beginning to use these drugs but sample sizes remain too small to draw conclusions about what works, and what
-        doesn't. By pooling together data from <strong>all</strong> sites at Feverbase, we can accumulate knowledge and
-        provide well-sourced information reviewed by teams of scientists.
+    We're an international group of researchers tracking the progress of COVID-19 clinical trials. Groups around the world are beginning trials for vaccines, novel therapeutics, and repurposed drugs, but it's hard to see the forest from the trees. We collect data from global registries and provide simple analysis to give researchers and the public an idea of how development is going on multiple fronts.
     </p>
-    <p>
-        <strong>We need your help collecting and understanding data about how we fight COVID-19.</strong> We keep all
-        submitted data fully secure and private and will collate the information into best practices for clinicians and
-        resource-allocators to fight this pandemic.
-    </p>
+
+    <p>This project is a collaboration between researchers at Stanford, MIT, and around the world. Join us by clicking
+        <a href="mailto:team@feverbase.org">here</a>. All feedback welcome!</p><br />
+
+    <table class="contributors">
+        <tr>
+            <td>
+                <img class="prof" src="assets/liphardt.jpg" alt="Jan Liphardt"/>
+            </td>
+            <td>
+                <img class="prof" src="assets/deming.jpg" alt="Laura Deming"/>
+            </td>
+            <td>
+                <img class="prof" src="assets/wall.png" alt="Dennis Wall"/>
+            </td>
+            <td>
+                <img class="prof" src="assets/zilis.jpg" alt="Shivon Zilis"/>
+            </td>
+        </tr>
+        <tr style="font-weight: bold;">
+            <td><a target="_blank" rel="noopener noreferrer" href="https://profiles.stanford.edu/jan-liphardt">Jan Liphardt</a></td>
+            <td><a target="_blank" rel="noopener noreferrer" href="https://www.ldeming.com/">Laura Deming</a></td>
+            <td><a target="_blank" rel="noopener noreferrer" href="https://profiles.stanford.edu/dennis-wall">Dennis Wall</a></td>
+            <td><a target="_blank" rel="noopener noreferrer" href="http://www.shivonzilis.com/about">Shivon A. Zilis</a></td>
+        </tr>
+        <tr class="spacer">
+            <td>Stanford University</td>
+            <td>The Longevity Fund</td>
+            <td>Stanford University</td>
+            <td>Neuralink</td>
+        </tr>
+        <tr>
+            <td>
+                <img class="prof" src="assets/ranjan.jpg" alt="Ankit Ranjan"/>
+            </td>
+            <td>
+                <img class="prof" src="assets/mittal.jpg" alt="Gautam Mittal"/>
+            </td>
+            <td>
+                <img class="prof" src="assets/saso.jpg" alt="Noah Saso"/>
+            </td>
+            <td>
+                <img class="prof" src="assets/houston.jpg" alt="Ethan Houston"/>
+            </td>
+        </tr>
+        <tr style="font-weight: bold;">
+            <td><a target="_blank" rel="noopener noreferrer" href="https://www.ankit.io">Ankit Ranjan</a></td>
+            <td><a target="_blank" rel="noopener noreferrer" href="https://www.gautam.cc/">Gautam Mittal</a></td>
+            <td><a target="_blank" rel="noopener noreferrer" href="https://www.noahsaso.com">Noah Saso</a></td>
+            <td><a target="_blank" rel="noopener noreferrer" href="https://www.ethanhouston.com">Ethan Houston</a></td>
+        </tr>
+        <tr>
+            <td>University of Oxford</td>
+            <td>UC Berkeley</td>
+            <td>UC Berkeley</td>
+            <td>UT Austin</td>
+        </tr>
+    </table>
 
     <hr />
 
     <p><strong>How can I help?</strong></p>
-    <p>Send an email to <a href="mailto:private@feverbase.org">private@feverbase.org</a> with patient outcome
-        information from your site. We're looking for patient information (such as age, sex, and comorbidities) and
-        treatment information (drug, dose, timing) matched with the clinical outcome (e.g. quantitatively measured
-        changes in symptom severity, duration, survival). We appreciate &mdash; and badly need &mdash; negative as well
-        as positive results, since resources spent on things that don’t work can detract from other efforts. We may
-        follow up with questions of clarification or to keep you posted about new developments. Time is of the essence!
-    </p>
-    <p>Furthermore, if you have information about drug production capacity, data collection processes, or other clinical
-        trials, we’d love to make a map of such efforts, and improve our recommendations for what additional kinds of
-        data are needed.</p>
+    <p>We collect COVID-19 clinical trial records from multiple global registries and are now building visualization tools to synthesize this work. Contact us with feedback and suggestions. Feverbase is <a target="_blank" rel="noopener noreferrer" href="https://github.com/feverbase/feverbase">entirely open source</a>, and we always appreciate engineering support!</p>
 
     <p><strong>What will we do with the data?</strong></p>
-    <p>We will create an anonymized and pooled dataset from your contributions, which we will analyze to make public
-        recommendations about which drugs seem to work best in treating COVID-19. We want to answer two questions:</p>
+    <p>We want to answer two questions:</p>
     <ol>
         <li>
             What treatments should clinicians use to prevent or treat COVID-19?
@@ -68,42 +103,6 @@
         data, please reach out. We will be releasing results periodically after analysis and a quality review of the
         data.
     </p>
-
-    <p><strong>Will you share the data or use it to publish papers?</strong></p>
-    <p>We will produce frequent blog posts about what seems to be working based on the data we collect. We will not be
-        publishing this work in academic journals, nor disclosing your identity or affiliation.</p>
-    <hr />
-    <p>This project is a collaboration between researchers at Stanford, MIT, and around the world. Join us by clicking
-        <a href="mailto:team@feverbase.org">here</a>. All feedback welcome!</p><br />
-
-    <table class="contributors">
-        <tr>
-            <td>
-                <img class="prof" src="assets/liphardt.jpg" />
-            </td>
-            <td>
-                <img class="prof" src="assets/deming.jpg" />
-            </td>
-            <td>
-                <img class="prof" src="assets/wall.png" />
-            </td>
-            <td>
-                <img class="prof" src="assets/zilis.jpg" />
-            </td>
-        </tr>
-        <tr style="font-weight: bold;">
-            <td><a href="https://profiles.stanford.edu/jan-liphardt">Jan Liphardt</a></td>
-            <td><a href="https://www.ldeming.com/">Laura Deming</a></td>
-            <td><a href="https://profiles.stanford.edu/dennis-wall">Dennis Wall</a></td>
-            <td><a href="http://www.shivonzilis.com/about">Shivon A. Zilis</a></td>
-        </tr>
-        <tr>
-            <td>Stanford University</td>
-            <td>The Longevity Fund</td>
-            <td>Stanford University</td>
-            <td>Neuralink</td>
-        </tr>
-    </table>
     <hr />
     <script type="text/javascript">
         var _gaq = _gaq || [];

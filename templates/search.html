@@ -38,25 +38,24 @@
 </head>
 
 <body>
+  <nav>
+    <a href="/about">About</a>
+    <button class="textbn" onclick="toggleFeedback()">Give Feedback</button>
+  </nav>
 
-  <div class="center">
-    <h1 id="logo">feverbase</h1>
-    <span>Finding the best, and fastest, way to beat COVID-19.</span>
-    <div class="nav">
-      <a href="/about">About</a>
-      <a href="/">Trial Search</a>
-    </div>
-  </div>
-  <hr />
+  <form action="/search" method="get" {{ 'class=horizontal' if url_for(request.endpoint) != '/' else '' }}>
+    <header class="center">
+      <h1 id="logo"><a href="/">feverbase</a></h1>
+      <span id="blurb" {{ 'style=display:none' if url_for(request.endpoint) != '/' else '' }}>Search {{ total_count }} clinical trials from around the world.</span>
 
-  <form action="/filter" method="get">
-    <div id="sbox">
-      <input type="submit" alt="Search" id="search-icon" value="">
-      <input name="q" type="text" id="qfield" value="{{ filters.q if filters and 'q' in filters else '' }}"
-        autocomplete="off" autocapitalize="off" spellcheck="false">
-    </div>
+      <div id="sbox">
+        <input type="submit" alt="Search" id="search-icon" value="">
+        <input name="q" type="text" id="qfield" value="{{ filters.q if filters and 'q' in filters else '' }}"
+          autocomplete="off" autocapitalize="off" spellcheck="false">
+      </div>
+    </header>
 
-    <div id="filters-box">
+    <div id="filters-box" {{ 'style=display:none' if url_for(request.endpoint) == '/' else '' }}>
       <a onclick="toggleAdvancedFilters()">
         <span id="filters-status">{{ 'Hide' if adv_filters_in_use else '' }}</span>
         Advanced Filters
@@ -136,34 +135,19 @@
         <input name="recruiting_status" type="text" id="filter-recruiting_status"
           value="{{ filters.recruiting_status if filters and 'recruiting_status' in filters else '' }}" autocomplete="off" autocapitalize="off" spellcheck="false">
 
-        <input type="submit" value="Update">
+        <input type="submit" value="Search">
       </div>
     </div>
   </form>
 
-  <div id="feedback-box">
-    <a onclick="toggleFeedback()">
-      <span id="feedback-status"></span>
-      Feedback Form
-    </a>
-    <br>
-    <div id="feedback-container" style="display: none;">
-      <label for="subject">Subject:</label>
-      <input name="subject" type="text" id="feedback-subject">
-
-      <label for="body">Body:</label>
-      <textarea name="body" id="feedback-body" rows="7"></textarea>
-
-      <input type="submit" value="Submit" onclick="submitFeedback()">
-    </div>
-  </div>
+  <p style="display:none" id="stats"></p>
 
   <div id="maindiv">
 
     <div id="rtable"></div>
 
     <div class="center">
-      <div class="lds-ring" id="loader">
+      <div class="lds-ring" id="loader" style="display:none">
         <div></div>
         <div></div>
         <div></div>
@@ -178,6 +162,21 @@
   </div>
 
   <br><br><br><br><br><br>
+
+  <div id="feedback" style="display:none" onclick="toggleFeedback()">
+    <div id="feedback-box">
+      <div id="feedback-title">
+        <button class="textbn" onclick="toggleFeedback()">Close</button>
+      </div>
+      <div id="feedback-container">
+        <input name="subject" type="text" id="feedback-subject" placeholder="Subject">
+
+        <textarea name="body" id="feedback-body" rows="7" placeholder="Body"></textarea>
+
+        <input type="submit" value="Submit Feedback" onclick="submitFeedback()">
+      </div>
+    </div>
+  </div>
 
   <script type="text/javascript">
     var _gaq = _gaq || [];
