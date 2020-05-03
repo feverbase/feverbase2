@@ -18,12 +18,11 @@ from mongoengine import (
 )
 from mongoengine_mate import ExtendedDocument
 
-from dotenv import load_dotenv
+from . import config
 
-load_dotenv()
-
-if os.environ.get("MONGODB_URI"):
-    connect(host=os.environ.get("MONGODB_URI"))
+# try each env var in order
+if config.mongodb_uri:
+    connect(host=config.mongodb_uri)
 else:
     raise Exception("No MongoDB URI specified.")
 
