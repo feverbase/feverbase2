@@ -217,7 +217,7 @@ def default_context(**kws):
     ans.update(kws)
 
     # add cmd filters to advanced filters inputs
-    filters = ans.get("filters", {}).copy()
+    filters = dict(ans.get("filters", {}))
     if filters.get("q"):
         # change filter q string
         filters["q"], cmd_matches = get_cmd_matches(ans["filters"]["q"])
@@ -318,7 +318,7 @@ def search():
                 d = dateutil.parser.parse(value)
                 ts = int(d.timestamp())
                 value = (
-                    f"datetime.utcfromtimestamp({ts})",
+                    f"datetime.fromtimestamp({ts})",
                     str(ts * 1000),
                 )
                 key = ("timestamp", "parsed_timestamp")
