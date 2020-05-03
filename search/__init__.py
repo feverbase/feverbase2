@@ -32,10 +32,11 @@ def parse_documents():
         else:
             entry_json["parsed_sample_size"] = -1
 
-        # convert timestamp to epoch milliseconds
-        entry_json["parsed_timestamp"] = entry_json.get("timestamp", {}).get(
-            "$date", -1
-        )
+        # convert timestamp to epoch
+        if doc.timestamp:
+            entry_json["parsed_timestamp"] = int(doc.timestamp.timestamp())
+        else:
+            entry_json["parsed_timestamp"] = -1
 
         parsed_documents.append(entry_json)
     print(f"Retrieved {len(parsed_documents)} documents from MongoDB")

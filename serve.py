@@ -319,7 +319,7 @@ def search():
                 ts = int(d.timestamp())
                 value = (
                     f"datetime.fromtimestamp({ts})",
-                    str(ts * 1000),
+                    str(ts),
                 )
                 key = ("timestamp", "parsed_timestamp")
             else:
