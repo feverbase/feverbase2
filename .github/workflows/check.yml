@@ -1,0 +1,23 @@
+name: Check
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-python@master
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: pip3 install -r requirements.txt
+      - name: Test
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          MEILI_KEY: ${{ secrets.MEILI_KEY }}
+          MEILI_URL: ${{ secrets.MEILI_URL }}
+        run: pytest

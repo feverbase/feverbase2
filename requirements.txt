@@ -27,3 +27,4 @@ dnspython
 meilisearch
 sentry-sdk[flask]
 requests
+pytest
