@@ -26,7 +26,7 @@ jobs:
         if: failure()
         with:
           type: ${{ job.status }}
-          job_name: 'Build'
+          job_name: 'Test'
           mention: 'here'
           channel: '#production'
           url: ${{ secrets.SLACK_WEBHOOK }}
