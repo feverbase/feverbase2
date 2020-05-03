@@ -12,9 +12,10 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 SOURCE = "clinicaltrialsregister.eu"
 FILENAME = "eu.json"
 BASE_URL = "https://www.clinicaltrialsregister.eu"
-QUERY_URL = "{BASE_URL}/ctr-search/search?query={query}"
+QUERY_URL = "{BASE_URL}/ctr-search/search?query={query}&dateFrom=2019-12-01"
 PAGINATE_QUERY = "&page={page_num}"
 LOG_FILENAME = "logs/eu.log"
+
 
 def setup_logging():
     os.makedirs(os.path.dirname(LOG_FILENAME), exist_ok=True)
@@ -164,7 +165,7 @@ def find(query):
                                     "target_disease": target_disease,
                                     "intervention": intervention,
                                     "sponsor": sponsor,
-                                    "summary": main_objective + "\n" + secondary_objectives,
+                                    "summary": f"{main_objective}\n{secondary_objectives}",
                                     "location": location,
                                     "institution": institution,
                                     "contact": contact,
@@ -172,10 +173,9 @@ def find(query):
                                     "sample_size": int(sample_size),
                                 }
 
-                                if this_entry["timestamp"][0:4] == "2020":
-                                    data[url] = this_entry
-                                    count += 1
-                                    logging.info(f"Parsed {url}")
+                                data[url] = this_entry
+                                count += 1
+                                logging.info(f"Parsed {url}")
                             except Exception as e:
                                 logging.error(f"Could not parse {url}, {e}")
 

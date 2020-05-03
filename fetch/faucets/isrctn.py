@@ -8,9 +8,8 @@ from pprint import pprint
 
 SOURCE = "isrctn.com"
 FILENAME = "isrctn.json"
-API_URL = "http://www.isrctn.com/api/query/format/who?q={query}&dateAssigned%20GT%202019-11-15"
+API_URL = "http://www.isrctn.com/api/query/format/who?q={query}&dateAssigned%20GT%202019-12-01"
 LOG_FILENAME = "logs/isrctn.log"
-
 
 
 def setup_logging():
@@ -24,6 +23,7 @@ def to_iso8601(date):
         return f"{comps[2]}-{comps[1]}-{comps[0]}"
     else:
         return None
+
 
 def find(query):
     data = {}
@@ -74,11 +74,10 @@ def find(query):
                 country = primary_contact.find("country1").text
 
                 this_entry["contact"] = {
-                        "name": f"{first_name} {last_name}",
-                        "phone": phone,
-                        "email": email,
-                    }
-
+                    "name": f"{first_name} {last_name}",
+                    "phone": phone,
+                    "email": email,
+                }
 
             this_entry["title"] = title
             this_entry["url"] = url
@@ -87,18 +86,18 @@ def find(query):
             this_entry["recruiting_status"] = recruitment_status
             this_entry["sex"] = sex
             this_entry["target_disease"] = target_disease
-            #TODO: Fix this
+            # TODO: Fix this
             this_entry["intervention"] = None
             this_entry["sponsor"] = sponsor
             this_entry["summary"] = summary
-            #TODO: Fix this
+            # TODO: Fix this
             this_entry["institution"] = None
 
-            print(this_entry, "\n")
+            # print(this_entry, "\n")
 
             data[url] = this_entry
             count += 1
-            #pprint(this_entry)
+            # pprint(this_entry)
             logging.info(f"Parsed {url}")
         except Exception as e:
             print(f"Failed on trial id: {trial_id} - {e}")

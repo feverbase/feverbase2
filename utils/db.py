@@ -73,8 +73,5 @@ def create(articles):
 
     Posts a list of articles to Mongo.
     """
-    objects = []
-    for a in articles:
-        obj = Article(**a)
-        objects.append(obj)
+    objects = list(map(lambda a: Article(**a), articles))
     Article.smart_insert(objects)
