@@ -313,7 +313,9 @@ def search():
                     )
                     key = ("timestamp", "parsed_timestamp")
                 except:
-                    errors.append(f"Could not parse date filter: {ovalue}")
+                    errors.append(
+                        f"Could not parse date filter '{ovalue}'. Please try another date format (e.g. YYYY-MM-DD)"
+                    )
                     continue
             elif okey == "sample_size":
                 try:
