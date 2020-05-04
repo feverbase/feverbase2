@@ -8,7 +8,6 @@ from random import shuffle, randrange, uniform
 from functools import reduce
 import re
 from datetime import datetime
-
 from hashlib import md5
 from flask import (
     Flask,
@@ -30,8 +29,16 @@ import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 from dotenv import load_dotenv
 import requests
-
 from utils import db, ms
+
+import nltk
+
+# ensure stopwords are downloaded before importing
+nltk.download("stopwords")
+nltk.download("punkt")
+
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer
 
 load_dotenv()
 
@@ -49,6 +56,31 @@ ms_index = ms.get_ms_trials_index(ms_client)
 slack_api_url = os.environ.get("SLACK_WEBHOOK_URL", "")
 
 PAGE_SIZE = 25
+
+# `"April 1, 2020"` or `April1,2020`
+quoted_or_single_word = "\\s*(?:(?:(?:\"|')(.*)(?:\"|'))|(?:([^\\s]*)))"
+# { regex: filter_key }
+CMDS = {
+    f"mindate:{quoted_or_single_word}": "min-timestamp",
+    f"maxdate:{quoted_or_single_word}": "max-timestamp",
+}
+
+ATTRIBUTES_TO_HIGHLIGHT = [
+    "title",
+    "recruiting_status",
+    "sex",
+    "target_disease",
+    "intervention",
+    "sponsor",
+    "summary",
+    "location",
+    "institution",
+    "contact",
+    "abandoned_reason",
+]
+
+stemmer = PorterStemmer()
+stops = set(stopwords.words("english"))
 
 # -----------------------------------------------------------------------------
 # connection handlers
@@ -78,18 +110,30 @@ def add_header(r):
 # search/sort functionality
 # -----------------------------------------------------------------------------
 
+# returns new query string and set of words to highlight
+def preprocess(q):
+    ## STEP 1: remove non-alphanumeric characters
+    q = "".join(filter(str.isalnum, q))
+
+    ## STEP 2: tokenize
+    words = nltk.word_tokenize(q)
+
+    ## STEP 3: stem
+    # keep non-stem words for highlighting
+    highlight = set(words)
+    # only keep unique stems
+    words = set(stemmer.stem(w) for w in words)
+    highlight.update(words)
+
+    ## STEP 4: remove stop words
+    words = [w for w in words if w not in stops]
+
+    # join into single string
+    return " ".join(words), highlight
+
 
 def is_article(a):
     return type(a) == db.Article
-
-
-# `"April 1, 2020"` or `April1,2020`
-quoted_or_single_word = '\\s*(?:(?:(?:"|\')(.*)(?:"|\'))|(?:([^\\s]*)))'
-# { regex: filter_key }
-CMDS = {
-    f"mindate:{quoted_or_single_word}": "min-timestamp",
-    f"maxdate:{quoted_or_single_word}": "max-timestamp",
-}
 
 
 def get_cmd_matches(qraw):
@@ -125,6 +169,8 @@ def filter_papers(page, qraw, dynamic_filters=[]):
         total_hits = len(query_set)
         query_time = None  # cant find rn
     else:
+        q, highlight = preprocess(qraw)
+
         escape = lambda x: x.replace('"', '\\"')
         advanced_filters = []
         for f in dynamic_filters:
@@ -139,26 +185,11 @@ def filter_papers(page, qraw, dynamic_filters=[]):
             "filters": advanced_filters,
             "offset": (page - 1) * PAGE_SIZE,
             "limit": PAGE_SIZE,
-            "attributesToHighlight": ",".join(
-                [
-                    "title",
-                    "recruiting_status",
-                    "sex",
-                    "target_disease",
-                    "intervention",
-                    "sponsor",
-                    "summary",
-                    "location",
-                    "institution",
-                    "contact",
-                    "abandoned_reason",
-                ]
-            ),
         }
 
         # perform meilisearch query
 
-        results = ms_index.search(qraw, options)
+        results = ms_index.search(q, options)
 
         # was going to use results.get('exhaustiveNbHits')
         # and prepend 'about' if it is False, but source
@@ -178,7 +209,16 @@ def filter_papers(page, qraw, dynamic_filters=[]):
         # )
         results = results.get("hits")
         # get formatted results for highlighting terms
-        results = list(map(lambda r: r.get("_formatted", r), results))
+        # results = list(map(lambda r: r.get("_formatted", r), results))
+        # EDIT: do this manually because meili doesnt handle stemming (YET!)
+        # match longest highlight targets first
+        ## sort descending by string length
+        highlight = sorted(highlight, key=len, reverse=True)
+        pattern = re.compile(f"({'|'.join(highlight)})", flags=re.IGNORECASE)
+        for r in results:
+            for a in ATTRIBUTES_TO_HIGHLIGHT:
+                if type(r.get(a)) == str:
+                    r[a] = pattern.sub(r"<em>\1</em>", r[a])
 
     if len(results) < PAGE_SIZE:
         page = -1
@@ -281,7 +321,7 @@ def search():
     if request.headers.get("Content-Type", "") == "application/json":
         page = get_page()
 
-        errors = []
+        alerts = []
 
         # { key, op, value }
         # all 2-tuples, first mongo, second meili
@@ -313,8 +353,11 @@ def search():
                     )
                     key = ("timestamp", "parsed_timestamp")
                 except:
-                    errors.append(
-                        f"Could not parse date filter '{ovalue}'. Please try another date format (e.g. YYYY-MM-DD)"
+                    alerts.append(
+                        {
+                            "type": "error",
+                            "message": f"Could not parse date filter '{ovalue}'. Please try another date format (e.g. YYYY-MM-DD)",
+                        }
                     )
                     continue
             elif okey == "sample_size":
@@ -329,9 +372,19 @@ def search():
 
             dynamic_filters.append({"key": key, "op": op, "value": value})
 
+        old_page = page
         papers, page, total_hits, query_time = filter_papers(
             page, filters.get("q", ""), dynamic_filters
         )
+
+        # if returned 0 results on first page, give error
+        if old_page == 1 and not len(papers):
+            alerts.append(
+                {
+                    "type": "warning",
+                    "message": "Sorry, your search did not return any results. Please try rephrasing your query.",
+                }
+            )
 
         stats = f"returned"
         if total_hits:
@@ -347,7 +400,7 @@ def search():
             if type(p.get("timestamp")) != int:
                 p["timestamp"] = p.get("timestamp", {}).get("$date", -1)
 
-        return jsonify(dict(page=page, papers=papers, stats=stats, errors=errors))
+        return jsonify(dict(page=page, papers=papers, stats=stats, alerts=alerts))
     else:
         return render_template("search.html", **ctx)
 

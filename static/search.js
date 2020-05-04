@@ -23,16 +23,18 @@ function addPapers() {
       loadingTimeout = null;
       page = data.page;
 
+      if (data.alerts && data.alerts.length) {
+        for (const m of data.alerts) {
+          if ('type' in m && 'message' in m) {
+            toastr[m.type](m.message);
+          }
+        }
+      }
+
       if (!data.papers || !data.papers.length) {
         $('#noresults').show();
         page = -1;
         return;
-      }
-
-      if (data.errors && data.errors.length) {
-        for (const m of data.errors) {
-          toastr.error(m);
-        }
       }
 
       if (page === -1) {
@@ -84,7 +86,7 @@ function addPapers() {
       $('#noresults > :first-child').html('Refresh the page to try again.');
       $('#noresults').show();
       if (errorThrown !== 'abort') {
-        toastr.error(errorThrown);
+        toastr.error("An unexpected error occurred. Please either try a different search query or try again later.");
       }
     }
   });
