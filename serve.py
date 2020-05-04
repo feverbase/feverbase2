@@ -37,7 +37,7 @@ import nltk
 
 # ensure stopwords are downloaded before importing
 nltk.download("stopwords")
-nltk.download("punkt")
+nltk.download("punkt")  # for tokenization
 
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
