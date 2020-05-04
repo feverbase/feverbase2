@@ -150,6 +150,7 @@ def postprocess(papers, highlight):
         # convert dict timestamp to int
         if type(p.get("timestamp")) != int:
             p["timestamp"] = p.get("timestamp", {}).get("$date", -1)
+
         for k, v in p.items():
             # html escape data
             v = html_escape(v)
@@ -162,9 +163,8 @@ def postprocess(papers, highlight):
                     v += "..."
 
             # highlight
-            if k in ATTRIBUTES_TO_HIGHLIGHT:
-                if type(v) == str:
-                    v = pattern.sub(r"<em>\1</em>", v)
+            if k in ATTRIBUTES_TO_HIGHLIGHT and type(v) == str:
+                v = pattern.sub(r"<em>\1</em>", v)
 
             p[k] = v
 
