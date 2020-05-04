@@ -51,7 +51,7 @@ function addPapers() {
         var div = root.append('<div class="apaper"></div>');
 
         var tdiv = div.append('<div class="paperdesc"></div>');
-        if (p.timestamp) {
+        if (p.timestamp && p.timestamp !== -1) {
           const timestamp = moment.utc(p.timestamp);
           tdiv.append(`<div class="ds">${timestamp.format('LL')} &middot; ${p.sponsor}</div>`);
         } else {

@@ -100,10 +100,15 @@ def html_escape(x):
 
 
 def postprocess(papers):
-    for p in papers:
+    move_to_end = set()
+
+    for i, p in enumerate(papers):
         # convert dict timestamp to int
         if type(p.get("timestamp")) != int:
             p["timestamp"] = p.get("timestamp", {}).get("$date", -1)
+
+        if p.get("timestamp", -1) == -1:
+            move_to_end.add(i)
 
         for k, v in p.items():
             # html escape data
@@ -120,6 +125,13 @@ def postprocess(papers):
                     v += "..."
 
             p[k] = v
+
+    # move those with timestamp -1 to bottom
+    # sort descending so the indices dont change
+    for i in sorted(move_to_end, reverse=True):
+        papers.append(papers.pop(i))
+
+    return papers
 
 
 def is_article(a):
@@ -390,7 +402,7 @@ def search():
         if len(papers) and is_article(papers[0]):
             papers = list(map(lambda p: json.loads(p.to_json()), papers))
 
-        postprocess(papers)
+        papers = postprocess(papers)
 
         return jsonify(dict(page=page, papers=papers, stats=stats, alerts=alerts))
     else:
