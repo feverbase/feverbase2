@@ -29,6 +29,8 @@ import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 from dotenv import load_dotenv
 import requests
+import html
+
 from utils import db, ms
 
 import nltk
@@ -132,6 +134,41 @@ def preprocess(q):
     return " ".join(words), highlight
 
 
+def html_escape(x):
+    if type(x) == str:
+        return html.escape(x)
+    if type(x) == list:
+        return [html_escape(y) for y in x]
+    if type(x) == dict:
+        return {html_escape(k): html_escape(v) for k, v in x.items()}
+    return x
+
+
+def postprocess(papers, highlight):
+    pattern = re.compile(f"({'|'.join(highlight)})", flags=re.IGNORECASE)
+    for p in papers:
+        # convert dict timestamp to int
+        if type(p.get("timestamp")) != int:
+            p["timestamp"] = p.get("timestamp", {}).get("$date", -1)
+        for k, v in p.items():
+            # html escape data
+            v = html_escape(v)
+
+            # trim summary
+            if k == "summary" and v:
+                orig = v
+                v = v[0:500]
+                if len(orig) > 500:
+                    v += "..."
+
+            # highlight
+            if k in ATTRIBUTES_TO_HIGHLIGHT:
+                if type(v) == str:
+                    v = pattern.sub(r"<em>\1</em>", v)
+
+            p[k] = v
+
+
 def is_article(a):
     return type(a) == db.Article
 
@@ -168,6 +205,7 @@ def filter_papers(page, qraw, dynamic_filters=[]):
         results = list(query_set.skip((page - 1) * PAGE_SIZE).limit(PAGE_SIZE))
         total_hits = len(query_set)
         query_time = None  # cant find rn
+        highlight = []  # none rn
     else:
         q, highlight = preprocess(qraw)
 
@@ -211,19 +249,15 @@ def filter_papers(page, qraw, dynamic_filters=[]):
         # get formatted results for highlighting terms
         # results = list(map(lambda r: r.get("_formatted", r), results))
         # EDIT: do this manually because meili doesnt handle stemming (YET!)
-        # match longest highlight targets first
-        ## sort descending by string length
-        highlight = sorted(highlight, key=len, reverse=True)
-        pattern = re.compile(f"({'|'.join(highlight)})", flags=re.IGNORECASE)
-        for r in results:
-            for a in ATTRIBUTES_TO_HIGHLIGHT:
-                if type(r.get(a)) == str:
-                    r[a] = pattern.sub(r"<em>\1</em>", r[a])
+
+    # match longest highlight targets first
+    ## sort descending by string length
+    highlight = sorted(highlight, key=len, reverse=True)
 
     if len(results) < PAGE_SIZE:
         page = -1
 
-    return results, page, total_hits, query_time
+    return results, page, total_hits, query_time, highlight
 
 
 # -----------------------------------------------------------------------------
@@ -373,7 +407,7 @@ def search():
             dynamic_filters.append({"key": key, "op": op, "value": value})
 
         old_page = page
-        papers, page, total_hits, query_time = filter_papers(
+        papers, page, total_hits, query_time, highlight = filter_papers(
             page, filters.get("q", ""), dynamic_filters
         )
 
@@ -395,10 +429,7 @@ def search():
         if len(papers) and is_article(papers[0]):
             papers = list(map(lambda p: json.loads(p.to_json()), papers))
 
-        # convert dict timestamp to int
-        for p in papers:
-            if type(p.get("timestamp")) != int:
-                p["timestamp"] = p.get("timestamp", {}).get("$date", -1)
+        postprocess(papers, highlight)
 
         return jsonify(dict(page=page, papers=papers, stats=stats, alerts=alerts))
     else:
