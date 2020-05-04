@@ -411,7 +411,7 @@ def search():
             page, filters.get("q", ""), dynamic_filters
         )
 
-        # if returned 0 results on first page, give error
+        # if returned 0 results on first page, give warning
         if old_page == 1 and not len(papers):
             alerts.append(
                 {
