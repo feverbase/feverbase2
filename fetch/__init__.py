@@ -45,3 +45,6 @@ def translate(info):
     if faucet:
         return faucet.translate(info)
     return info
+
+def preload_filters():
+    articles = db.Article.objects()

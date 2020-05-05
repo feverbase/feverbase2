@@ -76,7 +76,11 @@ class Article(ExtendedDocument):
         return self.url
 
 
-def create(Model, objects):
+class FilterOption(ExtendedDocument):
+    key = StringField()
+
+
+def create(articles):
     """
     Input: list of objects (dictionaries).
     Output: None
