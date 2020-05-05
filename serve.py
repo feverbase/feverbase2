@@ -410,7 +410,8 @@ def search():
         # add filter options for those that exist
         filter_options = db.FilterOption.objects()
         ctx["filter_options"] = {
-            k: list(v) for k, v in groupby(filter_options, key=lambda o: o.key)
+            k: list(map(lambda o: o.value, v))
+            for k, v in groupby(filter_options, key=lambda o: o.key)
         }
 
         return render_template("search.html", **ctx)

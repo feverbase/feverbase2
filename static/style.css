@@ -418,16 +418,18 @@ form.horizontal > header > span {
 	margin-top: 0.3rem;
 }
 
-input, textarea {
+input, textarea, select {
 	font-family: 'SF Pro', Arial, sans-serif;
 	font-size: 14px;
 	border: 1px solid #ddd;
 	border-radius: 12px;
 	padding: 5px 7px;
+	width: 100%;
 }
 
-input:focus, textarea:focus {
+input:focus, textarea:focus, select:focus {
 	outline: none;
+	border: 1px solid #555;
 }
 
 button, input[type=submit] {
