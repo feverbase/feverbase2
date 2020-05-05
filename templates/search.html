@@ -64,28 +64,6 @@
       </a>
       <br>
       <div id="filters-container" style="display: {{ 'grid' if adv_filters_in_use else 'none' }};">
-        {% if false %}
-        <!-- if false ensures this doesn't get send to device, don't show for now -->
-        <label for="country">Country:</label>
-        <select name="country" type="text" id="filter-country">
-          {% if filters and not 'country' in filters %}
-          <option value="" selected></option>
-          {% else %}
-          <option value=""></option>
-          {% endif %}
-
-          {% if filter_options and 'countries' in filter_options %}
-          {% for country in filter_options.countries %}
-          {% if filters and 'country' in filters and filters.country == country %}
-          <option value="{{ country }}" selected>{{ country }}</option>
-          {% else %}
-          <option value="{{ country }}">{{ country }}</option>
-          {% endif %}
-          {% endfor %}
-          {% endif %}
-        </select>
-        {% endif %}
-
         <label for="date">Date Posted:</label>
         <div class="inputs">
           <input name="min-timestamp" type="text" id="filter-min-timestamp" value="{{ filters.get("min-timestamp", "") }}"
@@ -95,8 +73,25 @@
         </div>
 
         <label for="sponsor">Sponsor:</label>
-        <input name="sponsor" type="text" id="filter-sponsor"
-          value="{{ filters.sponsor if filters and 'sponsor' in filters else '' }}" autocomplete="off" autocapitalize="off" spellcheck="false">
+        <select name="sponsor" type="text" id="filter-sponsor">
+          <!-- Add blank option -->
+          {% if filters and not 'sponsor' in filters %}
+          <option value="" selected></option>
+          {% else %}
+          <option value=""></option>
+          {% endif %}
+
+          <!-- Loop over options -->
+          {% if filter_options and 'sponsor' in filter_options %}
+          {% for sponsor in filter_options.sponsor %}
+          {% if filters and 'sponsor' in filters and filters.sponsor == sponsor %}
+          <option value="{{ sponsor }}" selected>{{ sponsor }}</option>
+          {% else %}
+          <option value="{{ sponsor }}">{{ sponsor }}</option>
+          {% endif %}
+          {% endfor %}
+          {% endif %}
+        </select>
 
         <label for="target_disease">Condition:</label>
         <input name="target_disease" type="text" id="filter-target_disease"
@@ -105,29 +100,6 @@
         <label for="intervention">Intervention:</label>
         <input name="intervention" type="text" id="filter-intervention"
           value="{{ filters.intervention if filters and 'intervention' in filters else '' }}" autocomplete="off" autocapitalize="off" spellcheck="false">
-
-        <!--
-          <div class="filter">
-            <label for="type">Trial Type:</label>
-            <select name="type" type="text" id="filter-type">
-              {% if filters and not 'type' in filters %}
-              <option value="" selected></option>
-              {% else %}
-              <option value=""></option>
-              {% endif %}
-
-              {% if filter_options and 'types' in filter_options %}
-              {% for type in filter_options.types %}
-              {% if filters and 'type' in filters and filters.type == type %}
-              <option value="{{ type }}" selected>{{ type }}</option>
-              {% else %}
-              <option value="{{ type }}">{{ type }}</option>
-              {% endif %}
-              {% endfor %}
-              {% endif %}
-            </select>
-          </div>
-          -->
 
         <label for="sample_size">Sample Size:</label>
         <div class="inputs">
@@ -142,8 +114,25 @@
           value="{{ filters.location if filters and 'location' in filters else '' }}" autocomplete="off" autocapitalize="off" spellcheck="false">
 
         <label for="recruiting_status">Status:</label>
-        <input name="recruiting_status" type="text" id="filter-recruiting_status"
-          value="{{ filters.recruiting_status if filters and 'recruiting_status' in filters else '' }}" autocomplete="off" autocapitalize="off" spellcheck="false">
+        <select name="recruiting_status" type="text" id="filter-recruiting_status">
+          <!-- Add blank option -->
+          {% if filters and not 'recruiting_status' in filters %}
+          <option value="" selected></option>
+          {% else %}
+          <option value=""></option>
+          {% endif %}
+
+          <!-- Loop over options -->
+          {% if filter_options and 'recruiting_status' in filter_options %}
+          {% for recruiting_status in filter_options.recruiting_status %}
+          {% if filters and 'recruiting_status' in filters and filters.recruiting_status == recruiting_status %}
+          <option value="{{ recruiting_status }}" selected>{{ recruiting_status }}</option>
+          {% else %}
+          <option value="{{ recruiting_status }}">{{ recruiting_status }}</option>
+          {% endif %}
+          {% endfor %}
+          {% endif %}
+        </select>
 
         <input type="submit" value="Search">
       </div>

@@ -78,6 +78,12 @@ class Article(ExtendedDocument):
 
 class FilterOption(ExtendedDocument):
     key = StringField()
+    value = StringField()
+
+    meta = {
+        "indexes": [{"fields": ["key", "value"], "unique": True}],
+        "ordering": ["key", "value"],
+    }
 
 
 def create(articles):

@@ -36,6 +36,7 @@ def run():
 
     db.create(db.Article, articles_with_location)
 
+    preload_filter_options()
     mongo_to_meili()
 
 
@@ -46,5 +47,34 @@ def translate(info):
         return faucet.translate(info)
     return info
 
-def preload_filters():
-    articles = db.Article.objects()
+
+FILTER_OPTION_KEYS = [
+    "sponsor",
+    # "location",
+    "recruiting_status",
+]
+
+
+def preload_filter_options():
+    """
+    Aggregate all Articles' existing values for given FILTER_OPTION_KEYS and save them to the FilterOption collection in Mongo, replacing those that already exist.
+    """
+
+    filter_options = {key: set() for key in FILTER_OPTION_KEYS}
+    # keep track of set of casefolded values to preserve case of the common values
+    existing_filter_options = {key: set() for key in FILTER_OPTION_KEYS}
+
+    for article in db.Article.objects().only(*FILTER_OPTION_KEYS):
+        for key, s in filter_options.items():
+            value = str(eval(f"article.{key}") or "")
+            if value and value.casefold() not in existing_filter_options[key]:
+                s.add(value)
+                existing_filter_options[key].add(value.casefold())
+
+    filter_option_data = []
+    for key, values in filter_options.items():
+        for value in values:
+            filter_option_data.append({"key": key, "value": value})
+    # clear collection before adding new values
+    db.FilterOption.objects.delete()
+    db.create(db.FilterOption, filter_option_data)

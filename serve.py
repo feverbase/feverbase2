@@ -30,6 +30,7 @@ from sentry_sdk.integrations.flask import FlaskIntegration
 from dotenv import load_dotenv
 import requests
 import html
+from itertools import groupby
 
 from utils import db, ms
 
@@ -239,7 +240,7 @@ def filter_papers(page, qraw, dynamic_filters=[]):
 
 
 def default_context(**kws):
-    ans = dict(filter_options={}, filters={}, total_count=db.Article.objects.count())
+    ans = dict(filter_options={}, filters={}, total_count=db.Article.objects.count(),)
     ans.update(kws)
 
     # add cmd filters to advanced filters inputs
@@ -323,10 +324,10 @@ ACCEPTED_DYNAMIC_FILTERS = [
 @app.route("/search", methods=["GET"])
 def search():
     ctx = default_context(render_format="search", filters=request.args)
-    filters = ctx.get("filters", {})
 
     if request.headers.get("Content-Type", "") == "application/json":
         page = get_page()
+        filters = ctx.get("filters", {})
 
         alerts = []
 
@@ -406,6 +407,12 @@ def search():
 
         return jsonify(dict(page=page, papers=papers, stats=stats, alerts=alerts))
     else:
+        # add filter options for those that exist
+        filter_options = db.FilterOption.objects()
+        ctx["filter_options"] = {
+            k: list(v) for k, v in groupby(filter_options, key=lambda o: o.key)
+        }
+
         return render_template("search.html", **ctx)
 
 
