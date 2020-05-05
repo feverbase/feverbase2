@@ -86,7 +86,7 @@ class FilterOption(ExtendedDocument):
     }
 
 
-def create(articles):
+def create(Model, objects):
     """
     Input: list of objects (dictionaries).
     Output: None
