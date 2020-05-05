@@ -240,7 +240,7 @@ def filter_papers(page, qraw, dynamic_filters=[]):
 
 
 def default_context(**kws):
-    ans = dict(filter_options={}, filters={}, total_count=db.Article.objects.count(),)
+    ans = dict(filter_options={}, filters={}, total_count=db.Article.objects.count())
     ans.update(kws)
 
     # add cmd filters to advanced filters inputs
