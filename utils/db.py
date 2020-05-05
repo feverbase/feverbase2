@@ -49,6 +49,7 @@ class Article(ExtendedDocument):
     timestamp = DateTimeField()
 
     # additional fields
+    overall_status = StringField()
     recruiting_status = StringField()
     sex = ListField(StringField(), default=["male", "female"])
     target_disease = StringField()

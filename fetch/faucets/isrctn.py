@@ -39,25 +39,24 @@ def find(query):
     for trial in root.iter("trial"):
         this_entry = {"_source": SOURCE}
         main = trial.find("main")
-        trial_id = main.get("trial_id")
+        trial_id = main.find("trial_id").text
         try:
-            date_registration = main.get("date_registration")
-            title = main.get("public_title")
-            sponsor = main.get("primary_sponsor")
-            sample_size = int(main.get("target_size"))
+            date_registration = main.find("date_registration").text
+            title = main.find("public_title").text
+            sponsor = main.find("primary_sponsor").text
+            sample_size = int(main.find("target_size").text)
             if sample_size == 0:
                 sample_size = None
-            url = main.get("url")
-            recruitment_status = main.get("recruitment_status")
-            sex = trial.find("criteria").get("gender")
+            url = main.find("url").text
+            sex = trial.find("criteria").find("gender").text
 
             if main.find("hc_freetext") != None:
-                target_disease = main.get("hc_freetext")
+                target_disease = main.find("hc_freetext").text
             else:
                 target_disease = None
 
             if main.find("i_freetext") != None:
-                summary = main.get("i_freetext")
+                summary = main.find("i_freetext").text
                 splits = summary.split("\n")
                 if len(splits) >= 1:
                     summary = splits[0]
@@ -94,11 +93,11 @@ def find(query):
                         primary_contact = scientific_contact
 
             if primary_contact:
-                first_name = primary_contact.get("firstname")
-                last_name = primary_contact.get("lastname")
-                phone = primary_contact.get("telephone")
-                email = primary_contact.get("email")
-                city = primary_contact.get("city")
+                first_name = primary_contact.find("firstname").text
+                last_name = primary_contact.find("lastname").text
+                phone = primary_contact.find("telephone").text
+                email = primary_contact.find("email").text
+                city = primary_contact.find("city").text
 
                 this_entry["contact"] = {
                     "name": f"{first_name} {last_name}",
@@ -119,23 +118,30 @@ def find(query):
 
             intervention = None
             institution = None
+            overall_status = None
+            recruiting_status = None
             try:
                 if url:
                     scrape_page = requests.get(url)
                     if scrape_page.status_code == 200:
                         soup = BeautifulSoup(scrape_page.content, "html.parser")
 
-                        def get_info_for_section_title(title):
-                            h3 = soup.find(
-                                "h3",
-                                attrs={"class": "Info_section_title"},
+                        def get_info_for_section_title(
+                            title,
+                            title_tag="h3",
+                            title_class="Info_section_title",
+                            next_tag="p",
+                        ):
+                            tag = soup.find(
+                                title_tag,
+                                attrs={"class": title_class},
                                 text=re.compile(title),
                             )
-                            p = h3.find_next_sibling("p")
-                            # p contains `NavigableString`s separated by <br> tags
-                            if p:
+                            container_tag = tag.find_next_sibling(next_tag)
+                            # container_tag contains `NavigableString`s potentially separated by <br> tags
+                            if container_tag:
                                 parts = []
-                                for e in p.children:
+                                for e in container_tag.children:
                                     if isinstance(e, NavigableString) and len(e):
                                         # replace all whitespace with single space
                                         parts.append(re.sub(r"\s+", " ", e).strip())
@@ -145,6 +151,18 @@ def find(query):
                         ### GET INFO
                         intervention = get_info_for_section_title("Intervention")
                         institution = get_info_for_section_title("Intervention")
+                        overall_status = get_info_for_section_title(
+                            "Overall trial status",
+                            title_tag="dt",
+                            title_class="Meta_name u-eta",
+                            next_tag="dd",
+                        )
+                        recruiting_status = get_info_for_section_title(
+                            "Recruitment status",
+                            title_tag="dt",
+                            title_class="Meta_name u-eta",
+                            next_tag="dd",
+                        )
             except Exception as e:
                 print(e)
 
@@ -152,7 +170,8 @@ def find(query):
             this_entry["url"] = url
             this_entry["timestamp"] = to_iso8601(date_registration)
             this_entry["sample_size"] = sample_size
-            this_entry["recruiting_status"] = recruitment_status
+            this_entry["overall_status"] = overall_status
+            this_entry["recruiting_status"] = recruiting_status
             this_entry["sex"] = sex
             this_entry["target_disease"] = target_disease
             this_entry["intervention"] = intervention
