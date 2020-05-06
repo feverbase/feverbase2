@@ -10,6 +10,7 @@ from mongoengine import (
     EmailField,
     EmbeddedDocument,
     EmbeddedDocumentField,
+    ReferenceField,
     ListField,
     StringField,
     URLField,
@@ -27,7 +28,7 @@ else:
     raise Exception("No MongoDB URI specified.")
 
 
-class Location(EmbeddedDocument):
+class Location(ExtendedDocument):
     institution = StringField()
     address = StringField()
     latitude = DecimalField()
@@ -48,6 +49,7 @@ class Article(ExtendedDocument):
     timestamp = DateTimeField()
 
     # additional fields
+    overall_status = StringField()
     recruiting_status = StringField()
     sex = ListField(StringField(), default=["male", "female"])
     target_disease = StringField()
@@ -55,7 +57,7 @@ class Article(ExtendedDocument):
     sponsor = StringField()
     summary = StringField()
     location = StringField()
-    location_data = EmbeddedDocumentField(Location)
+    location_data = ReferenceField(Location)
     institution = StringField()
     contact = EmbeddedDocumentField(Identity)
 

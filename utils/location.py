@@ -32,39 +32,32 @@ def add_location_data(articles):
     print("Beginning to add location data...")
     institutions = [a.get("institution") for a in articles]
 
-    # add locations not already stored in mongo
-    new_locations = fetch_new_locations(institutions)
-
-    print("Inserting new locations into database...")
-    if len(new_locations) > 0:
-        db.create(db.Location, new_locations)
-
-    # get institution name and location_data $id pairs from mongo
-    location_mappings = get_mongo_ids()
+    # get locations for given institutions
+    locations = get_locations(institutions)
 
     # add an article's location data, based on its institution
     for article in articles:
-        institution = article.get("institution", None)
+        article["location_data"] = None
+        institution = article.get("institution")
         if institution:
-            location_id = location_mappings.get(institution)
-            if location_id:
-                article["location_data"] = location_id
-        else:
-            article["location_data"] = None
+            location = locations.get(institution)
+            if location:
+                article["location_data"] = location.id
 
     return articles
 
 
-def fetch_new_locations(queries):
-    """Return a list of locations that are not in Mongo
+def get_locations(queries):
+    """Return a dict of location objects for the given queries.
 
     Pull every location from MongoDB. Iterate through queries
     (every institution in articles) and see which ones are already
     present in MongoDB (Location collection). For those that are not,
     make a call to Maps API and store result in an array. At the end,
-    insert all "new" location_data to Location collection.
+    insert all "new" location_data to Location collection. Then,
+    return a dictionary with location institutions mapping to the document.
     """
-    all_location_objects = db.Location.objects()
+    all_location_objects = db.Location.objects().only("institution")
     stored_institutions = [i.institution for i in all_location_objects]
 
     # for every 'new' instution (i.e. not present in stored_institution),
@@ -93,27 +86,14 @@ def fetch_new_locations(queries):
                 f"[{i + 1}/{len(new_location_names)}] Unable to geocode institution {inst}"
             )
 
-    return new_location_data
+    # get existing locations
+    locations = db.Location.objects(institution__in=queries).only("id", "institution")
+    # add new locations
+    if len(new_location_data):
+        print("Inserting new locations into database...")
+        locations += db.create(db.Location, new_location_data)
 
-
-def get_mongo_ids():
-    """Return a mapping of every location name to its Mongo ID
-
-    Every entry in the MongoDB "Location" collection has a location
-    data ID. We use these IDs to represent relationships from
-    Articles to their corresponding location data.
-
-    This function returns a dictionary with institution names as
-    keys, and MongoDB IDs as values.
-    """
-
-    # get all locations from mongo
-    all_locations = db.Location.objects.only("institution")
-    # read into dictionary structure
-    mappings = {}
-    for location in all_locations:
-        mappings[location["institution"]] = location.id
-    return mappings
+    return {l.institution: l for l in locations}
 
 
 def geocode_query(query):
