@@ -1,0 +1,50 @@
+body {
+	width: 45em;
+	max-width: 92%;
+	margin: 0 auto;
+}
+
+hr {
+	border: 0;
+	border-bottom: 1px solid #999;
+	margin: 30px 0
+}
+
+table {
+	text-align: center;
+	vertical-align: middle;
+	table-layout: fixed;
+	width: 100%;
+}
+
+img {
+	position: relative;
+	width: 80%;
+	margin: 0 auto;
+	border-radius: 50%;
+}
+
+td > a {
+	text-decoration: none;
+}
+
+td {
+	vertical-align: top;
+}
+
+tr.spacer > td {
+  padding-bottom: 1.25em;
+}
+
+tr a {
+	font-weight: bold;
+}
+
+li {
+	line-height: 1.65em;
+	word-wrap: break-word
+}
+
+#goto-search {
+	margin-top: 1rem !important;
+}

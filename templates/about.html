@@ -2,16 +2,13 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>Feverbase</title>
 
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-    <style type="text/css">
-        body {
-            max-width: 45em;
-        }
-    </style>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='common.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='about.css') }}">
 </head>
 
 <body>
@@ -28,22 +25,22 @@
     <p>This project is a collaboration between researchers at Stanford, MIT, and around the world. Join us by clicking
         <a href="mailto:team@feverbase.org">here</a>. All feedback welcome!</p><br />
 
-    <table class="contributors">
+    <table>
         <tr>
             <td>
-                <img class="prof" src="assets/liphardt.jpg" alt="Jan Liphardt"/>
+                <img src="assets/liphardt.jpg" alt="Jan Liphardt"/>
             </td>
             <td>
-                <img class="prof" src="assets/deming.jpg" alt="Laura Deming"/>
+                <img src="assets/deming.jpg" alt="Laura Deming"/>
             </td>
             <td>
-                <img class="prof" src="assets/wall.png" alt="Dennis Wall"/>
+                <img src="assets/wall.png" alt="Dennis Wall"/>
             </td>
             <td>
-                <img class="prof" src="assets/zilis.jpg" alt="Shivon Zilis"/>
+                <img src="assets/zilis.jpg" alt="Shivon Zilis"/>
             </td>
         </tr>
-        <tr style="font-weight: bold;">
+        <tr>
             <td><a target="_blank" rel="noopener noreferrer" href="https://profiles.stanford.edu/jan-liphardt">Jan Liphardt</a></td>
             <td><a target="_blank" rel="noopener noreferrer" href="https://www.ldeming.com/">Laura Deming</a></td>
             <td><a target="_blank" rel="noopener noreferrer" href="https://profiles.stanford.edu/dennis-wall">Dennis Wall</a></td>
@@ -57,19 +54,19 @@
         </tr>
         <tr>
             <td>
-                <img class="prof" src="assets/ranjan.jpg" alt="Ankit Ranjan"/>
+                <img src="assets/ranjan.jpg" alt="Ankit Ranjan"/>
             </td>
             <td>
-                <img class="prof" src="assets/mittal.jpg" alt="Gautam Mittal"/>
+                <img src="assets/mittal.jpg" alt="Gautam Mittal"/>
             </td>
             <td>
-                <img class="prof" src="assets/saso.jpg" alt="Noah Saso"/>
+                <img src="assets/saso.jpg" alt="Noah Saso"/>
             </td>
             <td>
-                <img class="prof" src="assets/houston.jpg" alt="Ethan Houston"/>
+                <img src="assets/houston.jpg" alt="Ethan Houston"/>
             </td>
         </tr>
-        <tr style="font-weight: bold;">
+        <tr>
             <td><a target="_blank" rel="noopener noreferrer" href="https://www.ankit.io">Ankit Ranjan</a></td>
             <td><a target="_blank" rel="noopener noreferrer" href="https://www.gautam.cc/">Gautam Mittal</a></td>
             <td><a target="_blank" rel="noopener noreferrer" href="https://www.noahsaso.com">Noah Saso</a></td>
@@ -104,16 +101,8 @@
         data.
     </p>
     <hr />
-    <script type="text/javascript">
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-41516705-6']);
-        _gaq.push(['_trackPageview']);
-        (function () {
-            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-        })();
-    </script>
+
+    {% include "partials/end_body.html" %}
 </body>
 
 </html>

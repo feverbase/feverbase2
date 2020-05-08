@@ -6,6 +6,9 @@
 
   <title>Feverbase</title>
 
+  <!-- Custom CSS -->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='search.css') }}">
+
   <!-- Load image before running scripts -->
   <style type="text/css">
     .load-img-early {
@@ -25,7 +28,7 @@
 </head>
 
 <body>
-  <form action="/search" method="get" class="search {{ 'horizontal' if url_for(request.endpoint) != '/' else '' }}">
+  <form action="/search" method="get" {{ 'class=horizontal' if url_for(request.endpoint) != '/' else '' }}>
     <header class="center">
       <nav>
         <a href="/about">About</a>
@@ -129,7 +132,7 @@
 
   <p style="display:none" id="stats"></p>
 
-  <div id="maindiv">
+  <div id="main">
 
     <div id="rtable"></div>
 

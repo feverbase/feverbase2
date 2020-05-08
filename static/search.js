@@ -61,17 +61,17 @@ function addPapers() {
       }
 
       for (const p of data.papers) {
-        var div = root.append('<div class="apaper"></div>');
+        var div = root.append('<div></div>');
 
-        var tdiv = div.append('<div class="paperdesc"></div>');
+        var tdiv = div.append('<div></div>');
         if (p.timestamp && p.timestamp !== -1) {
           const timestamp = moment.utc(p.timestamp);
-          tdiv.append(`<div class="ds">${timestamp.format('LL')} &middot; ${p.sponsor}</div>`);
+          tdiv.append(`<div class="pretitle-container">${timestamp.format('LL')} &middot; ${p.sponsor}</div>`);
         } else {
-          tdiv.append(`<div class="ds">${p.sponsor}</div>`);
+          tdiv.append(`<div class="pretitle-container">${p.sponsor}</div>`);
         }
 
-        tdiv.append(`<div class="ts"><a href="${p.url}" target="_blank">${p.title}</a></div>`);
+        tdiv.append(`<div class="title-container"><a href="${p.url}" target="_blank">${p.title}</a></div>`);
 
         const keys = ['title', 'url', 'timestamp', 'recruiting_status', 'sex', 'target_disease', 'intervention', 'sponsor', 'summary', 'location', 'institution', 'contact', 'sample_size', 'abandoned', 'abandoned_reason']
         for (var key of keys) {
@@ -79,7 +79,7 @@ function addPapers() {
         }
 
         tdiv.append(`
-          <blockquote class="as">
+          <blockquote>
             <b>Condition</b>: ${p.target_disease}<br />
             <b>Intervention</b>: ${p.intervention}<br />
             <b>Sample Size</b>: ${p.sample_size}<br />

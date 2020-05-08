@@ -1,0 +1,13 @@
+body {
+	width: 30em;
+	max-width: 92%;
+	margin: 0 auto;
+}
+
+header {
+	padding-top: 4vh;
+}
+
+input[type="text"] {
+	margin-bottom: 1.5rem;
+}
