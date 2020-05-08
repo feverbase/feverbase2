@@ -64,6 +64,20 @@ TRIM_KEYS = [
     "intervention",
 ]
 
+POSSIBLE_SYMPTOMS = [
+    "Fatigue",
+    "Fever",
+    "Cough",
+    "Chills",
+    "Runny Nose",
+    "Nasal congestion",
+    "Loss of taste",
+    "Loss of smell",
+    "Headache",
+    "Muscle/joint pain",
+    "Tight feeling in chest",
+]
+
 # -----------------------------------------------------------------------------
 # connection handlers
 # -----------------------------------------------------------------------------
@@ -424,9 +438,12 @@ def search():
 
         return render_template("search.html", **ctx)
 
+
 @app.route("/volunteer", methods=["GET", "POST"])
 def volunteer():
-    ctx = default_context(render_format="volunteer", filters=request.args)
+    ctx = default_context(
+        render_format="volunteer", filters=request.args, symptoms=POSSIBLE_SYMPTOMS
+    )
 
     return render_template("volunteer.html", **ctx)
 

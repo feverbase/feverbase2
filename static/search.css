@@ -162,15 +162,6 @@ form.horizontal > header > span {
 	margin-top: 4px;
 }
 
-.inputs > * {
-	width: calc(50% - 5px);
-	margin-right: 5px;
-}
-
-.inputs > *:last-child {
-	margin-right: 0;
-}
-
 .lds-ring {
   display: inline-block;
   position: relative;

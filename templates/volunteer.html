@@ -23,14 +23,20 @@
   </header>
 
   <form action="/volunteer" method="post">
-    <label for="first_name">First Name</label>
-    <input name="first_name" type="text" value="{{ inputs.first_name if inputs and 'first_name' in inputs else '' }}">
-
-    <label for="last_name">Last Name</label>
-    <input name="last_name" type="text" value="{{ inputs.last_name if inputs and 'last_name' in inputs else '' }}">
+    <label>Name</label>
+    <div class="inputs">
+      <input name="first_name" type="text" placeholder="First" value="{{ inputs.first_name if inputs and 'first_name' in inputs else '' }}">
+      <input name="last_name" type="text" placeholder="Last" value="{{ inputs.last_name if inputs and 'last_name' in inputs else '' }}">
+    </div>
 
     <label for="email">Email</label>
     <input name="email" type="text" value="{{ inputs.email if inputs and 'email' in inputs else '' }}">
+
+    <p>Symptoms</p>
+
+    {% for symptom in symptoms %}
+      <label class="check"><input type="checkbox" name="symptoms[]" value="{{ symptom }}"> <span>{{ symptom }}</span></label>
+    {% endfor %}
 
     <input type="submit" value="Submit">
   </form>
