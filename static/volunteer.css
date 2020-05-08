@@ -127,12 +127,14 @@ form > label.check.other > input[type="text"] {
   color: transparent;
 }
 
-.form-label-group input:not(:placeholder-shown) {
+.form-label-group input:not(:placeholder-shown),
+.form-label-group input:focus {
   padding-top: calc(0.75rem + 0.75rem / 2);
   padding-bottom: calc(0.75rem / 2);
 }
 
-.form-label-group input:not(:placeholder-shown) ~ label {
+.form-label-group input:not(:placeholder-shown) ~ label,
+.form-label-group input:focus ~ label {
   padding-top: calc(0.75rem / 5);
   font-size: 12px;
   color: #777;
