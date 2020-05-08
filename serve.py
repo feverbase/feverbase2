@@ -424,6 +424,12 @@ def search():
 
         return render_template("search.html", **ctx)
 
+@app.route("/volunteer", methods=["GET", "POST"])
+def volunteer():
+    ctx = default_context(render_format="volunteer", filters=request.args)
+
+    return render_template("volunteer.html", **ctx)
+
 
 # -----------------------------------------------------------------------------
 # int main
