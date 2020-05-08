@@ -7,8 +7,8 @@
   <title>Feverbase</title>
 </head>
 
-<body>
-  <header class="center volunteer">
+<body class="volunteer">
+  <header>
     <nav>
       <a href="/about">About</a>
       <a href="/">Search</a>
@@ -19,7 +19,7 @@
     <span id="blurb">Volunteer for eligible trials.</span>
   </header>
 
-  <form action="/volunteer" method="post" class="volunteer">
+  <form action="/volunteer" method="post">
     <label for="first_name">First Name</label>
     <input name="first_name" type="text" value="{{ inputs.first_name if inputs and 'first_name' in inputs else '' }}">
 
