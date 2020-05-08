@@ -271,9 +271,14 @@ button.textbn {
 	outline: none;
 }
 
+.inputs {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
 .inputs > * {
-	width: calc(50% - 5px);
-	margin-right: 5px;
+	width: calc(50% - 5px) !important;
 }
 
 .inputs > *:last-child {

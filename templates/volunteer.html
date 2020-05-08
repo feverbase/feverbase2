@@ -26,19 +26,29 @@
   </header>
 
   <form action="/volunteer" method="post">
-    <label>Name</label>
     <div class="inputs">
-      <input name="first_name" type="text" placeholder="First" value="{{ inputs.first_name if inputs and 'first_name' in inputs else '' }}">
-      <input name="last_name" type="text" placeholder="Last" value="{{ inputs.last_name if inputs and 'last_name' in inputs else '' }}">
+      <div class="form-label-group">
+        <input name="first_name" id="first-name" type="text" placeholder="First Name" value="{{ (inputs and 'first_name' in inputs and inputs.first_name) or '' }}" required>
+        <label for="first-name">First Name</label>
+      </div>
+      <div class="form-label-group">
+        <input name="last_name" id ="last-name" type="text" placeholder="Last Name" value="{{ (inputs and 'last_name' in inputs and inputs.last_name) or '' }}" required>
+        <label for="last-name">Last Name</label>
+      </div>
     </div>
 
-    <label for="email">Email</label>
-    <input name="email" type="text" value="{{ inputs.email if inputs and 'email' in inputs else '' }}">
+    <div class="form-label-group">
+      <input name="email" id="email" type="email" placeholder="Email" value="{{ (inputs and 'email' in inputs and inputs.email) or '' }}" required>
+      <label for="email">Email</label>
+    </div>
 
     <p>Symptoms</p>
 
     {% for symptom in symptoms %}
-      <label class="check"><input type="checkbox" name="symptoms[]" value="{{ symptom }}" {{ 'checked' if inputs.symptoms and symptom in inputs.symptoms else '' }}> <span>{{ symptom }}</span></label>
+      <label class="check">
+        <input type="checkbox" name="symptoms[]" value="{{ symptom }}" {{ 'checked' if inputs.symptoms and symptom in inputs.symptoms else '' }}>
+        <span>{{ symptom }}</span>
+      </label>
     {% endfor %}
 
     {% if inputs.others and inputs.others|length %}
