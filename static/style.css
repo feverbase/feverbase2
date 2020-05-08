@@ -225,17 +225,18 @@ form.search.horizontal > header > span {
 	display: none;
 }
 
-header.volunteer {
-	padding-top: 4vh;
-}
-
-form.volunteer {
+body.volunteer {
 	width: 40vw;
 	max-width: 98%;
 	margin: 0 auto;
+	padding: 0;
 }
 
-form.volunteer > input[type="text"] {
+body.volunteer > header {
+	padding-top: 4vh;
+}
+
+body.volunteer > form > input[type="text"] {
 	margin-bottom: 1.5rem;
 }
 
