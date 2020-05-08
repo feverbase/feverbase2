@@ -78,6 +78,15 @@ POSSIBLE_SYMPTOMS = [
     "Tight feeling in chest",
 ]
 
+VOLUNTEER_FORM_KEYS = [
+    "first_name",
+    "last_name",
+    "email",
+    "symptoms[]",
+    "others[]",
+    "others_selected[]",
+]
+
 # -----------------------------------------------------------------------------
 # connection handlers
 # -----------------------------------------------------------------------------
@@ -441,8 +450,15 @@ def search():
 
 @app.route("/volunteer", methods=["GET", "POST"])
 def volunteer():
+    inputs = {}
+    for key in VOLUNTEER_FORM_KEYS:
+        if "[]" in key:
+            inputs[key[:-2]] = request.form.getlist(key)
+        else:
+            inputs[key] = request.form.get(key)
+
     ctx = default_context(
-        render_format="volunteer", filters=request.args, symptoms=POSSIBLE_SYMPTOMS
+        render_format="volunteer", symptoms=POSSIBLE_SYMPTOMS, inputs=inputs
     )
 
     return render_template("volunteer.html", **ctx)
