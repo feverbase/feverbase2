@@ -8,6 +8,10 @@ header {
 	padding-top: 4vh;
 }
 
+p {
+	margin-top: 0;
+}
+
 /* won't affect labels */
 form > input, form > label.check:last-of-type, .inputs {
 	margin-bottom: 1rem !important;
@@ -24,7 +28,7 @@ form > label.check {
 	margin-bottom: 0.5rem;
 }
 
-form > label.check > input {
+form > label.check > input[type="checkbox"] {
 	margin: 0;
 	padding: 0;
 	-webkit-appearance: none;
@@ -35,7 +39,7 @@ form > label.check > input {
 	border: 2px solid #bbb;
 }
 
-form > label.check > input:checked {
+form > label.check > input[type="checkbox"]:checked {
 	background: #9C2460; /* midpoint of gradient */
 	background: linear-gradient(0deg, #C04848, #780078);
 	background: -webkit-linear-gradient(0deg, #C04848, #780078);
@@ -44,6 +48,10 @@ form > label.check > input:checked {
 
 form > label.check > span {
 	margin-left: 4px;
+}
+
+form > label.check.other > span {
+	margin-right: 10px;
 }
 
 @media only screen and (max-width: 300px) {
