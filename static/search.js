@@ -1,5 +1,18 @@
 'use strict';
 
+// setup
+
+$.ajaxSetup({
+  beforeSend: function () {
+    $("#loader").show();
+  },
+  complete: function () {
+    $("#loader").hide();
+  }
+});
+
+// toastr.options.positionClass = 'toast-bottom-right';
+
 // if not on search, dont add
 var page =
   window.location.pathname === '/'
@@ -97,22 +110,8 @@ function addPapers() {
   }, 60000);
 }
 
-$.ajaxSetup({
-  beforeSend: function () {
-    $("#loader").show();
-  },
-  complete: function () {
-    $("#loader").hide();
-  }
-});
-
-// toastr.options.positionClass = 'toast-bottom-right';
-
 // when page loads...
 $(document).ready(function () {
-  $('#feedback-box')
-    .click(function (e) { e.stopPropagation(); });
-
   // add papers to #rtable
   addPapers();
 
@@ -139,39 +138,4 @@ function toggleAdvancedFilters() {
     container.css('display', 'none');
     status.html('');
   }
-}
-
-function toggleFeedback() {
-  var container = $('#feedback');
-
-  if (container.css('display') === 'none') {
-    container.css('display', 'flex');
-  } else {
-    container.css('display', 'none');
-  }
-}
-
-var submittingFeedback = false;
-function submitFeedback() {
-  if (submittingFeedback) { return; }
-  submittingFeedback = true;
-  var subject = $('#feedback-subject').val().trim();
-  var body = $('#feedback-body').val().trim();
-  var xhr = $.ajax('/feedback', {
-    type: 'GET',
-    data: { subject, body },
-    beforeSend: null, // dont show loader
-    success: function (data) {
-      toastr.success(data);
-
-      $('#feedback-subject').val('');
-      $('#feedback-body').val('');
-      $('#feedback-container').css('display', 'none');
-      $('#feedback-status').html('');
-    },
-    error: function (jqXHR, textStatus, errorThrown) {
-      console.log(jqXHR, textStatus, errorThrown);
-      toastr.error(jqXHR.responseText);
-    }
-  }).always(function () { submittingFeedback = false; });
 }

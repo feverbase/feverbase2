@@ -144,7 +144,8 @@ blockquote {
 
 .center {
 	text-align: center;
-	margin: 0 auto
+	margin-left: auto;
+	margin-right: auto;
 }
 
 hr {
@@ -190,38 +191,42 @@ li {
 	word-wrap: break-word
 }
 
-form {
-	margin-top: 40px; /* account for nav of height 40px */
-	padding-top: 20vh;
-}
-
-form.horizontal {
-	padding-top: 0;
-}
-
 header {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	margin-top: 40px; /* account for nav of height 40px */
 	margin-bottom: 1rem !important;
 }
 
-form.horizontal > header {
+form.search {
+	padding-top: 20vh;
+}
+
+form.search.horizontal {
+	padding-top: 0;
+}
+
+form.search.horizontal > header {
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: flex-start;
 }
 
-form.horizontal > header > #logo {
+form.search.horizontal > header > #logo {
 	margin-right: 1rem;
 }
 
-form.horizontal > header > #sbox {
+form.search.horizontal > header > #sbox {
 	margin-top: 0;
 }
 
-form.horizontal > header > span {
+form.search.horizontal > header > span {
 	display: none;
+}
+
+header.volunteer {
+	padding-top: 4vh;
 }
 
 #logo {
@@ -266,13 +271,13 @@ form.horizontal > header > span {
 }
 
 @media only screen and (max-width: 660px) {
-	form.horizontal > header {
+	form.search.horizontal > header {
 		flex-direction: column;
 		justify-content: flex-start;
 		align-items: center;
 	}
 
-	form.horizontal > header > #logo {
+	form.search.horizontal > header > #logo {
 		margin-top: -0.8rem;
 		margin-bottom: 0.5rem;
 		margin-right: 0;
@@ -530,6 +535,13 @@ nav {
 	padding: 0 10px;
 	background: rgb(230, 230, 230);
 	border-bottom: solid 1px #D6D3C5;
+}
+
+nav * {
+	/* make all nav options same width even if different text lengths */
+	/* expand with a basis of 0px so start from nothing and expand together */
+	flex: 1 1 0px;
+	padding-top: 2px;
 }
 
 nav *, #goto-search {
