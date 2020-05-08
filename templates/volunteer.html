@@ -46,12 +46,12 @@
     <button class="textbn" onclick="toggleFeedback()">Give Feedback</button>
   </nav>
 
-  <header class="center">
-    <h1 id="logo"><a href="/">feverbase</a></h1>
-    <span id="blurb">Volunteer for eligible trials.</span>
-  </header>
-
   <form action="/volunteer" method="post">
+    <header class="center">
+      <h1 id="logo"><a href="/">feverbase</a></h1>
+      <span id="blurb">Volunteer for eligible trials.</span>
+    </header>
+
     <input name="first_name" type="text" value="{{ inputs.first_name if inputs and 'first_name' in inputs else '' }}">
 
     <input type="submit" id="submit-volunteer" value="Submit">
