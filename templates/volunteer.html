@@ -20,10 +20,16 @@
   </header>
 
   <form action="/volunteer" method="post" class="volunteer">
-
+    <label for="first_name">First Name</label>
     <input name="first_name" type="text" value="{{ inputs.first_name if inputs and 'first_name' in inputs else '' }}">
 
-    <input type="submit" id="submit-volunteer" value="Submit">
+    <label for="last_name">Last Name</label>
+    <input name="last_name" type="text" value="{{ inputs.last_name if inputs and 'last_name' in inputs else '' }}">
+
+    <label for="email">Email</label>
+    <input name="email" type="text" value="{{ inputs.email if inputs and 'email' in inputs else '' }}">
+
+    <input type="submit" value="Submit">
   </form>
 
   {% include "partials/end_body.html" %}

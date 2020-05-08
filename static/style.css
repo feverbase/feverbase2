@@ -229,6 +229,16 @@ header.volunteer {
 	padding-top: 4vh;
 }
 
+form.volunteer {
+	width: 40vw;
+	max-width: 98%;
+	margin: 0 auto;
+}
+
+form.volunteer > input[type="text"] {
+	margin-bottom: 1.5rem;
+}
+
 #logo {
 	display: inline-block;
 	font-size: 2.3rem;
