@@ -1,5 +1,18 @@
 'use strict';
 
+// setup
+
+$.ajaxSetup({
+  beforeSend: function () {
+    $("#loader").show();
+  },
+  complete: function () {
+    $("#loader").hide();
+  }
+});
+
+// toastr.options.positionClass = 'toast-bottom-right';
+
 // if not on search, dont add
 var page =
   window.location.pathname === '/'
@@ -48,17 +61,17 @@ function addPapers() {
       }
 
       for (const p of data.papers) {
-        var div = root.append('<div class="apaper"></div>');
+        var div = root.append('<div></div>');
 
-        var tdiv = div.append('<div class="paperdesc"></div>');
+        var tdiv = div.append('<div></div>');
         if (p.timestamp && p.timestamp !== -1) {
           const timestamp = moment.utc(p.timestamp);
-          tdiv.append(`<div class="ds">${timestamp.format('LL')} &middot; ${p.sponsor}</div>`);
+          tdiv.append(`<div class="pretitle-container">${timestamp.format('LL')} &middot; ${p.sponsor}</div>`);
         } else {
-          tdiv.append(`<div class="ds">${p.sponsor}</div>`);
+          tdiv.append(`<div class="pretitle-container">${p.sponsor}</div>`);
         }
 
-        tdiv.append(`<div class="ts"><a href="${p.url}" target="_blank">${p.title}</a></div>`);
+        tdiv.append(`<div class="title-container"><a href="${p.url}" target="_blank">${p.title}</a></div>`);
 
         const keys = ['title', 'url', 'timestamp', 'recruiting_status', 'sex', 'target_disease', 'intervention', 'sponsor', 'summary', 'location', 'institution', 'contact', 'sample_size', 'abandoned', 'abandoned_reason']
         for (var key of keys) {
@@ -66,7 +79,7 @@ function addPapers() {
         }
 
         tdiv.append(`
-          <blockquote class="as">
+          <blockquote>
             <b>Condition</b>: ${p.target_disease}<br />
             <b>Intervention</b>: ${p.intervention}<br />
             <b>Sample Size</b>: ${p.sample_size}<br />
@@ -97,22 +110,8 @@ function addPapers() {
   }, 60000);
 }
 
-$.ajaxSetup({
-  beforeSend: function () {
-    $("#loader").show();
-  },
-  complete: function () {
-    $("#loader").hide();
-  }
-});
-
-// toastr.options.positionClass = 'toast-bottom-right';
-
 // when page loads...
 $(document).ready(function () {
-  $('#feedback-box')
-    .click(function (e) { e.stopPropagation(); });
-
   // add papers to #rtable
   addPapers();
 
@@ -139,39 +138,4 @@ function toggleAdvancedFilters() {
     container.css('display', 'none');
     status.html('');
   }
-}
-
-function toggleFeedback() {
-  var container = $('#feedback');
-
-  if (container.css('display') === 'none') {
-    container.css('display', 'flex');
-  } else {
-    container.css('display', 'none');
-  }
-}
-
-var submittingFeedback = false;
-function submitFeedback() {
-  if (submittingFeedback) { return; }
-  submittingFeedback = true;
-  var subject = $('#feedback-subject').val().trim();
-  var body = $('#feedback-body').val().trim();
-  var xhr = $.ajax('/feedback', {
-    type: 'GET',
-    data: { subject, body },
-    beforeSend: null, // dont show loader
-    success: function (data) {
-      toastr.success(data);
-
-      $('#feedback-subject').val('');
-      $('#feedback-body').val('');
-      $('#feedback-container').css('display', 'none');
-      $('#feedback-status').html('');
-    },
-    error: function (jqXHR, textStatus, errorThrown) {
-      console.log(jqXHR, textStatus, errorThrown);
-      toastr.error(jqXHR.responseText);
-    }
-  }).always(function () { submittingFeedback = false; });
 }
