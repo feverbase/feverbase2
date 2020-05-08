@@ -5,9 +5,10 @@ $(document).ready(function () {
   // handle adding/deleting other symptoms
   // delete other if unchecking checkbox
   $('form').on('change', 'label.check.other > input[type="checkbox"]', function () {
-    // if unchecked, try to delete
-    if (!this.checked) {
-      deleteOther(this.value);
+    var value = parseInt(this.value);
+    // if unchecked and not last other, try to delete
+    if (!this.checked && value < $('label.check.other').length - 1) {
+      deleteOther(value);
     }
   });
   // dont unfocus text field if checkbox clicked
