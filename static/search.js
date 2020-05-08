@@ -13,6 +13,19 @@ $.ajaxSetup({
 
 // toastr.options.positionClass = 'toast-bottom-right';
 
+// setup
+
+$.ajaxSetup({
+  beforeSend: function () {
+    $("#loader").show();
+  },
+  complete: function () {
+    $("#loader").hide();
+  }
+});
+
+// toastr.options.positionClass = 'toast-bottom-right';
+
 // if not on search, dont add
 var page = window.location.pathname === "/" ? -1 : 0;
 var loadingTimeout = null;
