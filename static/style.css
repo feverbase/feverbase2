@@ -236,7 +236,6 @@ form.horizontal > header > span {
 	background-repeat: no-repeat;
 	background-position: center;
 	background-clip: text;
-	text-fill-color: transparent;
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
 	-webkit-font-smoothing: subpixel-antialiased;
@@ -539,7 +538,7 @@ nav *, #goto-search {
 	color: #aaa;
 	text-decoration: none;
 	border: none;
-	margin: 0 20px;
+	margin: 0 14px !important;
 	font-family: 'Proxima Nova', 'SF Pro', -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
 	font-weight: bold;
 	filter: none !important;
@@ -547,13 +546,20 @@ nav *, #goto-search {
 	background: none;
 	font-size: 12pt;
 	line-height: 12pt;
+	text-align: center;
+}
+
+@media only screen and (max-width: 450px) {
+	nav *, #goto-search {
+		font-size: 10pt;
+	}
 }
 
 nav *:first-child {
-	margin-left: 0;
+	margin-left: 0 !important;
 }
 nav *:last-child {
-	margin-right: 0;
+	margin-right: 0 !important;
 }
 
 nav *:hover, #goto-search:hover {
@@ -561,7 +567,7 @@ nav *:hover, #goto-search:hover {
 }
 
 #goto-search {
-	margin-top: 1rem;
+	margin-top: 1rem !important;
 }
 
 em {

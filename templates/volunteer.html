@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Feverbase</title>
+
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <!-- CSS -->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='toastr.min.css') }}">
+
+  <!-- Favicon -->
+  <!-- <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}" /> -->
+
+  <!-- JS -->
+  <script src="{{ url_for('static', filename='jquery-3.5.0.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='moment.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='toastr.min.js') }}"></script>
+
+  <!-- Load image before running scripts -->
+  <style type="text/css">
+    .load-img-early {
+      display: none;
+    }
+  </style>
+  <img src="{{ url_for('static', filename='search.png') }}" class="load-img-early">
+
+  <script src="{{ url_for('static', filename='search.js') }}"></script>
+
+  <script src="https://browser.sentry-cdn.com/5.15.4/bundle.min.js"
+    integrity="sha384-Nrg+xiw+qRl3grVrxJtWazjeZmUwoSt0FAVsbthlJ5OMpx0G08bqIq3b/v0hPjhB" crossorigin="anonymous">
+    </script>
+  <script>
+    Sentry.init({ dsn: 'https://0d610ab75a934c93922251b180896c2c@o376768.ingest.sentry.io/5197934' });
+  </script>
+</head>
+
+<body>
+  <nav>
+    {# <div id="nav-links"> #}
+    <a href="/about">About</a>
+    <a href="/search">Search</a>
+    {# </div> #}
+    <button class="textbn" onclick="toggleFeedback()">Give Feedback</button>
+  </nav>
+
+  <header class="center">
+    <h1 id="logo"><a href="/">feverbase</a></h1>
+    <span id="blurb">Volunteer for eligible trials.</span>
+  </header>
+
+  <form action="/volunteer" method="post">
+    <input name="first_name" type="text" value="{{ inputs.first_name if inputs and 'first_name' in inputs else '' }}">
+
+    <input type="submit" id="submit-volunteer" value="Submit">
+  </form>
+
+  <div id="feedback" style="display:none" onclick="toggleFeedback()">
+    <div id="feedback-box">
+      <div id="feedback-title">
+        <button class="textbn" onclick="toggleFeedback()">Close</button>
+      </div>
+      <div id="feedback-container">
+        <input name="subject" type="text" id="feedback-subject" placeholder="Subject">
+
+        <textarea name="body" id="feedback-body" rows="7" placeholder="Body"></textarea>
+
+        <input type="submit" value="Submit Feedback" onclick="submitFeedback()">
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-41516705-6']);
+    _gaq.push(['_trackPageview']);
+    (function () {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+</body>
+
+</html>
