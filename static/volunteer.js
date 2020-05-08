@@ -24,6 +24,23 @@ $(document).ready(function () {
     }
   );
   // typing in text box
+  // if press enter, focus on next text box if exists instead of submitting form
+  $("form").on("keydown", 'label.check.other > input[type="text"]', function (
+    e
+  ) {
+    if (e.keyCode === 13) {
+      var next = $(this)
+        .parent()
+        .next("label.check.other")
+        .find('input[type="text"]');
+      if (next) {
+        next.focus();
+      }
+
+      e.preventDefault();
+      return false;
+    }
+  });
   // entered key
   $("form").on("keyup", 'label.check.other > input[type="text"]', function () {
     var elem = $(this);

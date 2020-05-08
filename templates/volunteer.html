@@ -42,6 +42,7 @@
     {% endfor %}
 
     {% if inputs.others and inputs.others|length %}
+
       {% for other_val in inputs.others %}
         <label class="check other">
           <input type="checkbox" name="others_selected[]" value="{{ loop.index - 1 }}" {{ 'checked' if inputs.others_selected and (loop.index - 1)|string in inputs.others_selected else '' }}>
@@ -49,12 +50,15 @@
           <input name="others[]" type="text" value="{{ other_val }}">
         </label>
       {% endfor %}
+
     {% else %}
+
     <label class="check other">
       <input type="checkbox" name="others_selected[]" value="0">
       <span>Other:</span>
       <input name="others[]" type="text" value="{{ inputs.others[0] if inputs and 'others' in inputs and inputs.others|length > 0 else '' }}">
     </label>
+
     {% endif %}
 
     <input type="submit" value="Submit">
