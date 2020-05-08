@@ -1,78 +1,78 @@
 body {
-	margin: 10px;
+  margin: 10px;
 }
 
 blockquote {
-	border-left: 3px solid #ddd;
-	margin: 10px 0;
-	padding: 10px 10px;
-	background: #eee;
-	word-wrap: break-word;
+  border-left: 3px solid #ddd;
+  margin: 10px 0;
+  padding: 10px 10px;
+  background: #eee;
+  word-wrap: break-word;
 }
 
 em {
-	font-style: normal;
-	background-color: #F0E68C;
+  font-style: normal;
+  background-color: #f0e68c;
 }
 
 form {
-	padding-top: 20vh;
+  padding-top: 20vh;
 }
 
 form.horizontal {
-	padding-top: 1vh;
+  padding-top: 1vh;
 }
 
 form.horizontal > header {
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: flex-start;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
 form.horizontal > header > #logo {
-	margin-right: 1rem;
+  margin-right: 1rem;
 }
 
 form.horizontal > header > #sbox {
-	margin-top: 0;
+  margin-top: 0;
 }
 
 form.horizontal > header > span {
-	display: none;
+  display: none;
 }
 
 #hint {
-	margin-top: 1rem;
-	color: #aaa;
+  margin-top: 1rem;
+  color: #aaa;
 }
 
 #hint > em {
-	background-color: rgba(27,31,35,.05);
-	padding: 0.2em 0.4em;
+  background-color: rgba(27, 31, 35, 0.05);
+  padding: 0.2em 0.4em;
 }
 
 #sbox {
-	width: 70%;
-	text-align: left;
-	margin-top: 1rem;
+  width: 70%;
+  text-align: left;
+  margin-top: 1rem;
 }
 
 @media only screen and (max-width: 660px) {
-	form.horizontal > header {
-		flex-direction: column;
-		justify-content: flex-start;
-		align-items: center;
-	}
+  form.horizontal > header {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+  }
 
-	form.horizontal > header > #logo {
-		margin-top: -0.8rem;
-		margin-bottom: 0.5rem;
-		margin-right: 0;
-	}
+  form.horizontal > header > #logo {
+    margin-top: -0.8rem;
+    margin-bottom: 0.5rem;
+    margin-right: 0;
+  }
 
-	#sbox {
-		width: 100%;
-	}
+  #sbox {
+    width: 100%;
+  }
 }
 
 #qfield {
@@ -83,90 +83,90 @@ form.horizontal > header > span {
   height: 40px;
   font-size: 22px;
   color: "#333";
-  font-family: 'SF Pro';
+  font-family: "SF Pro";
   font-weight: 300;
   padding-left: 40px;
   outline: 0;
 }
 
 #search-icon {
-	position: absolute;
+  position: absolute;
 
-	width: 40px;
-	height: 40px;
+  width: 40px;
+  height: 40px;
 
-	border: none;
-	background-color: transparent;
-	background-image: url(/assets/search.png);
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: 30px;
+  border: none;
+  background-color: transparent;
+  background-image: url(/assets/search.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 30px;
 }
 
 #main {
-	margin-left: auto;
-	margin-right: auto;
-	background-color: white;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: white;
 }
 
 .title-container {
-	font-weight: bold;
-	margin-bottom: 0;
-	line-height: 1.25;
-	color: #313131;
-	font-size: 1.1rem;
-	margin-top: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0;
+  line-height: 1.25;
+  color: #313131;
+  font-size: 1.1rem;
+  margin-top: 1.5rem;
 }
 
 .title-container > a {
-	border-bottom: none !important;
+  border-bottom: none !important;
 }
 
 .pretitle-container {
-	font-family: 'Menlo', Monaco, monospace;
-	padding: 0;
-	margin-bottom: -20px;
-	color: #666;
-	line-height: 1.25
+  font-family: "Menlo", Monaco, monospace;
+  padding: 0;
+  margin-bottom: -20px;
+  color: #666;
+  line-height: 1.25;
 }
 
 #filters-box {
-	padding: 5px;
-	background-color: rgb(240, 240, 240);
-	margin: -0.5rem auto 1rem auto;
-	border: solid 1px #D6D3C5;
-	width: 100%;
+  padding: 5px;
+  background-color: rgb(240, 240, 240);
+  margin: -0.5rem auto 1rem auto;
+  border: solid 1px #d6d3c5;
+  width: 100%;
 }
 
 #filters-box > a {
-	color: gray;
-	cursor: pointer;
-	user-select: none;
+  color: gray;
+  cursor: pointer;
+  user-select: none;
 }
 
 #filters-box > a:hover {
-	text-decoration: underline;
+  text-decoration: underline;
 }
 
 #filters-container {
-	margin-top: 0.6rem;
-	display: grid;
-	grid-template-columns: 1fr 3fr;
-	grid-gap: 5px;
-	width: 100%;
+  margin-top: 0.6rem;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  grid-gap: 5px;
+  width: 100%;
 }
 
 #filters-container > label {
-	font-weight: 600;
-	font-size: 16px;
-	margin-top: 4px;
+  font-weight: 600;
+  font-size: 16px;
+  margin-top: 4px;
 }
 
 .lds-ring {
   display: inline-block;
   position: relative;
   width: 80px;
-	height: 80px;
+  height: 80px;
 }
 .lds-ring div {
   box-sizing: border-box;
@@ -198,13 +198,14 @@ form.horizontal > header > span {
   }
 }
 
-#noresults > *, #stats {
-	font-family: 'Menlo', Monaco, monospace;
-	color: #666;
+#noresults > *,
+#stats {
+  font-family: "Menlo", Monaco, monospace;
+  color: #666;
 }
 
 #stats {
-	/* border-bottom: solid 1px rgba(0, 0, 0, 0.2); */
-	margin-bottom: 2rem;
-	font-size: 14px;
+  /* border-bottom: solid 1px rgba(0, 0, 0, 0.2); */
+  margin-bottom: 2rem;
+  font-size: 14px;
 }

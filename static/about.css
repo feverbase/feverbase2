@@ -1,35 +1,35 @@
 body {
-	width: 45em;
-	max-width: 92%;
-	margin: 0 auto;
+  width: 45em;
+  max-width: 92%;
+  margin: 0 auto;
 }
 
 hr {
-	border: 0;
-	border-bottom: 1px solid #999;
-	margin: 30px 0
+  border: 0;
+  border-bottom: 1px solid #999;
+  margin: 30px 0;
 }
 
 table {
-	text-align: center;
-	vertical-align: middle;
-	table-layout: fixed;
-	width: 100%;
+  text-align: center;
+  vertical-align: middle;
+  table-layout: fixed;
+  width: 100%;
 }
 
 img {
-	position: relative;
-	width: 80%;
-	margin: 0 auto;
-	border-radius: 50%;
+  position: relative;
+  width: 80%;
+  margin: 0 auto;
+  border-radius: 50%;
 }
 
 td > a {
-	text-decoration: none;
+  text-decoration: none;
 }
 
 td {
-	vertical-align: top;
+  vertical-align: top;
 }
 
 tr.spacer > td {
@@ -37,14 +37,14 @@ tr.spacer > td {
 }
 
 tr a {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 li {
-	line-height: 1.65em;
-	word-wrap: break-word
+  line-height: 1.65em;
+  word-wrap: break-word;
 }
 
 #goto-search {
-	margin-top: 1rem !important;
+  margin-top: 1rem !important;
 }
