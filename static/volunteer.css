@@ -26,6 +26,10 @@ form > *:last-child {
   margin-bottom: 0;
 }
 
+form input[type="submit"]:focus {
+  border: 2px solid #777;
+}
+
 form > label.check {
   display: flex;
   align-items: center;
@@ -43,6 +47,10 @@ form > label.check > input[type="checkbox"] {
   border-radius: 6px;
   border: 1px solid #bbb;
   cursor: inherit;
+}
+
+form > label.check > input[type="checkbox"]:focus {
+  border: 2px solid #777;
 }
 
 form > label.check > input[type="checkbox"]:checked {
@@ -146,6 +154,8 @@ form > label.check.other > input[type="text"] {
 
 /* Radio button bar */
 .radio-bar {
+  position: relative;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -155,8 +165,21 @@ form > label.check.other > input[type="text"] {
   border-radius: 12px;
 }
 
+.radio-bar > .radio-bar-spacer {
+  width: 1px;
+  height: 100%;
+  background-color: #ccc;
+}
+
 .radio-bar > input {
-  display: none;
+  position: absolute;
+  left: calc(50%);
+  top: calc(100% + 5px);
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
 }
 
 .radio-bar > input + label {
@@ -164,9 +187,18 @@ form > label.check.other > input[type="text"] {
   flex: 1 1 0px;
   text-align: center;
   border-radius: 11px;
-  border-left: 1px solid #ccc;
   line-height: 40px;
   cursor: pointer;
+}
+
+.radio-bar > input:hover + label {
+  /* filter: brightness(80%);
+  -webkit-filter: brightness(80%); */
+}
+
+.radio-bar > input:focus + label,
+.radio-bar > input:checked + label {
+  border: 1px solid #777;
 }
 
 .radio-bar > input:checked + label {
@@ -174,22 +206,21 @@ form > label.check.other > input[type="text"] {
   /* text-shadow: 0 1px 1px rgba(40, 40, 40, 0.75); */
 }
 
-.radio-bar > input:checked + label:hover {
-  background-color: inherit;
-  background-position: 0 0;
-  transition: none;
-}
-
 .radio-bar > input:first-of-type + label {
-  border-left: 0;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
 
+.radio-bar > input:hover:first-of-type + label {
+  background: #9c246020; /* midpoint of gradient */
+  background: linear-gradient(90deg, #78007820, #9c246020);
+  background: -webkit-linear-gradient(0deg, #78007820, #9c246020);
+}
+
 .radio-bar > input:checked:first-of-type + label {
   background: #9c2460; /* midpoint of gradient */
-  background: linear-gradient(90deg, #c04848, #9c2460);
-  background: -webkit-linear-gradient(0deg, #c04848, #9c2460);
+  background: linear-gradient(90deg, #780078, #9c2460);
+  background: -webkit-linear-gradient(0deg, #780078, #9c2460);
 }
 
 .radio-bar > input:last-of-type + label {
@@ -197,8 +228,14 @@ form > label.check.other > input[type="text"] {
   border-bottom-left-radius: 0;
 }
 
+.radio-bar > input:hover:last-of-type + label {
+  background: #9c246020; /* midpoint of gradient */
+  background: linear-gradient(90deg, #9c246020, #c0484820);
+  background: -webkit-linear-gradient(0deg, #9c246020, #c0484820);
+}
+
 .radio-bar > input:checked:last-of-type + label {
   background: #9c2460; /* midpoint of gradient */
-  background: linear-gradient(90deg, #9c2460, #780078);
-  background: -webkit-linear-gradient(0deg, #9c2460, #780078);
+  background: linear-gradient(90deg, #9c2460, #c04848);
+  background: -webkit-linear-gradient(0deg, #9c2460, #c04848);
 }

@@ -28,26 +28,28 @@
   <form action="/volunteer" method="post">
     <div class="inputs">
       <div class="form-label-group">
-        <input name="first_name" id="first-name" type="text" placeholder="First Name" value="{{ (inputs and 'first_name' in inputs and inputs.first_name) or '' }}" required>
+        <input name="first_name" id="first-name" type="text" tabindex="1" placeholder="First Name" value="{{ (inputs and 'first_name' in inputs and inputs.first_name) or '' }}" required>
         <label for="first-name">First Name</label>
       </div>
       <div class="form-label-group">
-        <input name="last_name" id ="last-name" type="text" placeholder="Last Name" value="{{ (inputs and 'last_name' in inputs and inputs.last_name) or '' }}" required>
+        <input name="last_name" id ="last-name" type="text" tabindex="2" placeholder="Last Name" value="{{ (inputs and 'last_name' in inputs and inputs.last_name) or '' }}" required>
         <label for="last-name">Last Name</label>
       </div>
     </div>
 
     <div class="form-label-group">
-      <input name="email" id="email" type="email" placeholder="Email" value="{{ (inputs and 'email' in inputs and inputs.email) or '' }}" required>
+      <input name="email" id="email" type="email" tabindex="3" placeholder="Email" value="{{ (inputs and 'email' in inputs and inputs.email) or '' }}" required>
       <label for="email">Email</label>
     </div>
 
     <div class="radio-bar">
-      <input name="sex" id="sex-male" type="radio" required>
-      <label for="sex-male">Male</label>
-
-      <input name="sex" id="sex-female" type="radio" required>
+      <input name="sex" id="sex-female" type="radio" tabindex="4" required>
       <label for="sex-female">Female</label>
+
+      <div class="radio-bar-spacer"></div>
+
+      <input name="sex" id="sex-male" type="radio" tabindex="5" required>
+      <label for="sex-male">Male</label>
     </div>
 
     <p>Symptoms</p>
