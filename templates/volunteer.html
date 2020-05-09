@@ -43,13 +43,14 @@
     </div>
 
     <div class="radio-bar">
-      <input name="sex" id="sex-female" type="radio" tabindex="4" required>
-      <label for="sex-female">Female</label>
+      {% set choice = ["Female", "Male"]|sort(reverse=([True, False]|random())) %}
+      <input name="sex" id="sex-{{choice[0]}}" type="radio" tabindex="4" required>
+      <label for="sex-{{choice[0]}}">{{choice[0]}}</label>
 
       <div class="radio-bar-spacer"></div>
 
-      <input name="sex" id="sex-male" type="radio" tabindex="5" required>
-      <label for="sex-male">Male</label>
+      <input name="sex" id="sex-{{choice[1]}}" type="radio" tabindex="5" required>
+      <label for="sex-{{choice[1]}}">{{choice[1]}}</label>
     </div>
 
     <p>Symptoms</p>
