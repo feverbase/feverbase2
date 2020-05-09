@@ -15,7 +15,8 @@ p {
 /* won't affect labels */
 form > input,
 form > label.check:last-of-type,
-.form-label-group {
+.form-label-group,
+.radio-bar {
   margin-bottom: 0.6rem !important;
   width: 100%;
 }
@@ -29,6 +30,7 @@ form > label.check {
   display: flex;
   align-items: center;
   margin-bottom: 0.5rem;
+  cursor: pointer;
 }
 
 form > label.check > input[type="checkbox"] {
@@ -40,6 +42,7 @@ form > label.check > input[type="checkbox"] {
   background: white;
   border-radius: 6px;
   border: 2px solid #bbb;
+  cursor: inherit;
 }
 
 form > label.check > input[type="checkbox"]:checked {
@@ -139,4 +142,59 @@ form > label.check.other > input[type="text"] {
   font-size: 12px;
   color: #777;
   line-height: 1.5;
+}
+
+/* Radio button bar */
+.radio-bar {
+  display: flex;
+  align-items: center;
+  height: 42px;
+
+  border: 1px solid #ddd;
+  border-radius: 12px;
+}
+
+.radio-bar > input {
+  display: none;
+}
+
+.radio-bar > input + label {
+  /* expand with a basis of 0px so start from nothing and expand together = makes them all same size */
+  flex: 1 1 0px;
+  text-align: center;
+  border-radius: 12px;
+  border-left: 1px solid #ccc;
+  line-height: 42px;
+  cursor: pointer;
+}
+
+/* TODO: not working */
+/* remove middle border separator when any button is selected */
+.radio-bar:has(input:checked) > label {
+  border-left: none;
+}
+
+.radio-bar > input:checked + label {
+  background: #9c2460; /* midpoint of gradient */
+  background: linear-gradient(90deg, #c04848, #780078);
+  background: -webkit-linear-gradient(0deg, #c04848, #780078);
+  color: #e6e6e6;
+  text-shadow: 0 1px 1px rgba(40, 40, 40, 0.75);
+}
+
+.radio-bar > input:checked + label:hover {
+  background-color: inherit;
+  background-position: 0 0;
+  transition: none;
+}
+
+.radio-bar > input:first-of-type + label {
+  border-left: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.radio-bar > input:last-of-type + label {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }

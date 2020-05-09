@@ -204,7 +204,7 @@ nav {
 
 nav * {
   /* make all nav options same width even if different text lengths */
-  /* expand with a basis of 0px so start from nothing and expand together */
+  /* expand with a basis of 0px so start from nothing and expand together = makes them all same size */
   flex: 1 1 0px;
   padding-top: 2px;
 }
