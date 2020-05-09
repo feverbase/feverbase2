@@ -41,7 +41,7 @@ form > label.check > input[type="checkbox"] {
   height: 20px;
   background: white;
   border-radius: 6px;
-  border: 2px solid #bbb;
+  border: 1px solid #bbb;
   cursor: inherit;
 }
 
@@ -147,6 +147,7 @@ form > label.check.other > input[type="text"] {
 /* Radio button bar */
 .radio-bar {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   height: 42px;
 
@@ -162,24 +163,15 @@ form > label.check.other > input[type="text"] {
   /* expand with a basis of 0px so start from nothing and expand together = makes them all same size */
   flex: 1 1 0px;
   text-align: center;
-  border-radius: 12px;
+  border-radius: 11px;
   border-left: 1px solid #ccc;
-  line-height: 42px;
+  line-height: 40px;
   cursor: pointer;
 }
 
-/* TODO: not working */
-/* remove middle border separator when any button is selected */
-.radio-bar:has(input:checked) > label {
-  border-left: none;
-}
-
 .radio-bar > input:checked + label {
-  background: #9c2460; /* midpoint of gradient */
-  background: linear-gradient(90deg, #c04848, #780078);
-  background: -webkit-linear-gradient(0deg, #c04848, #780078);
   color: #e6e6e6;
-  text-shadow: 0 1px 1px rgba(40, 40, 40, 0.75);
+  /* text-shadow: 0 1px 1px rgba(40, 40, 40, 0.75); */
 }
 
 .radio-bar > input:checked + label:hover {
@@ -194,7 +186,19 @@ form > label.check.other > input[type="text"] {
   border-bottom-right-radius: 0;
 }
 
+.radio-bar > input:checked:first-of-type + label {
+  background: #9c2460; /* midpoint of gradient */
+  background: linear-gradient(90deg, #c04848, #9c2460);
+  background: -webkit-linear-gradient(0deg, #c04848, #9c2460);
+}
+
 .radio-bar > input:last-of-type + label {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+}
+
+.radio-bar > input:checked:last-of-type + label {
+  background: #9c2460; /* midpoint of gradient */
+  background: linear-gradient(90deg, #9c2460, #780078);
+  background: -webkit-linear-gradient(0deg, #9c2460, #780078);
 }
