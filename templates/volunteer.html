@@ -25,7 +25,7 @@
     <span id="blurb">Volunteer for eligible trials.</span>
   </header>
 
-  <form action="/volunteer" method="post">
+  <form action="?submitted" method="post">
     <div class="inputs">
       <div class="form-label-group">
         <input name="first_name" id="first-name" type="text" tabindex="1" placeholder="First Name" value="{{ (inputs and 'first_name' in inputs and inputs.first_name) or '' }}" required>
@@ -44,12 +44,12 @@
 
     <div class="radio-bar">
       {% set choice = ["Female", "Male"]|sort(reverse=([True, False]|random())) %}
-      <input name="sex" id="sex-{{choice[0]}}" type="radio" tabindex="3" required>
+      <input name="sex" id="sex-{{choice[0]}}" type="radio" value="{{choice[0]}}" tabindex="3" required {{ 'checked' if inputs.sex == choice[0] else '' }}>
       <label for="sex-{{choice[0]}}">{{choice[0]}}</label>
 
       <div class="radio-bar-spacer"></div>
 
-      <input name="sex" id="sex-{{choice[1]}}" type="radio" tabindex="4" required>
+      <input name="sex" id="sex-{{choice[1]}}" type="radio" value="{{choice[1]}}" tabindex="4" required {{ 'checked' if inputs.sex == choice[1] else '' }}>
       <label for="sex-{{choice[1]}}">{{choice[1]}}</label>
     </div>
 
@@ -89,6 +89,14 @@
 
     <input type="submit" value="Submit">
   </form>
+
+  <script>
+    {% if error %}
+      toastr.error("{{ error|replace('"', '\\"') }}");
+    {% elif 'submitted' in request.args %}
+      toastr.success("Thank you for volunteering to help!");
+    {% endif %}
+  </script>
 
   {% include "partials/end_body.html" %}
 </body>
