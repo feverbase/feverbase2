@@ -77,6 +77,31 @@ class Article(ExtendedDocument):
     def __str__(self):
         return self.url
 
+    # PATCH: match smart_update by url instead of id
+    # https://mongoengine-mate.readthedocs.io/_modules/mongoengine_mate/document.html#ExtendedDocument.smart_update
+    @classmethod
+    def _smart_update(cls, obj, upsert=False):
+        """
+        Update one document, locate the document by url, then only update
+        the field defined with the ExtendedDocument instance. None field is
+        ignored.
+
+        :type obj: ExtendedDocument
+
+        :rtype: int
+        :return: 0 or 1, number of document been updated
+        """
+        if isinstance(obj, cls):
+            dct = obj.to_dict(include_none=False)
+            url_field_name = cls.url.name
+            if url_field_name in dct:
+                dct.pop(url_field_name)
+            return cls.objects(__raw__={"url": obj.url}).update_one(
+                upsert=upsert, **dct
+            )
+        else:  # pragma: no cover
+            raise TypeError
+
 
 class FilterOption(ExtendedDocument):
     key = StringField()
@@ -96,4 +121,4 @@ def create(Model, objects):
     Posts a list of objects to Mongo collection Model.
     """
     docs = list(map(lambda o: Model(**o), objects))
-    Model.smart_insert(docs)
+    Model.smart_update(docs, upsert=True)
