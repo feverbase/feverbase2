@@ -114,13 +114,11 @@ class FilterOption(ExtendedDocument):
 
 
 class Patient(Document):
-    email = StringField(unique=True)
-
+    email = StringField()
     first_name = StringField()
     last_name = StringField()
     age = IntField()
     sex = StringField()
-
     symptoms = ListField(StringField())
 
 

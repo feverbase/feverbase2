@@ -459,12 +459,13 @@ def volunteer():
     error = None
 
     if request.method == "POST":
-        # update if patient exists
-        email = request.form.get("email").strip()
-        if email:
-            existing_patients = db.Patient.objects(email__iexact=email)
-            if len(existing_patients):
-                error = "You have already submitted the form."
+        # DON'T PREVENT DUPLICATES OR UPDATE DATA, JUST STORE ALL ENTRIES
+        # # error if duplicate email submission
+        # email = request.form.get("email").strip()
+        # if email:
+        #     existing_patients = db.Patient.objects(email__iexact=email)
+        #     if len(existing_patients):
+        #         error = "You have already submitted the form."
 
         # parse parameters into python dicts
         # define patient document
@@ -492,6 +493,7 @@ def volunteer():
                 except Exception as e:
                     print(e)
 
+            # create patient entry
             try:
                 p = db.Patient(symptoms=symptoms, **patient_data)
                 db.Patient.objects.insert(p)
