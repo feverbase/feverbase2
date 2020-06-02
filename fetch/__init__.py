@@ -65,9 +65,9 @@ def run():
                 logger.error(e)
 
     articles = list(map(translate, data.values()))
-    articles_with_location = location.add_location_data(articles)
+    #articles_with_location = location.add_location_data(articles)
 
-    db.create(db.Article, articles_with_location)
+    db.create(db.Article, articles)
 
     preload_filter_options()
     mongo_to_meili()
