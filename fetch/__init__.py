@@ -34,7 +34,6 @@ logger = logging.getLogger(__name__)
 
 TERMS = utils.get_query_terms()
 DRIPPING_FAUCETS = {
-    # chictr.SOURCE: chictr,
     clinicaltrialsgov.SOURCE: clinicaltrialsgov,
     eu.SOURCE: eu,
     isrctn.SOURCE: isrctn,
