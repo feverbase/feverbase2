@@ -85,7 +85,7 @@ def find(query, existing):
                                 contact_email = None
                                 contact_street_address = None
                                 contact_country = None
-                                sample_size = 0
+                                sample_size = None
 
                                 td_second = soup.findAll("td", {"class": "second"})
                                 elems = [a.text.strip() for a in td_second]
@@ -126,20 +126,19 @@ def find(query, existing):
                                         contact_town_city = a.next_sibling.text
                                     if a.text.strip() == "Country":
                                         contact_country = a.next_sibling.text
-                                    if a.text.strip() == "In the member state":
-                                        sample_size = int(a.next_sibling.text)
-                                    if a.text.strip() == "In the EEA":
-                                        if sample_size != 0:
-                                            try:
-                                                sample_size = int(a.next_sibling.text)
-                                            except ValueError:
-                                                pass
-                                    if a.text.strip() == "In the whole clinical trial":
-                                        if sample_size != 0:
-                                            try:
-                                                sample_size = int(a.next_sibling.text)
-                                            except ValueError:
-                                                pass
+
+                                    # none if 0 or can't parse
+                                    try:
+                                        if a.text.strip() in [
+                                            "In the member state",
+                                            "In the EEA",
+                                            "In the whole clinical trial",
+                                        ]:
+                                            sample_size = (
+                                                int(a.next_sibling.text) or None
+                                            )
+                                    except:
+                                        sample_size = None
 
                                 sex = []
 
@@ -152,9 +151,6 @@ def find(query, existing):
                                     "email": contact_email,
                                     "address": f"{contact_street_address}, {contact_town_city}, {contact_country}",
                                 }
-
-                                if sample_size == 0:
-                                    sample_size = None
 
                                 this_entry = {
                                     "_source": SOURCE,
@@ -171,7 +167,7 @@ def find(query, existing):
                                     "institution": institution,
                                     "contact": contact,
                                     "abandoned": None,
-                                    "sample_size": int(sample_size),
+                                    "sample_size": sample_size,
                                 }
 
                                 data[url] = this_entry

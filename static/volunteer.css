@@ -1,0 +1,241 @@
+body {
+  width: 30em;
+  max-width: 92%;
+  margin: 0 auto;
+}
+
+header {
+  padding-top: 4vh;
+}
+
+p {
+  margin-top: 0;
+}
+
+/* won't affect labels */
+form > input,
+form > label.check:last-of-type,
+.form-label-group,
+.radio-bar {
+  margin-bottom: 0.6rem !important;
+  width: 100%;
+}
+
+form > *:last-child {
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+}
+
+form input[type="submit"]:focus {
+  border: 2px solid #777;
+}
+
+form > label.check {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+}
+
+form > label.check > input[type="checkbox"] {
+  margin: 0;
+  padding: 0;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #bbb;
+  cursor: inherit;
+}
+
+form > label.check > input[type="checkbox"]:focus {
+  border: 2px solid #777;
+}
+
+form > label.check > input[type="checkbox"]:checked {
+  background: #9c2460; /* midpoint of gradient */
+  background: linear-gradient(0deg, #c04848, #780078);
+  background: -webkit-linear-gradient(0deg, #c04848, #780078);
+  border: none;
+}
+
+form > label.check > span {
+  margin-left: 4px;
+}
+
+form > label.check.other > span {
+  margin-right: 10px;
+}
+
+form > label.check.other > input[type="text"] {
+  width: unset;
+  flex: 1;
+}
+
+@media only screen and (max-width: 300px) {
+  .inputs {
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .inputs > * {
+    width: 100% !important;
+    margin-right: 0;
+    margin-bottom: 0.6rem;
+  }
+
+  .inputs > *:last-child {
+    margin-bottom: 0;
+  }
+}
+
+/* Floating Labels */
+
+.form-label-group {
+  display: inline-block;
+  position: relative;
+}
+
+.form-label-group > input,
+.form-label-group > label {
+  padding: 0.75rem;
+  height: 100%;
+}
+
+.form-label-group > label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  margin-bottom: 0; /* Override default `<label>` margin */
+  line-height: 1.25;
+  color: #495057;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  transition: all 0.1s ease-in-out;
+  pointer-events: none;
+}
+
+.form-label-group input::-webkit-input-placeholder {
+  color: transparent;
+}
+
+.form-label-group input:-ms-input-placeholder {
+  color: transparent;
+}
+
+.form-label-group input::-ms-input-placeholder {
+  color: transparent;
+}
+
+.form-label-group input::-moz-placeholder {
+  color: transparent;
+}
+
+.form-label-group input::placeholder {
+  color: transparent;
+}
+
+.form-label-group input:not(:placeholder-shown),
+.form-label-group input:focus {
+  padding-top: calc(0.75rem + 0.75rem / 2);
+  padding-bottom: calc(0.75rem / 2);
+}
+
+.form-label-group input:not(:placeholder-shown) ~ label,
+.form-label-group input:focus ~ label {
+  padding-top: calc(0.75rem / 5);
+  font-size: 12px;
+  color: #777;
+  line-height: 1.5;
+}
+
+/* Radio button bar */
+.radio-bar {
+  position: relative;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 42px;
+
+  border: 1px solid #ddd;
+  border-radius: 12px;
+}
+
+.radio-bar > .radio-bar-spacer {
+  width: 1px;
+  height: 100%;
+  background-color: #ccc;
+}
+
+.radio-bar > input {
+  position: absolute;
+  left: calc(50%);
+  top: calc(100% + 5px);
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+}
+
+.radio-bar > input + label {
+  /* expand with a basis of 0px so start from nothing and expand together = makes them all same size */
+  flex: 1 1 0px;
+  text-align: center;
+  border-radius: 11px;
+  line-height: 40px;
+  cursor: pointer;
+}
+
+.radio-bar > input:hover + label {
+  /* filter: brightness(80%);
+  -webkit-filter: brightness(80%); */
+}
+
+.radio-bar > input:focus + label,
+.radio-bar > input:checked + label {
+  border: 1px solid #777;
+}
+
+.radio-bar > input:checked + label {
+  color: #e6e6e6;
+  /* text-shadow: 0 1px 1px rgba(40, 40, 40, 0.75); */
+}
+
+.radio-bar > input:first-of-type + label {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.radio-bar > input:hover:first-of-type + label {
+  background: #9c246020; /* midpoint of gradient */
+  background: linear-gradient(90deg, #c0484820, #9c246020);
+  background: -webkit-linear-gradient(0deg, #c0484820, #9c246020);
+}
+
+.radio-bar > input:checked:first-of-type + label {
+  background: #9c2460; /* midpoint of gradient */
+  background: linear-gradient(90deg, #c04848, #9c2460);
+  background: -webkit-linear-gradient(0deg, #c04848, #9c2460);
+}
+
+.radio-bar > input:last-of-type + label {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.radio-bar > input:hover:last-of-type + label {
+  background: #9c246020; /* midpoint of gradient */
+  background: linear-gradient(90deg, #9c246020, #78007820);
+  background: -webkit-linear-gradient(0deg, #9c246020, #78007820);
+}
+
+.radio-bar > input:checked:last-of-type + label {
+  background: #9c2460; /* midpoint of gradient */
+  background: linear-gradient(90deg, #9c2460, #780078);
+  background: -webkit-linear-gradient(0deg, #9c2460, #780078);
+}
