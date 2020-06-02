@@ -52,7 +52,10 @@
         <span id="filters-status">{{ 'Hide' if adv_filters_in_use else '' }}</span>
         Advanced Filters
       </a>
-      <br>
+      <br />
+      <a onclick="resetAdvancedFilters()">
+        <span id="filters-reset">{{ 'Reset Advanced Filters<br />' if adv_filters_in_use else '' }}</span>
+      </a>
       <div id="filters-container" style="display: {{ 'grid' if adv_filters_in_use else 'none' }};">
         <label for="date">Date Posted:</label>
         <div class="inputs">
