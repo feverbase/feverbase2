@@ -149,10 +149,6 @@ form.horizontal > header > span {
   user-select: none;
 }
 
-#filters-box > a:hover {
-  text-decoration: underline;
-}
-
 #filters-container {
   margin-top: 0.6rem;
   display: grid;
