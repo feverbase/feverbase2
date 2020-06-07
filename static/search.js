@@ -68,7 +68,7 @@ function addPapers() {
           tdiv.append(
             `<div class="pretitle-container">${timestamp.format(
               "LL"
-            )} &middot; ${p.sponsor}</div>`
+            )} &middot; ${p.sponsor} &middot; ${getRegistry(p.url)}</div>`
           );
         } else {
           tdiv.append(`<div class="pretitle-container">${p.sponsor}</div>`);
@@ -161,4 +161,15 @@ function toggleAdvancedFilters() {
     container.css("display", "none");
     status.html("");
   }
+}
+
+// TODO(gmittal): Move this to server-side
+function getRegistry(url) {
+  let host = url.split('/')[2];
+  let registries = {
+    'clinicaltrials.gov': 'clinicaltrials.gov',
+    'www.clinicaltrialsregister.eu': 'EU Clinical Trials Register',
+    'isrctn.com': 'ISRCTN',
+  }
+  return registries[host];
 }
