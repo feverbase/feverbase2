@@ -65,6 +65,7 @@ def run():
                 logger.error(e)
 
     articles = list(map(translate, data.values()))
+    # TODO (ethanzh) get maps API key
     #articles_with_location = location.add_location_data(articles)
 
     db.create(db.Article, articles)
