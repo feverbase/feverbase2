@@ -64,6 +64,34 @@ TRIM_KEYS = [
     "intervention",
 ]
 
+POSSIBLE_SYMPTOMS = [
+    "Fatigue",
+    "Fever",
+    "Cough",
+    "Chills",
+    "Runny Nose",
+    "Nasal congestion",
+    "Loss of taste",
+    "Loss of smell",
+    "Headache",
+    "Muscle/joint pain",
+    "Tight feeling in chest",
+]
+
+VOLUNTEER_DB_KEYS = [
+    "email",
+    "first_name",
+    "last_name",
+    "age",
+    "sex",
+]
+
+VOLUNTEER_FORM_KEYS = VOLUNTEER_DB_KEYS + [
+    "symptoms[]",
+    "others[]",
+    "others_selected[]",
+]
+
 # -----------------------------------------------------------------------------
 # connection handlers
 # -----------------------------------------------------------------------------
@@ -423,6 +451,63 @@ def search():
         }
 
         return render_template("search.html", **ctx)
+
+
+@app.route("/volunteer", methods=["GET", "POST"])
+def volunteer():
+    inputs = {}
+    error = None
+
+    if request.method == "POST":
+        # DON'T PREVENT DUPLICATES OR UPDATE DATA, JUST STORE ALL ENTRIES
+        # # error if duplicate email submission
+        # email = request.form.get("email").strip()
+        # if email:
+        #     existing_patients = db.Patient.objects(email__iexact=email)
+        #     if len(existing_patients):
+        #         error = "You have already submitted the form."
+
+        # parse parameters into python dicts
+        # define patient document
+        patient_data = {}
+        for key in VOLUNTEER_FORM_KEYS:
+            if "[]" in key:
+                inputs[key[:-2]] = request.form.getlist(key)
+            else:
+                inputs[key] = request.form.get(key)
+                if inputs[key]:
+                    inputs[key] = inputs[key].strip()
+                if key in VOLUNTEER_DB_KEYS:
+                    patient_data[key] = inputs[key]
+
+        if not error:
+            # add others to symptoms list
+            symptoms = inputs.get("symptoms", [])
+            for selected in inputs.get("others_selected", []):
+                try:
+                    idx = int(selected)
+                    others = inputs.get("others", [])
+                    if len(others) > idx:
+                        symptom = others[idx].strip()
+                        symptoms.append(symptom)
+                except Exception as e:
+                    print(e)
+
+            # create patient entry
+            try:
+                p = db.Patient(symptoms=symptoms, **patient_data)
+                db.Patient.objects.insert(p)
+            except Exception as e:
+                print(e)
+
+    ctx = default_context(
+        render_format="volunteer",
+        symptoms=POSSIBLE_SYMPTOMS,
+        inputs=inputs,
+        error=error,
+    )
+
+    return render_template("volunteer.html", **ctx)
 
 
 # -----------------------------------------------------------------------------

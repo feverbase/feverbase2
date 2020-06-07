@@ -24,11 +24,6 @@ def parse_documents():
         del entry_json["_id"]
         entry_json["ms-id"] = oid
 
-        sample_size = entry_json.get("sample_size", 0)
-        if sample_size == 0:
-            sample_size = -1
-        entry_json["sample_size"] = sample_size
-
         # convert timestamp to epoch
         if doc.timestamp:
             entry_json["parsed_timestamp"] = int(doc.timestamp.timestamp())
