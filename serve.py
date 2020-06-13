@@ -51,8 +51,8 @@ slack_api_url = os.environ.get("SLACK_WEBHOOK_URL", "")
 
 PAGE_SIZE = 25
 
-# `"April 1, 2020"` or `April1,2020`
-quoted_or_single_word = "\\s*(?:(?:(?:\"|')(.*)(?:\"|'))|(?:([^\\s]*)))"
+# `"April 1, 2020"` or `'April 1, 2020'` or `April1,2020`
+quoted_or_single_word = "\\s*(?:(?:\"([^\"]*)\")|(?:'([^']*)')|(?:([^\\s]*)))"
 # { regex: filter_key }
 CMDS = {
     f"mindate:{quoted_or_single_word}": "min-timestamp",

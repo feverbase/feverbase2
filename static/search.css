@@ -210,3 +210,15 @@ form.horizontal > header > span {
   margin-bottom: 2rem;
   font-size: 14px;
 }
+
+.shortcut-filter {
+  display: inline-block;
+  cursor: pointer;
+  line-height: 20px;
+  transition: transform 0.2s ease;
+}
+
+.shortcut-filter:hover,
+.shortcut-filter:active {
+  transform: scale(1.05);
+}
