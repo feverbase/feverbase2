@@ -64,7 +64,7 @@ class Article(ExtendedDocument):
     location_data = ObjectIdField()
 
     # optional fields
-    sample_size = IntField(default=0)
+    sample_size = IntField()
     abandoned = BooleanField()
     abandoned_reason = StringField()
 
@@ -111,6 +111,15 @@ class FilterOption(ExtendedDocument):
         "indexes": [{"fields": ["key", "value"], "unique": True}],
         "ordering": ["key", "value"],
     }
+
+
+class Patient(Document):
+    email = StringField()
+    first_name = StringField()
+    last_name = StringField()
+    age = IntField()
+    sex = StringField()
+    symptoms = ListField(StringField())
 
 
 def create(Model, objects):

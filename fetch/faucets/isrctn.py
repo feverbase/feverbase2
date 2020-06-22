@@ -46,8 +46,11 @@ def find(query, existing):
             date_registration = main.find("date_registration").text
             title = main.find("public_title").text
             sponsor = main.find("primary_sponsor").text
-            sample_size = int(main.find("target_size").text)
-            if sample_size == 0:
+
+            # none if 0 or can't parse
+            try:
+                sample_size = int(main.find("target_size").text) or None
+            except:
                 sample_size = None
 
             sex = trial.find("criteria").find("gender").text

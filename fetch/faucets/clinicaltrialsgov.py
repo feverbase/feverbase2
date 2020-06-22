@@ -136,9 +136,10 @@ def translate(info):
     institution = info.get("Responsible Party", "")
     contacts = {}
 
-    sample_size = int(info.get("Estimated Enrollment", 0))
-
-    if sample_size == 0:
+    # none if 0 or can't parse
+    try:
+        sample_size = int(info.get("Estimated Enrollment")) or None
+    except:
         sample_size = None
 
     abandoned = None

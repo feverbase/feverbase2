@@ -14,7 +14,7 @@ $.ajaxSetup({
 // toastr.options.positionClass = 'toast-bottom-right';
 
 // if not on search, dont add
-var page = window.location.pathname === "/" ? -1 : 0;
+var page = 0;
 var loadingTimeout = null;
 
 function addPapers() {
@@ -68,7 +68,7 @@ function addPapers() {
           tdiv.append(
             `<div class="pretitle-container">${timestamp.format(
               "LL"
-            )} &middot; ${p.sponsor}</div>`
+            )} &middot; ${p.sponsor} &middot; ${getRegistry(p.url)}</div>`
           );
         } else {
           tdiv.append(`<div class="pretitle-container">${p.sponsor}</div>`);
@@ -135,19 +135,38 @@ function addPapers() {
 
 // when page loads...
 $(document).ready(function () {
-  // add papers to #rtable
-  addPapers();
+  // splash search page, no results
+  if (window.location.pathname === "/") {
+    var q = $("#qfield");
+    $(".shortcut-filter").click(function () {
+      var text = $(this).data("text");
+      var idxFromEnd = text.length - text.indexOf("|");
+      text = text.replace("|", "");
 
-  // set up infinite scrolling for adding more papers
-  $(window).on("scroll", function () {
-    var scrollTop = $(document).scrollTop();
-    var windowHeight = $(window).height();
-    var bodyHeight = $(document).height() - windowHeight;
-    var scrollPercentage = scrollTop / bodyHeight;
-    if (scrollPercentage > 0.9) {
-      addPapers();
-    }
-  });
+      var newVal = (q.val().trim() + " " + text).trim();
+      q.val(newVal);
+      q.focus();
+
+      var idx = newVal.length - idxFromEnd + 1;
+      q[0].setSelectionRange(idx, idx);
+    });
+
+    // search page after results returned
+  } else {
+    // add papers to #rtable
+    addPapers();
+
+    // set up infinite scrolling for adding more papers
+    $(window).on("scroll", function () {
+      var scrollTop = $(document).scrollTop();
+      var windowHeight = $(window).height();
+      var bodyHeight = $(document).height() - windowHeight;
+      var scrollPercentage = scrollTop / bodyHeight;
+      if (scrollPercentage > 0.9) {
+        addPapers();
+      }
+    });
+  }
 });
 
 function toggleAdvancedFilters() {
@@ -176,4 +195,15 @@ function resetAdvancedFilters() {
   $("#filter-target_disease").val("");
   $("#filter-intervention").val("");
   $("#filter-recruiting_status").val("");
+}
+  
+// TODO(gmittal): Move this to server-side
+function getRegistry(url) {
+  let host = url.split("/")[2];
+  let registries = {
+    "clinicaltrials.gov": "clinicaltrials.gov",
+    "www.clinicaltrialsregister.eu": "EU Clinical Trials Register",
+    "isrctn.com": "ISRCTN",
+  };
+  return registries[host];
 }

@@ -34,7 +34,6 @@ logger = logging.getLogger(__name__)
 
 TERMS = utils.get_query_terms()
 DRIPPING_FAUCETS = {
-    # chictr.SOURCE: chictr,
     clinicaltrialsgov.SOURCE: clinicaltrialsgov,
     eu.SOURCE: eu,
     isrctn.SOURCE: isrctn,
@@ -65,9 +64,10 @@ def run():
                 logger.error(e)
 
     articles = list(map(translate, data.values()))
-    articles_with_location = location.add_location_data(articles)
+    # TODO (ethanzh) get maps API key
+    #articles_with_location = location.add_location_data(articles)
 
-    db.create(db.Article, articles_with_location)
+    db.create(db.Article, articles)
 
     preload_filter_options()
     mongo_to_meili()

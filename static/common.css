@@ -204,7 +204,7 @@ nav {
 
 nav * {
   /* make all nav options same width even if different text lengths */
-  /* expand with a basis of 0px so start from nothing and expand together */
+  /* expand with a basis of 0px so start from nothing and expand together = makes them all same size */
   flex: 1 1 0px;
   padding-top: 2px;
 }
@@ -285,9 +285,14 @@ button.textbn {
   outline: none;
 }
 
+.inputs {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .inputs > * {
-  width: calc(50% - 5px);
-  margin-right: 5px;
+  width: calc(50% - 5px) !important;
 }
 
 .inputs > *:last-child {

@@ -1,0 +1,104 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  {% include "partials/head.html" %}
+
+  <title>Feverbase</title>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='volunteer.css') }}">
+
+  <!-- Custom JS -->
+  <script src="{{ url_for('static', filename='volunteer.js') }}"></script>
+</head>
+
+<body>
+  <header>
+    <nav>
+      <a href="/about">About</a>
+      <a href="/">Search</a>
+      <button type="button" class="textbn" onclick="toggleFeedback()">Give Feedback</button>
+    </nav>
+
+    <h1 id="logo"><a href="/">feverbase</a></h1>
+    <span id="blurb">Volunteer for eligible trials.</span>
+  </header>
+
+  <form action="?submitted" method="post">
+    <div class="inputs">
+      <div class="form-label-group">
+        <input name="first_name" id="first-name" type="text" tabindex="1" placeholder="First Name" value="{{ (inputs and 'first_name' in inputs and inputs.first_name) or '' }}" required>
+        <label for="first-name">First Name</label>
+      </div>
+      <div class="form-label-group">
+        <input name="last_name" id ="last-name" type="text" tabindex="2" placeholder="Last Name" value="{{ (inputs and 'last_name' in inputs and inputs.last_name) or '' }}" required>
+        <label for="last-name">Last Name</label>
+      </div>
+    </div>
+
+    <div class="form-label-group">
+      <input name="age" id="age" type="number" tabindex="5" placeholder="Age" value="{{ (inputs and 'age' in inputs and inputs.age) or '' }}" required>
+      <label for="age">Age</label>
+    </div>
+
+    <div class="radio-bar">
+      {% set choice = ["Female", "Male"]|sort(reverse=([True, False]|random())) %}
+      <input name="sex" id="sex-{{choice[0]}}" type="radio" value="{{choice[0]}}" tabindex="3" required {{ 'checked' if inputs.sex == choice[0] else '' }}>
+      <label for="sex-{{choice[0]}}">{{choice[0]}}</label>
+
+      <div class="radio-bar-spacer"></div>
+
+      <input name="sex" id="sex-{{choice[1]}}" type="radio" value="{{choice[1]}}" tabindex="4" required {{ 'checked' if inputs.sex == choice[1] else '' }}>
+      <label for="sex-{{choice[1]}}">{{choice[1]}}</label>
+    </div>
+
+    <div class="form-label-group">
+      <input name="email" id="email" type="email" tabindex="6" placeholder="Email" value="{{ (inputs and 'email' in inputs and inputs.email) or '' }}" required>
+      <label for="email">Email</label>
+    </div>
+
+    <p>Symptoms</p>
+
+    {% for symptom in symptoms %}
+      <label class="check">
+        <input type="checkbox" name="symptoms[]" value="{{ symptom }}" {{ 'checked' if inputs.symptoms and symptom in inputs.symptoms else '' }}>
+        <span>{{ symptom }}</span>
+      </label>
+    {% endfor %}
+
+    {% if inputs.others and inputs.others|length %}
+
+      {% for other_val in inputs.others %}
+        <label class="check other">
+          <input type="checkbox" name="others_selected[]" value="{{ loop.index - 1 }}" {{ 'checked' if inputs.others_selected and (loop.index - 1)|string in inputs.others_selected else '' }}>
+          <span>Other:</span>
+          <input name="others[]" type="text" value="{{ other_val }}">
+        </label>
+      {% endfor %}
+
+    {% else %}
+
+    <label class="check other">
+      <input type="checkbox" name="others_selected[]" value="0">
+      <span>Other:</span>
+      <input name="others[]" type="text" value="{{ inputs.others[0] if inputs and 'others' in inputs and inputs.others|length > 0 else '' }}">
+    </label>
+
+    {% endif %}
+
+    <input type="submit" value="Submit">
+  </form>
+
+  <script>
+    {% if error %}
+      toastr.error("{{ error|replace('"', '\\"') }}");
+    {% elif 'submitted' in request.args %}
+      toastr.success("Thank you for volunteering to help!");
+    {% endif %}
+  </script>
+
+  {% include "partials/end_body.html" %}
+</body>
+
+</html>

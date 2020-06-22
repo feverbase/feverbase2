@@ -149,10 +149,6 @@ form.horizontal > header > span {
   user-select: none;
 }
 
-#filters-box > a:hover {
-  text-decoration: underline;
-}
-
 #filters-container {
   margin-top: 0.6rem;
   display: grid;
@@ -213,4 +209,16 @@ form.horizontal > header > span {
   /* border-bottom: solid 1px rgba(0, 0, 0, 0.2); */
   margin-bottom: 2rem;
   font-size: 14px;
+}
+
+.shortcut-filter {
+  display: inline-block;
+  cursor: pointer;
+  line-height: 20px;
+  transition: transform 0.2s ease;
+}
+
+.shortcut-filter:hover,
+.shortcut-filter:active {
+  transform: scale(1.05);
 }
