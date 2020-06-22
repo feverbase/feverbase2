@@ -45,7 +45,7 @@
           autocomplete="off" autocapitalize="off" spellcheck="false">
       </div>
 
-      <span id="hint">Hint: try adding <em>mindate:"April 1, 2020"</em> or <em>maxdate:2020-03-15</em> to your search</span>
+      <span id="hint">Hint: try adding <em class="shortcut-filter" data-text="mindate:&quot;|&quot;">mindate:"April 1, 2020"</em> or <em class="shortcut-filter" data-text="maxdate:&quot;|&quot;">maxdate:2020-03-15</em> to your search</span>
     </header>
 
     <div id="filters-box" {{ 'style=display:none' if url_for(request.endpoint) == '/' else '' }}>
