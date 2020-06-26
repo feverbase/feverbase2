@@ -172,16 +172,31 @@ $(document).ready(function () {
 function toggleAdvancedFilters() {
   var status = $("#filters-status");
   var container = $("#filters-container");
+  var reset = $("#filters-reset");
 
   if (container.css("display") === "none") {
     container.css("display", "grid");
     status.html("Hide");
+    reset.html("Reset Advanced Filters")
   } else {
     container.css("display", "none");
     status.html("");
+    reset.html("");
   }
 }
 
+function resetAdvancedFilters() {
+  $("#filter-min-timestamp").val("");
+  $("#filter-max-timestamp").val("");
+  $("#filter-min-sample_size").val("");
+  $("#filter-max-sample_size").val("");
+  $("#filter-location").val("");
+  $("#filter-sponsor").val("");
+  $("#filter-target_disease").val("");
+  $("#filter-intervention").val("");
+  $("#filter-recruiting_status").val("");
+}
+  
 // TODO(gmittal): Move this to server-side
 function getRegistry(url) {
   let host = url.split("/")[2];
