@@ -121,7 +121,7 @@ function addPapers() {
       $("#noresults").show();
       if (errorThrown !== "abort") {
         toastr.error(
-          "an unexpected error occurred. Please either try a different search query or try again later."
+          "An unexpected error occurred. Please either try a different search query or try again later."
         );
       }
     },
