@@ -1,0 +1,52 @@
+version: "3.1"
+
+services:
+  app:
+    build:
+      context: .
+    container_name: feverbase-flask
+    env_file: .env
+    restart: unless-stopped
+    environment:
+      WAIT_HOSTS: db:27017, meili:7700
+      MONGODB_URI: mongodb://dev:dev@feverbase-mongo/dev?retryWrites=true&w=majority
+      MONGODB_TEST_URI: mongodb://dev:dev@feverbase-mongo/dev?retryWrites=true&w=majority
+      MEILI_URL: http://feverbase-meili:7700
+    ports:
+      - '5000:5000'
+    depends_on:
+      - db
+      - meili
+    volumes:
+      - .:/app
+    networks:
+      - app-network
+    tty: true
+  db:
+    image: mongo:4.2.8
+    container_name: feverbase-mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - feverbase-db:/data/db
+      - ./scripts/docker-mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - app-network
+  meili:
+    image: feverbase/meilisearch:containsfilter
+    container_name: feverbase-meili
+    restart: unless-stopped
+    volumes:
+      - feverbase-meili-db:/data.ms
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  feverbase-db:
+  feverbase-meili-db:
