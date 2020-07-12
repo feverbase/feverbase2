@@ -33,172 +33,164 @@ logger = logging.getLogger(__name__)
 
 
 def find(query, existing):
-    data = {}
-    count = 0
-    url = QUERY_URL.format(BASE_URL=BASE_URL, query=query)
-    page = requests.get(url, verify=False)
-    if page.status_code == 200:
+  data = {}
+  count = 0
+  url = QUERY_URL.format(BASE_URL=BASE_URL, query=query)
+  page = requests.get(url, verify=False)
+  if page.status_code == 200:
+    soup = BeautifulSoup(page.content, "html.parser")
+
+    links = [link.get("href") for link in soup.findAll("a", href=True)]
+
+    page_links = [int(link.split("=")[1]) for link in links if "&page" in link]
+
+    if page_links == []:
+      num_pages = 1
+    else:
+      num_pages = max(page_links)
+
+    for page_num in range(num_pages):
+      url = QUERY_URL.format(
+          BASE_URL=BASE_URL,
+          query=query) + PAGINATE_QUERY.format(page_num=page_num)
+      time.sleep(1)
+      page = requests.get(url, verify=False)
+      if page.status_code == 200:
         soup = BeautifulSoup(page.content, "html.parser")
 
-        links = [link.get("href") for link in soup.findAll("a", href=True)]
+        result_tables = soup.findAll("table", {"class": "result"})
 
-        page_links = [int(link.split("=")[1]) for link in links if "&page" in link]
+        for result in result_tables:
+          links = result.findAll("a", href=True)
 
-        if page_links == []:
-            num_pages = 1
-        else:
-            num_pages = max(page_links)
+          spans = result.findAll("span", {"class": "label"})
 
-        for page_num in range(num_pages):
-            url = QUERY_URL.format(
-                BASE_URL=BASE_URL, query=query
-            ) + PAGINATE_QUERY.format(page_num=page_num)
-            time.sleep(1)
+          next_siblings = [span.next_sibling.strip() for span in spans]
+
+          date = next_siblings[2]
+          if "Information" in date:
+            date = None
+          title = next_siblings[4]
+
+          # looks like some studies are done for multiple countries
+          for i in range(len(links)):
+            link = links[i]
+            country = link.text
+            link = link.get("href")
+
+            url = f"{BASE_URL}{link}"
+
+            # skip duplicates
+            if url in existing:
+              continue
+            existing.add(url)
+
             page = requests.get(url, verify=False)
             if page.status_code == 200:
-                soup = BeautifulSoup(page.content, "html.parser")
+              soup = BeautifulSoup(page.content, "html.parser")
 
-                result_tables = soup.findAll("table", {"class": "result"})
+              try:
+                intervention = None
+                sponsor = None
+                main_objective = None
+                secondary_objectives = None
+                location = None
+                institution = None
+                contact_email = None
+                contact_street_address = None
+                contact_town_city = None
+                contact_country = None
+                sample_size = None
 
-                for result in result_tables:
-                    links = result.findAll("a", href=True)
+                td_second = soup.findAll("td", {"class": "second"})
+                elems = [a.text.strip() for a in td_second]
+                for a in td_second:
+                  if (a.text.strip() ==
+                      "Medical condition(s) being investigated"):
+                    target_disease = a.next_sibling.find("td").text
+                  if a.text.strip() == "Female":
+                    female = a.next_sibling.text.strip() == "Yes"
+                  if a.text.strip() == "Male":
+                    male = a.next_sibling.text.strip() == "Yes"
+                  if a.text.strip() == "Trade name":
+                    intervention = a.next_sibling.text
+                  if a.text.strip() == "Product name":
+                    intervention = a.next_sibling.text
+                  if a.text.strip() == "Name of Sponsor":
+                    sponsor = a.next_sibling.text
+                  if a.text.strip() == "Main objective of the trial":
+                    main_objective = a.next_sibling.find("td").text
+                  if (a.text.strip() == "Secondary objectives of the trial"):
+                    secondary_objectives = a.next_sibling.find("td").text
+                  if a.text.strip() == "Country":
+                    location = a.next_sibling.text
+                  if a.text.strip() == "Name of organisation":
+                    institution = a.next_sibling.text
+                  if a.text.strip() == "E-mail":
+                    contact_email = a.next_sibling.text
+                  if a.text.strip() == "Street Address":
+                    contact_street_address = a.next_sibling.text
+                  if a.text.strip() == "Town/ city":
+                    contact_town_city = a.next_sibling.text
+                  if a.text.strip() == "Country":
+                    contact_country = a.next_sibling.text
 
-                    spans = result.findAll("span", {"class": "label"})
+                  # none if 0 or can't parse
+                  try:
+                    if a.text.strip() in [
+                        "In the member state",
+                        "In the EEA",
+                        "In the whole clinical trial",
+                    ]:
+                      sample_size = (int(a.next_sibling.text) or None)
+                  except:
+                    sample_size = None
 
-                    next_siblings = [span.next_sibling.strip() for span in spans]
+                sex = []
 
-                    date = next_siblings[2]
-                    if "Information" in date:
-                        date = None
-                    title = next_siblings[4]
+                if male:
+                  sex.append("MALE")
+                if female:
+                  sex.append("FEMALE")
 
-                    # looks like some studies are done for multiple countries
-                    for i in range(len(links)):
-                        link = links[i]
-                        country = link.text
-                        link = link.get("href")
+                contact = {
+                    "email":
+                    contact_email,
+                    "address":
+                    f"{contact_street_address}, {contact_town_city}, {contact_country}",
+                }
 
-                        url = f"{BASE_URL}{link}"
+                this_entry = {
+                    "_source": SOURCE,
+                    "url": url,
+                    "title": title,
+                    "timestamp": date,
+                    "recruiting_status": "",
+                    "sex": sex,
+                    "target_disease": target_disease,
+                    "intervention": intervention,
+                    "sponsor": sponsor,
+                    "summary": f"{main_objective}\n{secondary_objectives}",
+                    "location": location,
+                    "institution": institution,
+                    "contact": contact,
+                    "abandoned": None,
+                    "sample_size": sample_size,
+                }
 
-                        # skip duplicates
-                        if url in existing:
-                            continue
-                        existing.add(url)
+                data[url] = this_entry
+                count += 1
+              except Exception as e:
+                logger.error(f"[URL: {url}] {e}")
 
-                        page = requests.get(url, verify=False)
-                        if page.status_code == 200:
-                            soup = BeautifulSoup(page.content, "html.parser")
+        logger.info(
+            f"Page {page_num + 1} out of {num_pages} fetched for {query}")
 
-                            try:
-                                intervention = None
-                                sponsor = None
-                                main_objective = None
-                                secondary_objectives = None
-                                location = None
-                                institution = None
-                                contact_email = None
-                                contact_street_address = None
-                                contact_town_city = None
-                                contact_country = None
-                                sample_size = None
+  logger.info(f"Fetched {count} results for {query}")
 
-                                td_second = soup.findAll("td", {"class": "second"})
-                                elems = [a.text.strip() for a in td_second]
-                                for a in td_second:
-                                    if (
-                                        a.text.strip()
-                                        == "Medical condition(s) being investigated"
-                                    ):
-                                        target_disease = a.next_sibling.find("td").text
-                                    if a.text.strip() == "Female":
-                                        female = a.next_sibling.text.strip() == "Yes"
-                                    if a.text.strip() == "Male":
-                                        male = a.next_sibling.text.strip() == "Yes"
-                                    if a.text.strip() == "Trade name":
-                                        intervention = a.next_sibling.text
-                                    if a.text.strip() == "Product name":
-                                        intervention = a.next_sibling.text
-                                    if a.text.strip() == "Name of Sponsor":
-                                        sponsor = a.next_sibling.text
-                                    if a.text.strip() == "Main objective of the trial":
-                                        main_objective = a.next_sibling.find("td").text
-                                    if (
-                                        a.text.strip()
-                                        == "Secondary objectives of the trial"
-                                    ):
-                                        secondary_objectives = a.next_sibling.find(
-                                            "td"
-                                        ).text
-                                    if a.text.strip() == "Country":
-                                        location = a.next_sibling.text
-                                    if a.text.strip() == "Name of organisation":
-                                        institution = a.next_sibling.text
-                                    if a.text.strip() == "E-mail":
-                                        contact_email = a.next_sibling.text
-                                    if a.text.strip() == "Street Address":
-                                        contact_street_address = a.next_sibling.text
-                                    if a.text.strip() == "Town/ city":
-                                        contact_town_city = a.next_sibling.text
-                                    if a.text.strip() == "Country":
-                                        contact_country = a.next_sibling.text
-
-                                    # none if 0 or can't parse
-                                    try:
-                                        if a.text.strip() in [
-                                            "In the member state",
-                                            "In the EEA",
-                                            "In the whole clinical trial",
-                                        ]:
-                                            sample_size = (
-                                                int(a.next_sibling.text) or None
-                                            )
-                                    except:
-                                        sample_size = None
-
-                                sex = []
-
-                                if male:
-                                    sex.append("MALE")
-                                if female:
-                                    sex.append("FEMALE")
-
-                                contact = {
-                                    "email": contact_email,
-                                    "address": f"{contact_street_address}, {contact_town_city}, {contact_country}",
-                                }
-
-                                this_entry = {
-                                    "_source": SOURCE,
-                                    "url": url,
-                                    "title": title,
-                                    "timestamp": date,
-                                    "recruiting_status": "",
-                                    "sex": sex,
-                                    "target_disease": target_disease,
-                                    "intervention": intervention,
-                                    "sponsor": sponsor,
-                                    "summary": f"{main_objective}\n{secondary_objectives}",
-                                    "location": location,
-                                    "institution": institution,
-                                    "contact": contact,
-                                    "abandoned": None,
-                                    "sample_size": sample_size,
-                                }
-
-                                data[url] = this_entry
-                                count += 1
-                            except Exception as e:
-                                logger.error(f"[URL: {url}] {e}")
-
-                logger.info(
-                    f"Page {page_num + 1} out of {num_pages} fetched for {query}"
-                )
-
-    logger.info(f"Fetched {count} results for {query}")
-
-    return data
+  return data
 
 
 def translate(info):
-    del info["_source"]
-    return info
+  del info["_source"]
+  return info

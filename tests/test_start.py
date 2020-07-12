@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 def test_start(client):
-    response = client.get("/")
-    assert response.status_code == 200
+  response = client.get("/")
+  assert response.status_code == 200
